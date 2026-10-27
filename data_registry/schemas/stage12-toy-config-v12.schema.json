@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage12-toy-config-v12.schema.json",
+  "title": "RetinaEntail-DR Stage 12 Local Random Signer Recovery Config v12",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "method", "scope", "dataset_id", "dataset_version",
+    "split", "runner_ids", "physical_host_count", "independent_process_count",
+    "cross_physical_host_claim", "production_authentication", "trusted_time_epoch",
+    "compromise_epoch", "recovery_epoch", "source_contract", "locked_contract",
+    "signer_policy", "tamper_scenarios", "locked_policy"
+  ],
+  "properties": {
+    "schema_version": {"const": "12.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "method": {"const": "two_process_random_ed25519_compromise_recovery_v1"},
+    "scope": {"const": "SYNTHETIC_FIXTURE"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "split": {"const": "test"},
+    "runner_ids": {
+      "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "physical_host_count": {"const": 1},
+    "independent_process_count": {"const": 2},
+    "cross_physical_host_claim": {"const": false},
+    "production_authentication": {"const": false},
+    "trusted_time_epoch": {"type": "integer", "minimum": 1},
+    "compromise_epoch": {"type": "integer", "minimum": 1},
+    "recovery_epoch": {"type": "integer", "minimum": 1},
+    "source_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "stage11_package_sha256", "stage11_package_file_count", "stage11_manifest_sha256",
+        "stage11_audit_sha256", "stage11_summary_sha256"
+      ],
+      "properties": {
+        "stage11_package_sha256": {"$ref": "#/$defs/sha256"},
+        "stage11_package_file_count": {"type": "integer", "minimum": 1},
+        "stage11_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "stage11_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "stage11_summary_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "locked_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "alpha", "positive_threshold", "negative_threshold", "positive_sample_count",
+        "negative_sample_count", "config_hash", "data_hash", "model_hash"
+      ],
+      "properties": {
+        "alpha": {"type": "number", "minimum": 0, "maximum": 1},
+        "positive_threshold": {"type": "number"},
+        "negative_threshold": {"type": "number"},
+        "positive_sample_count": {"type": "integer", "minimum": 1},
+        "negative_sample_count": {"type": "integer", "minimum": 1},
+        "config_hash": {"$ref": "#/$defs/sha256"},
+        "data_hash": {"$ref": "#/$defs/sha256"},
+        "model_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "signer_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "adapter", "algorithm", "random_private_keys", "private_key_export_allowed",
+        "private_key_serialization_allowed", "private_key_artifact_write_allowed",
+        "hsm_backed", "production_authentication", "local_status_is_rfc6960_ocsp",
+        "complete_wheel_archive_hashes"
+      ],
+      "properties": {
+        "adapter": {"const": "InMemoryEd25519Signer"},
+        "algorithm": {"const": "Ed25519"},
+        "random_private_keys": {"const": true},
+        "private_key_export_allowed": {"const": false},
+        "private_key_serialization_allowed": {"const": false},
+        "private_key_artifact_write_allowed": {"const": false},
+        "hsm_backed": {"const": false},
+        "production_authentication": {"const": false},
+        "local_status_is_rfc6960_ocsp": {"const": false},
+        "complete_wheel_archive_hashes": {"const": false}
+      }
+    },
+    "tamper_scenarios": {
+      "type": "array", "minItems": 10, "maxItems": 10, "uniqueItems": true,
+      "items": {
+        "enum": [
+          "recovered_payload_mutation", "recovered_signature_mutation",
+          "recovery_proof_mutation", "status_signature_mutation", "untrusted_anchor",
+          "generation2_certificate_mutation", "session_nonce_replay", "shared_recovery_key",
+          "frozen_contract_mutation", "malformed_bundle_extra_field"
+        ]
+      }
+    },
+    "locked_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "test_tuning_prohibited", "threshold_reestimation_prohibited",
+        "sample_replacement_prohibited", "network_used", "gpu_used", "real_data_access",
+        "deterministic_difference_fail_closed", "large_model_training_prohibited",
+        "weights_download_prohibited"
+      ],
+      "properties": {
+        "test_tuning_prohibited": {"const": true},
+        "threshold_reestimation_prohibited": {"const": true},
+        "sample_replacement_prohibited": {"const": true},
+        "network_used": {"const": false},
+        "gpu_used": {"const": false},
+        "real_data_access": {"const": false},
+        "deterministic_difference_fail_closed": {"const": true},
+        "large_model_training_prohibited": {"const": true},
+        "weights_download_prohibited": {"const": true}
+      }
+    }
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

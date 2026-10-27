@@ -1,0 +1,17 @@
+schema_version: "7.0"
+run_id: stage7-toy-authorization-consumption-001
+method: synthetic_authorization_consumption_rebuild_locked_pilot_v1
+source_contract:
+  stage6_scope: SYNTHETIC_ONLY
+  stage6_run_id: stage6-toy-verifier-pilot-001
+  stage6_authority_boundary: COMPLETE_VERIFIED_STAGE6_PACKAGE
+  stage6_package_file_count: 122
+authorization_scope: SYNTHETIC_ONLY
+authorization_ttl_seconds: 5
+one_shot_consumption: true
+confidence_level: 0.95
+rebuild_mode: EMBEDDED_STAGE2_TYPED_ROUNDTRIP
+identity_policy: FIVE_IDENTITY_STRICT_REPLAY
+threshold_policy: LOCKED_STAGE3_NO_REESTIMATION
+test_tuning_prohibited: true
+real_data_access: false

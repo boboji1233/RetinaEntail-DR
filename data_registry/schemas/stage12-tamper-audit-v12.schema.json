@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage12-tamper-audit-v12.schema.json",
+  "title": "RetinaEntail-DR Stage 12 Tamper Audit v12",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "scenario_count", "rejection_count", "results",
+    "failure_state", "synthetic_only"
+  ],
+  "properties": {
+    "schema_version": {"const": "12.0.0"},
+    "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+    "scenario_count": {"const": 10},
+    "rejection_count": {"type": "integer", "minimum": 0, "maximum": 10},
+    "results": {
+      "type": "array", "minItems": 10, "maxItems": 10,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["scenario", "expected_code", "observed_code", "rejected"],
+        "properties": {
+          "scenario": {"type": "string", "minLength": 1},
+          "expected_code": {"type": "string", "minLength": 1},
+          "observed_code": {"type": "string", "minLength": 1},
+          "rejected": {"type": "boolean"}
+        }
+      }
+    },
+    "failure_state": {"const": "OUT_OF_MODEL"},
+    "synthetic_only": {"const": true}
+  }
+}

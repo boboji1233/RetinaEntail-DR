@@ -1,0 +1,53 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage7-toy-config-v7.schema.json",
+    "title": "RetinaEntail-DR Stage 7 Synthetic Authorization-Consumption Config v7",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "run_id",
+        "method",
+        "source_contract",
+        "authorization_scope",
+        "authorization_ttl_seconds",
+        "one_shot_consumption",
+        "confidence_level",
+        "rebuild_mode",
+        "identity_policy",
+        "threshold_policy",
+        "test_tuning_prohibited",
+        "real_data_access"
+    ],
+    "properties": {
+        "schema_version": {"const": "7.0"},
+        "run_id": {"const": "stage7-toy-authorization-consumption-001"},
+        "method": {"const": "synthetic_authorization_consumption_rebuild_locked_pilot_v1"},
+        "source_contract": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "stage6_scope",
+                "stage6_run_id",
+                "stage6_authority_boundary",
+                "stage6_package_file_count"
+            ],
+            "properties": {
+                "stage6_scope": {"const": "SYNTHETIC_ONLY"},
+                "stage6_run_id": {"const": "stage6-toy-verifier-pilot-001"},
+                "stage6_authority_boundary": {"const": "COMPLETE_VERIFIED_STAGE6_PACKAGE"},
+                "stage6_package_file_count": {"const": 122}
+            }
+        },
+        "authorization_scope": {"const": "SYNTHETIC_ONLY"},
+        "authorization_ttl_seconds": {"const": 5},
+        "one_shot_consumption": {"const": true},
+        "confidence_level": {"const": 0.95},
+        "rebuild_mode": {"const": "EMBEDDED_STAGE2_TYPED_ROUNDTRIP"},
+        "identity_policy": {"const": "FIVE_IDENTITY_STRICT_REPLAY"},
+        "threshold_policy": {"const": "LOCKED_STAGE3_NO_REESTIMATION"},
+        "test_tuning_prohibited": {"const": true},
+        "real_data_access": {"const": false}
+    },
+    "$comment": "Synthetic fixture declaration only; it never authorizes a physical dataset root or real-data access."
+}

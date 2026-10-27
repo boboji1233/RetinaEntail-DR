@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-twin-tranche-v1.schema.json",
+  "title": "RetinaEntail-DR Science S4 four-lesion twin tranche audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment_id", "status", "summary", "gate", "hashes", "io_audit"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S4_IDRID_FOUR_LESION_TWIN_TRANCHE"},
+    "status": {"enum": ["READY_FOR_AI_QC", "BLOCKED_SAMPLE_OR_ORACLE_SUFFICIENCY", "FAIL_CLOSED"]},
+    "summary": {
+      "type": "object",
+      "required": ["accepted_twin_count", "rejected_attempt_count", "paired_output_count", "accepted_counts", "accepted_distinct_sources", "raw_exact_collision_pairs"],
+      "properties": {
+        "accepted_twin_count": {"type": "integer", "minimum": 0},
+        "rejected_attempt_count": {"type": "integer", "minimum": 0},
+        "paired_output_count": {"type": "integer", "minimum": 0},
+        "accepted_counts": {"type": "object"},
+        "accepted_distinct_sources": {"type": "object"},
+        "raw_exact_collision_pairs": {"type": "object"}
+      }
+    },
+    "gate": {"type": "object"},
+    "hashes": {"type": "object"},
+    "io_audit": {
+      "type": "object",
+      "required": ["locked_test_root_reads", "locked_test_mask_decodes", "source_split_leak_count"],
+      "properties": {
+        "locked_test_root_reads": {"const": 0},
+        "locked_test_mask_decodes": {"const": 0},
+        "source_split_leak_count": {"const": 0}
+      }
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage5-identity-audit-v5.schema.json",
+  "title": "RetinaEntail-DR Stage 5 Five-Identity Isolation Audit v5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "dataset_id",
+    "status",
+    "isolation_proven",
+    "input_projection_sha256",
+    "record_count",
+    "audited_record_count",
+    "rejected_record_count",
+    "split_counts",
+    "unknown_counts",
+    "reasons",
+    "issues"
+  ],
+  "properties": {
+    "schema_version": {"const": "5.0.0"},
+    "dataset_id": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+      ]
+    },
+    "status": {"enum": ["PASS", "FAIL_CLOSED"]},
+    "isolation_proven": {"type": "boolean"},
+    "input_projection_sha256": {"$ref": "#/$defs/sha256"},
+    "record_count": {"$ref": "#/$defs/count"},
+    "audited_record_count": {"$ref": "#/$defs/count"},
+    "rejected_record_count": {"$ref": "#/$defs/count"},
+    "split_counts": {"$ref": "#/$defs/splitCounts"},
+    "unknown_counts": {"$ref": "#/$defs/identityCounts"},
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reason"}
+    },
+    "issues": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/issue"}
+    }
+  },
+  "$defs": {
+    "count": {"type": "integer", "minimum": 0},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "split": {"enum": ["train", "calibration", "test"]},
+    "identityType": {
+      "enum": [
+        "source_image_id",
+        "patient_id",
+        "eye_id",
+        "followup_id",
+        "intervention_pair_id"
+      ]
+    },
+    "reason": {
+      "enum": [
+        "EMPTY_RECORD_SET",
+        "INVALID_RECORD_TYPE",
+        "INVALID_RECORD_CONTRACT",
+        "MULTIPLE_DATASETS",
+        "INVALID_SPLIT",
+        "REQUIRED_SPLIT_EMPTY",
+        "MISSING_PATIENT_ID",
+        "MISSING_EYE_ID",
+        "MISSING_FOLLOWUP_ID",
+        "MISSING_INTERVENTION_PAIR_ID",
+        "EYE_SCOPE_INCOMPLETE",
+        "FOLLOWUP_SCOPE_INCOMPLETE",
+        "DUPLICATE_RELATIVE_PATH",
+        "CROSS_SPLIT_IDENTITY_OVERLAP"
+      ]
+    },
+    "splitCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["train", "calibration", "test"],
+      "properties": {
+        "train": {"$ref": "#/$defs/count"},
+        "calibration": {"$ref": "#/$defs/count"},
+        "test": {"$ref": "#/$defs/count"}
+      }
+    },
+    "identityCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_image_id",
+        "patient_id",
+        "eye_id",
+        "followup_id",
+        "intervention_pair_id"
+      ],
+      "properties": {
+        "source_image_id": {"const": 0},
+        "patient_id": {"$ref": "#/$defs/count"},
+        "eye_id": {"$ref": "#/$defs/count"},
+        "followup_id": {"$ref": "#/$defs/count"},
+        "intervention_pair_id": {"$ref": "#/$defs/count"}
+      }
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reason",
+        "identity_type",
+        "subject_fingerprint",
+        "splits",
+        "record_indices"
+      ],
+      "properties": {
+        "reason": {"$ref": "#/$defs/reason"},
+        "identity_type": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/identityType"}
+          ]
+        },
+        "subject_fingerprint": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/sha256"}
+          ]
+        },
+        "splits": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/split"}
+        },
+        "record_indices": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/count"}
+        }
+      }
+    }
+  }
+}

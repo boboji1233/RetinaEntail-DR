@@ -1,0 +1,49 @@
+schema_version: "9.0"
+run_id: stage9-toy-independent-session-diff-001
+method: independent_process_stage8_package_diff_v1
+scope: SYNTHETIC_FIXTURE
+source_contract:
+  stage8_package_sha256: 581d9f0ee9ddb0ed89cf7148f423c3a0d989bad5e5ea9cbf6b442eb9dfa08e27
+  stage8_package_file_count: 140
+  stage7_package_sha256: 232506ae1514b8ff52b60621b73dcc3218c315277bd360efdacdf030c39eb61a
+  stage8_preregistration_sha256: 8c4b7edd45b229002f0014cbc193a6c26fcca43464f23e466174e9cc1f7a8912
+dataset_id: synthetic_stage2
+dataset_version: synthetic-fixture-v1
+split: test
+session_count: 2
+environment_lock:
+  capture_before_sessions: true
+  python_hash_seed: "0"
+inclusion_case_ids:
+  - stage4-toy-entailed-present
+  - stage4-toy-entailed-absent
+  - stage4-toy-raw-unidentifiable
+  - stage4-toy-infeasible-out-of-model
+  - stage4-toy-domain-out-of-model
+  - stage4-toy-unknown-degradation
+  - stage4-toy-invalid-witness
+replay_runs:
+  - run_id: stage8-repeat-001
+    seed: 20260824
+  - run_id: stage8-repeat-002
+    seed: 20260824
+degradation_replay_set_sha256: 3ecb4261c82250937253dea330ba898317ed7903416d88529fe10ef8fd6a9e76
+locked_contract:
+  alpha: 0.25
+  positive_threshold: 0.000012299400515471258
+  negative_threshold: 0.000012299400515471254
+  positive_sample_count: 4
+  negative_sample_count: 4
+  config_hash: 0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52
+  data_hash: ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd
+  model_hash: ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1
+confidence_level: 0.95
+locked_policy:
+  test_tuning_prohibited: true
+  threshold_reestimation_prohibited: true
+  sample_replacement_prohibited: true
+  network_used: false
+  gpu_used: false
+  real_data_access: false
+  deterministic_difference_fail_closed: true
+  detached_receipt_authoritative: false

@@ -1,0 +1,15 @@
+schema_version: "1.0"
+case_id: toy-smoke-001
+seed: 20260823
+image_size: 96
+lesion_class: MA
+lesion_radius: 4
+alpha: 0.05
+score_threshold: 0.02
+degradations:
+  - name: gaussian_blur
+    severity: 0.72
+  - name: downsample_restore
+    severity: 0.55
+  - name: jpeg_compression
+    severity: 0.45

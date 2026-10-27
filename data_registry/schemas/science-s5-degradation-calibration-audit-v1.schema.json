@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s5-degradation-calibration-audit-v1.schema.json",
+  "title": "Science S5 degradation calibration and regional Tier-A Oracle audit v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "dataset",
+    "calibration",
+    "oracle",
+    "io_audit",
+    "gate",
+    "hashes",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S5_DEGRADATION_DOMAIN_CALIBRATION_V1"},
+    "status": {"enum": ["READY_FOR_AI_QC", "BLOCKED_AUTOMATED_GATE"]},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit",
+        "tree_sha",
+        "archive_sha256",
+        "archive_byte_size",
+        "image_counts",
+        "patient_counts",
+        "quality_counts",
+        "selected_image_bytes"
+      ],
+      "properties": {
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "tree_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "archive_sha256": {"$ref": "#/$defs/sha256"},
+        "archive_byte_size": {"type": "integer", "minimum": 1},
+        "image_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["TRAIN", "VALID"],
+          "properties": {"TRAIN": {"const": 1200}, "VALID": {"const": 400}}
+        },
+        "patient_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["TRAIN", "VALID"],
+          "properties": {"TRAIN": {"const": 300}, "VALID": {"const": 100}}
+        },
+        "quality_counts": {"type": "object"},
+        "selected_image_bytes": {"const": 889888502}
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "synthetic_source_count",
+        "synthetic_distinct_patient_count",
+        "trace_replay_checks",
+        "trace_replay_mismatches",
+        "required_family_gate",
+        "ordered_combination_gate"
+      ],
+      "properties": {
+        "synthetic_source_count": {"const": 128},
+        "synthetic_distinct_patient_count": {"const": 128},
+        "trace_replay_checks": {"type": "integer", "minimum": 9984},
+        "trace_replay_mismatches": {"const": 0},
+        "required_family_gate": {"type": "boolean"},
+        "ordered_combination_gate": {"type": "boolean"}
+      }
+    },
+    "oracle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain_ready",
+        "twin_record_count",
+        "collision_counts",
+        "collision_distinct_sources",
+        "search_attempt_counts",
+        "collision_gate",
+        "all_classes_gate"
+      ],
+      "properties": {
+        "domain_ready": {"type": "boolean"},
+        "twin_record_count": {"const": 621},
+        "collision_counts": {"$ref": "#/$defs/classCounts"},
+        "collision_distinct_sources": {"$ref": "#/$defs/classCounts"},
+        "search_attempt_counts": {"$ref": "#/$defs/classCounts"},
+        "collision_gate": {"$ref": "#/$defs/classBooleans"},
+        "all_classes_gate": {"type": "boolean"}
+      }
+    },
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "real_feature_image_decodes",
+        "synthetic_source_decode_operations",
+        "quality_qc_decode_operations",
+        "online_evaluation_reads",
+        "uwf_reads",
+        "locked_test_root_reads",
+        "dr_grade_values_used",
+        "source_split_leaks"
+      ],
+      "properties": {
+        "real_feature_image_decodes": {"const": 1600},
+        "synthetic_source_decode_operations": {"const": 129},
+        "quality_qc_decode_operations": {"type": "integer", "minimum": 2},
+        "online_evaluation_reads": {"const": 0},
+        "uwf_reads": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "dr_grade_values_used": {"const": 0},
+        "source_split_leaks": {"const": 0}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_and_git_blob_replay",
+        "real_feature_calibration",
+        "regional_tier_a_oracle",
+        "ai_visual_qc",
+        "s6_authorized"
+      ],
+      "properties": {
+        "archive_and_git_blob_replay": {"const": "PASS"},
+        "real_feature_calibration": {"enum": ["PASS", "FAIL"]},
+        "regional_tier_a_oracle": {"enum": ["PASS", "FAIL"]},
+        "ai_visual_qc": {"const": "PENDING"},
+        "s6_authorized": {"const": false}
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code_sha256",
+        "official_tree_json_sha256",
+        "selected_file_manifest_sha256",
+        "degradation_domain_sha256",
+        "regional_oracle_sha256"
+      ],
+      "properties": {
+        "code_sha256": {"$ref": "#/$defs/sha256"},
+        "official_tree_json_sha256": {"$ref": "#/$defs/sha256"},
+        "selected_file_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "degradation_domain_sha256": {"$ref": "#/$defs/sha256"},
+        "regional_oracle_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"type": "integer", "minimum": 0},
+        "EX": {"type": "integer", "minimum": 0},
+        "MA": {"type": "integer", "minimum": 0},
+        "SE": {"type": "integer", "minimum": 0}
+      }
+    },
+    "classBooleans": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"type": "boolean"},
+        "EX": {"type": "boolean"},
+        "MA": {"type": "boolean"},
+        "SE": {"type": "boolean"}
+      }
+    }
+  }
+}

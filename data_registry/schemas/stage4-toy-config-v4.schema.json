@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage4-toy-config-v4.schema.json",
+  "title": "RetinaEntail-DR Stage 4 Synthetic Locked-Test Configuration v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "seed",
+    "image_size",
+    "lesion_class",
+    "lesion_radius",
+    "stage3_lock",
+    "degradations",
+    "test_cases"
+  ],
+  "properties": {
+    "schema_version": {"const": "4.0"},
+    "run_id": {"const": "stage4-toy-locked-test-001"},
+    "seed": {"const": 20260824},
+    "image_size": {"const": 96},
+    "lesion_class": {"const": "MA"},
+    "lesion_radius": {"const": 2},
+    "stage3_lock": {"$ref": "#/$defs/stage3Lock"},
+    "degradations": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {"$ref": "#/$defs/gaussian"},
+        {"$ref": "#/$defs/downsample"},
+        {"$ref": "#/$defs/jpeg"}
+      ],
+      "items": false
+    },
+    "test_cases": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/entailedPresent"
+        },
+        {
+          "$ref": "#/$defs/entailedAbsent"
+        },
+        {
+          "$ref": "#/$defs/rawUnidentifiable"
+        },
+        {
+          "$ref": "#/$defs/infeasibleOutOfModel"
+        },
+        {
+          "$ref": "#/$defs/domainOutOfModel"
+        },
+        {
+          "$ref": "#/$defs/unknownDegradation"
+        },
+        {
+          "$ref": "#/$defs/invalidWitness"
+        }
+      ],
+      "items": false
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "stage3Lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "method_version",
+        "protocol_scope",
+        "artifact_sha256",
+        "alpha",
+        "positive_threshold",
+        "negative_threshold",
+        "positive_sample_count",
+        "negative_sample_count",
+        "total_sample_count",
+        "positive_order_index",
+        "negative_order_index",
+        "config_hash",
+        "data_hash",
+        "model_hash"
+      ],
+      "properties": {
+        "schema_version": {"const": "3.0.0"},
+        "method_version": {"const": "toy_conservative_order_statistic_v1"},
+        "protocol_scope": {"const": "TOY_PROTOCOL"},
+        "artifact_sha256": {
+          "allOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"const": "c84762f2d44d345cd39732e1ce0f5a44003e0a635e482f28d3f8abcd6395e78e"}
+          ]
+        },
+        "alpha": {"const": 0.25},
+        "positive_threshold": {"const": 0.000012299400515471258},
+        "negative_threshold": {"const": 0.000012299400515471254},
+        "positive_sample_count": {"const": 4},
+        "negative_sample_count": {"const": 4},
+        "total_sample_count": {"const": 8},
+        "positive_order_index": {"const": 4},
+        "negative_order_index": {"const": 4},
+        "config_hash": {
+          "allOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"const": "0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52"}
+          ]
+        },
+        "data_hash": {
+          "allOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"const": "ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd"}
+          ]
+        },
+        "model_hash": {
+          "allOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"const": "ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1"}
+          ]
+        }
+      }
+    },
+    "gaussian": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {"const": "gaussian_blur"},
+        "severity": {"const": 0.55}
+      }
+    },
+    "downsample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {"const": "downsample_restore"},
+        "severity": {"const": 0.35}
+      }
+    },
+    "jpeg": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {"const": "jpeg_compression"},
+        "severity": {"const": 0.25}
+      }
+    },
+    "entailedPresent": {
+      "allOf": [{"$ref": "#/$defs/caseShape"}],
+      "properties": {
+        "case_id": {"const": "stage4-toy-entailed-present"},
+        "observation_mode": {"const": "LESION_PRESENT"},
+        "failure_mode": {"const": "NONE"},
+        "expected_state": {"const": "ENTAILED_PRESENT"}
+      }
+    },
+    "entailedAbsent": {
+      "allOf": [{"$ref": "#/$defs/caseShape"}],
+      "properties": {
+        "case_id": {"const": "stage4-toy-entailed-absent"},
+        "observation_mode": {"const": "LESION_ABSENT"},
+        "failure_mode": {"const": "NONE"},
+        "expected_state": {"const": "ENTAILED_ABSENT"}
+      }
+    },
+    "rawUnidentifiable": {
+      "allOf": [{"$ref": "#/$defs/caseShape"}],
+      "properties": {
+        "case_id": {"const": "stage4-toy-raw-unidentifiable"},
+        "observation_mode": {"const": "MIDPOINT"},
+        "failure_mode": {"const": "NONE"},
+        "expected_state": {"const": "RAW_UNIDENTIFIABLE"}
+      }
+    },
+    "infeasibleOutOfModel": {
+      "allOf": [{"$ref": "#/$defs/caseShape"}],
+      "properties": {
+        "case_id": {"const": "stage4-toy-infeasible-out-of-model"},
+        "observation_mode": {"const": "SHIFTED_MIDPOINT"},
+        "failure_mode": {"const": "NONE"},
+        "expected_state": {"const": "OUT_OF_MODEL"}
+      }
+    },
+    "domainOutOfModel": {
+      "allOf": [{"$ref": "#/$defs/caseShape"}],
+      "properties": {
+        "case_id": {"const": "stage4-toy-domain-out-of-model"},
+        "observation_mode": {"const": "LESION_PRESENT"},
+        "failure_mode": {"const": "OUT_OF_DISTRIBUTION"},
+        "expected_state": {"const": "OUT_OF_MODEL"}
+      }
+    },
+    "unknownDegradation": {
+      "allOf": [{"$ref": "#/$defs/caseShape"}],
+      "properties": {
+        "case_id": {"const": "stage4-toy-unknown-degradation"},
+        "observation_mode": {"const": "LESION_PRESENT"},
+        "failure_mode": {"const": "UNKNOWN_DEGRADATION"},
+        "expected_state": {"const": "OUT_OF_MODEL"}
+      }
+    },
+    "invalidWitness": {
+      "allOf": [{"$ref": "#/$defs/caseShape"}],
+      "properties": {
+        "case_id": {"const": "stage4-toy-invalid-witness"},
+        "observation_mode": {"const": "LESION_PRESENT"},
+        "failure_mode": {"const": "INVALID_WITNESS"},
+        "expected_state": {"const": "OUT_OF_MODEL"}
+      }
+    },
+    "caseShape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "observation_mode", "failure_mode", "expected_state"],
+      "properties": {
+        "case_id": {"type": "string", "minLength": 1},
+        "observation_mode": {
+          "enum": ["LESION_PRESENT", "LESION_ABSENT", "MIDPOINT", "SHIFTED_MIDPOINT"]
+        },
+        "failure_mode": {
+          "enum": [
+            "NONE",
+            "OUT_OF_DISTRIBUTION",
+            "UNKNOWN_DEGRADATION",
+            "INVALID_WITNESS",
+            "MISSING_THRESHOLD"
+          ]
+        },
+        "expected_state": {
+          "enum": [
+            "ENTAILED_PRESENT",
+            "ENTAILED_ABSENT",
+            "RAW_UNIDENTIFIABLE",
+            "OUT_OF_MODEL"
+          ]
+        }
+      }
+    }
+  },
+  "$comment": "The Python parser repeats every const and additionally validates enum types and operator parameter domains. This fixture is synthetic-only and non-clinical."
+}

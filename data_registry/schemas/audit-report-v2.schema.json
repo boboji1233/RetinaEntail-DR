@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/audit-report-v2.schema.json",
+  "title": "RetinaEntail-DR Data Audit Report v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "dataset_id",
+    "dataset_version",
+    "manifest_sha256",
+    "summary",
+    "issues"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "status": {"enum": ["PASS", "FAIL_CLOSED", "BLOCKED"]},
+    "dataset_id": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "dataset_version": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "manifest_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_count",
+        "image_files_checked",
+        "label_files_checked",
+        "mask_files_decoded",
+        "unknown_label_count",
+        "issue_counts"
+      ],
+      "properties": {
+        "record_count": {"type": "integer", "minimum": 0},
+        "image_files_checked": {"type": "integer", "minimum": 0},
+        "label_files_checked": {"type": "integer", "minimum": 0},
+        "mask_files_decoded": {"type": "integer", "minimum": 0},
+        "unknown_label_count": {"type": "integer", "minimum": 0},
+        "issue_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "severity",
+          "code",
+          "message",
+          "relative_path",
+          "related_paths",
+          "details"
+        ],
+        "properties": {
+          "severity": {"enum": ["INFO", "WARNING", "ERROR", "CRITICAL"]},
+          "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+          "message": {"type": "string", "minLength": 1},
+          "relative_path": {"type": ["string", "null"]},
+          "related_paths": {"type": "array", "items": {"type": "string"}},
+          "details": {
+            "type": "object",
+            "additionalProperties": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

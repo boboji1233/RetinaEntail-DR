@@ -1,0 +1,28 @@
+schema_version: "1.0.0"
+dataset_id: idrid
+name: IDRiD
+version: "idrid-ieee-h25w98-2026-01-12-zenodo17219542-v1"
+source_url: "https://idrid.grand-challenge.org/Data/"
+alternate_source_urls:
+  - "https://zenodo.org/records/17219542"
+access_mode: gated
+license_status: verified
+license_review_status: reviewed
+license_notes: >-
+  The official IDRiD Grand Challenge data page states CC BY 4.0 and points to the
+  original IEEE DataPort DOI 10.21227/H25W98. The exact acquired archives came from
+  Zenodo record 17219542 v1 as a transport mirror; its uploader is not the dataset
+  creator and IEEE publishes no file hash, so byte identity with the IEEE copy is
+  not claimed. Exact archive hashes and the human review are versioned separately.
+expected_labels:
+  - dr_grade
+  - dme_grade
+  - lesion_pixel_masks_ma_he_ex_se
+  - optic_disc_and_fovea_localization
+label_verification_status: verified
+root_env: RETINAENTAIL_IDRID_ROOT
+patient_id_available: false
+source_image_id_rule: >-
+  For the S1 segmentation task, use the published IDRiD_XX image key prefixed by
+  idrid-segmentation-. Do not infer patient, eye, follow-up, or pair identity.
+redistribution: false

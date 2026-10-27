@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage9-diff-v9.schema.json",
+  "title": "RetinaEntail-DR Stage 9 Cross-Session Deterministic Diff v9",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "clinical_claim", "deterministic_difference_fail_closed",
+    "confidence_level", "session_a", "session_b", "independent_processes",
+    "independent_sessions", "global_differences", "comparison_count", "case_comparisons",
+    "transition_matrix", "metric_intervals"
+  ],
+  "properties": {
+    "schema_version": {"const": "9.0.0"},
+    "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+    "clinical_claim": {"const": false},
+    "deterministic_difference_fail_closed": {"const": true},
+    "confidence_level": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "session_a": {"$ref": "#/$defs/session"},
+    "session_b": {"$ref": "#/$defs/session"},
+    "independent_processes": {"type": "boolean"},
+    "independent_sessions": {"type": "boolean"},
+    "global_differences": {
+      "type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/difference"}
+    },
+    "comparison_count": {"type": "integer", "minimum": 0},
+    "case_comparisons": {"type": "array", "items": {"$ref": "#/$defs/comparison"}},
+    "transition_matrix": {
+      "type": "object", "additionalProperties": false, "minProperties": 16, "maxProperties": 16,
+      "patternProperties": {
+        "^(ENTAILED_PRESENT|ENTAILED_ABSENT|RAW_UNIDENTIFIABLE|OUT_OF_MODEL)->(ENTAILED_PRESENT|ENTAILED_ABSENT|RAW_UNIDENTIFIABLE|OUT_OF_MODEL)$": {
+          "type": "integer", "minimum": 0
+        }
+      }
+    },
+    "metric_intervals": {"$ref": "#/$defs/metrics"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+    "state": {"enum": ["ENTAILED_PRESENT", "ENTAILED_ABSENT", "RAW_UNIDENTIFIABLE", "OUT_OF_MODEL"]},
+    "difference": {"enum": [
+      "ENVIRONMENT_LOCK", "DATASET_IDENTITY", "SCOPE_OR_SPLIT", "PREREGISTRATION",
+      "PACKAGE_HASH", "PACKAGE_FILE_COUNT", "PACKAGE_MANIFEST", "SOURCE_STAGE7_PACKAGE",
+      "AUDIT_PROVENANCE", "OBSERVATION_SET", "OBSERVATION_RECORD", "STATE", "SCORE",
+      "FAIL_CLOSED_OR_OOD", "WITNESS_CONTENT", "WITNESS_REPLAY", "INVALID_INPUT"
+    ]},
+    "session": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "schema_version", "session_id", "producer_process_id", "session_nonce_sha256",
+        "environment_lock_sha256", "dataset_id", "dataset_version", "scope", "split",
+        "package_sha256", "package_file_count", "package_manifest_sha256",
+        "stage8_audit_sha256", "stage8_observations_sha256", "stage8_preregistration_sha256",
+        "source_stage7_package_sha256", "complete_stage8_package_replay_verified",
+        "detached_receipt_authoritative"
+      ],
+      "properties": {
+        "schema_version": {"const": "9.0.0"},
+        "session_id": {"$ref": "#/$defs/identifier"},
+        "producer_process_id": {"type": "integer", "minimum": 1},
+        "session_nonce_sha256": {"$ref": "#/$defs/sha256"},
+        "environment_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "dataset_id": {"$ref": "#/$defs/identifier"},
+        "dataset_version": {"$ref": "#/$defs/identifier"},
+        "scope": {"enum": ["SYNTHETIC_ONLY", "APPROVED_REAL_DATA"]},
+        "split": {"const": "test"},
+        "package_sha256": {"$ref": "#/$defs/sha256"},
+        "package_file_count": {"type": "integer", "minimum": 1},
+        "package_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "stage8_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "stage8_observations_sha256": {"$ref": "#/$defs/sha256"},
+        "stage8_preregistration_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage7_package_sha256": {"$ref": "#/$defs/sha256"},
+        "complete_stage8_package_replay_verified": {"const": true},
+        "detached_receipt_authoritative": {"const": false}
+      }
+    },
+    "comparison": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "schema_version", "case_id", "run_id", "session_a_state", "session_b_state",
+        "effective_state", "session_a_positive_score", "session_b_positive_score",
+        "session_a_negative_score", "session_b_negative_score", "state_match", "score_match",
+        "fail_closed_ood_match", "dual_witness_content_match", "dual_witness_replay_match",
+        "deterministic_record_match", "differences"
+      ],
+      "properties": {
+        "schema_version": {"const": "9.0.0"},
+        "case_id": {"$ref": "#/$defs/identifier"},
+        "run_id": {"$ref": "#/$defs/identifier"},
+        "session_a_state": {"$ref": "#/$defs/state"},
+        "session_b_state": {"$ref": "#/$defs/state"},
+        "effective_state": {"$ref": "#/$defs/state"},
+        "session_a_positive_score": {"type": "number"},
+        "session_b_positive_score": {"type": "number"},
+        "session_a_negative_score": {"type": "number"},
+        "session_b_negative_score": {"type": "number"},
+        "state_match": {"type": "boolean"},
+        "score_match": {"type": "boolean"},
+        "fail_closed_ood_match": {"type": "boolean"},
+        "dual_witness_content_match": {"type": "boolean"},
+        "dual_witness_replay_match": {"type": "boolean"},
+        "deterministic_record_match": {"type": "boolean"},
+        "differences": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/difference"}}
+      }
+    },
+    "interval": {
+      "type": "object", "additionalProperties": false,
+      "required": ["numerator", "denominator", "estimate", "lower", "upper", "confidence_level", "method"],
+      "properties": {
+        "numerator": {"type": "integer", "minimum": 0},
+        "denominator": {"type": "integer", "minimum": 0},
+        "estimate": {"oneOf": [{"type": "null"}, {"type": "number", "minimum": 0, "maximum": 1}]},
+        "lower": {"oneOf": [{"type": "null"}, {"type": "number", "minimum": 0, "maximum": 1}]},
+        "upper": {"oneOf": [{"type": "null"}, {"type": "number", "minimum": 0, "maximum": 1}]},
+        "confidence_level": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "method": {"const": "wilson_score"}
+      }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "STATE_EXACT_MATCH", "SCORE_EXACT_MATCH", "FAIL_CLOSED_OOD_EXACT_MATCH",
+        "DUAL_WITNESS_CONTENT_EXACT_MATCH", "DUAL_WITNESS_REPLAY_EXACT_MATCH",
+        "FULL_DETERMINISTIC_RECORD_EXACT_MATCH"
+      ],
+      "properties": {
+        "STATE_EXACT_MATCH": {"$ref": "#/$defs/interval"},
+        "SCORE_EXACT_MATCH": {"$ref": "#/$defs/interval"},
+        "FAIL_CLOSED_OOD_EXACT_MATCH": {"$ref": "#/$defs/interval"},
+        "DUAL_WITNESS_CONTENT_EXACT_MATCH": {"$ref": "#/$defs/interval"},
+        "DUAL_WITNESS_REPLAY_EXACT_MATCH": {"$ref": "#/$defs/interval"},
+        "FULL_DETERMINISTIC_RECORD_EXACT_MATCH": {"$ref": "#/$defs/interval"}
+      }
+    }
+  }
+}

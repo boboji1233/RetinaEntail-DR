@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage11-toy-config-v11.schema.json",
+  "title": "RetinaEntail-DR Stage 11 Local Asymmetric Fixture Config v11",
+  "type": "object",
+  "required": [
+    "schema_version", "run_id", "method", "scope", "dataset_id", "dataset_version",
+    "split", "runner_ids", "physical_host_count", "cross_physical_host_claim",
+    "trusted_time_epoch", "source_contract", "trust_policy", "environment_policy",
+    "locked_contract", "tamper_scenarios", "locked_policy"
+  ],
+  "properties": {
+    "schema_version": {"const": "11.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "method": {"const": "local_ed25519_rotation_tamper_fixture_v1"},
+    "scope": {"const": "SYNTHETIC_FIXTURE"},
+    "split": {"const": "test"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "runner_ids": {
+      "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "physical_host_count": {"const": 1},
+    "cross_physical_host_claim": {"const": false},
+    "trusted_time_epoch": {"type": "integer", "minimum": 1},
+    "source_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "stage10_package_sha256", "stage10_package_file_count", "stage10_manifest_sha256",
+        "stage10_audit_sha256", "stage10_summary_sha256",
+        "stage10_environment_lock_sha256"
+      ],
+      "properties": {
+        "stage10_package_sha256": {"$ref": "#/$defs/sha256"},
+        "stage10_package_file_count": {"type": "integer", "minimum": 1},
+        "stage10_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "stage10_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "stage10_summary_sha256": {"$ref": "#/$defs/sha256"},
+        "stage10_environment_lock_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "trust_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "algorithm", "authentication_scope", "trust_anchor_sha256",
+        "fixture_private_derivation_public", "production_authentication",
+        "unique_runner_leaf_keys_required", "rotation_required",
+        "revocation_status_required", "trusted_time_required",
+        "private_keys_written_to_artifacts"
+      ],
+      "properties": {
+        "algorithm": {"const": "Ed25519"},
+        "authentication_scope": {"const": "LOCAL_ASYMMETRIC_FIXTURE_ONLY"},
+        "trust_anchor_sha256": {"$ref": "#/$defs/sha256"},
+        "fixture_private_derivation_public": {"const": true},
+        "production_authentication": {"const": false},
+        "unique_runner_leaf_keys_required": {"const": true},
+        "rotation_required": {"const": true},
+        "revocation_status_required": {"const": true},
+        "trusted_time_required": {"const": true},
+        "private_keys_written_to_artifacts": {"const": false}
+      }
+    },
+    "environment_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "dependency_distributions", "complete_wheel_archive_hashes",
+        "production_hardware_attestation", "cpu_instruction_policy",
+        "exact_stage10_environment_lock_required"
+      ],
+      "properties": {
+        "dependency_distributions": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "complete_wheel_archive_hashes": {"const": false},
+        "production_hardware_attestation": {"const": false},
+        "cpu_instruction_policy": {"const": "RECORDED_NOT_HARDWARE_ATTESTED"},
+        "exact_stage10_environment_lock_required": {"const": true}
+      }
+    },
+    "locked_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "alpha", "positive_threshold", "negative_threshold", "positive_sample_count",
+        "negative_sample_count", "config_hash", "data_hash", "model_hash"
+      ],
+      "properties": {
+        "alpha": {"type": "number", "minimum": 0, "maximum": 1},
+        "positive_threshold": {"type": "number"},
+        "negative_threshold": {"type": "number"},
+        "positive_sample_count": {"type": "integer", "minimum": 1},
+        "negative_sample_count": {"type": "integer", "minimum": 1},
+        "config_hash": {"$ref": "#/$defs/sha256"},
+        "data_hash": {"$ref": "#/$defs/sha256"},
+        "model_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "tamper_scenarios": {
+      "type": "array", "minItems": 10, "maxItems": 10, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "locked_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "test_tuning_prohibited", "threshold_reestimation_prohibited",
+        "sample_replacement_prohibited", "network_used", "gpu_used", "real_data_access",
+        "deterministic_difference_fail_closed", "large_model_training_prohibited",
+        "weights_download_prohibited"
+      ],
+      "properties": {
+        "test_tuning_prohibited": {"const": true},
+        "threshold_reestimation_prohibited": {"const": true},
+        "sample_replacement_prohibited": {"const": true},
+        "network_used": {"const": false},
+        "gpu_used": {"const": false},
+        "real_data_access": {"const": false},
+        "deterministic_difference_fail_closed": {"const": true},
+        "large_model_training_prohibited": {"const": true},
+        "weights_download_prohibited": {"const": true}
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

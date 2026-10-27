@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage4-evaluation-report-v4.schema.json",
+  "title": "RetinaEntail-DR Stage 4 Locked Test Evaluation Report v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scope",
+    "split",
+    "clinical_claim",
+    "status",
+    "locked_contract",
+    "confidence_level",
+    "interval_method",
+    "input_record_count",
+    "test_case_count",
+    "rejected_record_count",
+    "evaluable_count",
+    "unevaluable_count",
+    "fail_closed_count",
+    "out_of_distribution_count",
+    "both_witness_replays_passed_count",
+    "one_or_more_witness_replays_failed_count",
+    "labeled_reference_count",
+    "state_counts",
+    "reference_label_counts",
+    "failure_reason_counts",
+    "rejected_reason_counts",
+    "aggregation_failure_reasons",
+    "state_proportions",
+    "evaluable_proportion",
+    "unevaluable_proportion",
+    "fail_closed_proportion",
+    "out_of_distribution_proportion",
+    "both_witness_replays_passed_proportion",
+    "one_or_more_witness_replays_failed_proportion"
+  ],
+  "properties": {
+    "schema_version": {"const": "4.0.0"},
+    "scope": {"enum": ["SYNTHETIC_ONLY", "APPROVED_REAL_DATA"]},
+    "split": {"const": "test"},
+    "clinical_claim": {"const": false},
+    "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+    "locked_contract": {"$ref": "#/$defs/lockedContract"},
+    "confidence_level": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 1
+    },
+    "interval_method": {"const": "wilson_score"},
+    "input_record_count": {"$ref": "#/$defs/count"},
+    "test_case_count": {"$ref": "#/$defs/count"},
+    "rejected_record_count": {"$ref": "#/$defs/count"},
+    "evaluable_count": {"$ref": "#/$defs/count"},
+    "unevaluable_count": {"$ref": "#/$defs/count"},
+    "fail_closed_count": {"$ref": "#/$defs/count"},
+    "out_of_distribution_count": {"$ref": "#/$defs/count"},
+    "both_witness_replays_passed_count": {"$ref": "#/$defs/count"},
+    "one_or_more_witness_replays_failed_count": {"$ref": "#/$defs/count"},
+    "labeled_reference_count": {"$ref": "#/$defs/count"},
+    "state_counts": {"$ref": "#/$defs/stateCounts"},
+    "reference_label_counts": {"$ref": "#/$defs/referenceLabelCounts"},
+    "failure_reason_counts": {"$ref": "#/$defs/failureReasonCounts"},
+    "rejected_reason_counts": {"$ref": "#/$defs/stage4ReasonCounts"},
+    "aggregation_failure_reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/stage4FailureReason"}
+    },
+    "state_proportions": {"$ref": "#/$defs/stateProportions"},
+    "evaluable_proportion": {"$ref": "#/$defs/proportion"},
+    "unevaluable_proportion": {"$ref": "#/$defs/proportion"},
+    "fail_closed_proportion": {"$ref": "#/$defs/proportion"},
+    "out_of_distribution_proportion": {"$ref": "#/$defs/proportion"},
+    "both_witness_replays_passed_proportion": {"$ref": "#/$defs/proportion"},
+    "one_or_more_witness_replays_failed_proportion": {"$ref": "#/$defs/proportion"}
+  },
+  "$defs": {
+    "count": {"type": "integer", "minimum": 0},
+    "positiveCount": {"type": "integer", "minimum": 1},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "lockedContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alpha",
+        "positive_threshold",
+        "negative_threshold",
+        "positive_sample_count",
+        "negative_sample_count",
+        "total_sample_count",
+        "calibration_artifact_hash",
+        "config_hash",
+        "data_hash",
+        "model_hash"
+      ],
+      "properties": {
+        "alpha": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "positive_threshold": {"type": "number", "minimum": 0},
+        "negative_threshold": {"type": "number", "minimum": 0},
+        "positive_sample_count": {"$ref": "#/$defs/positiveCount"},
+        "negative_sample_count": {"$ref": "#/$defs/positiveCount"},
+        "total_sample_count": {"$ref": "#/$defs/positiveCount"},
+        "calibration_artifact_hash": {"$ref": "#/$defs/sha256"},
+        "config_hash": {"$ref": "#/$defs/sha256"},
+        "data_hash": {"$ref": "#/$defs/sha256"},
+        "model_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "stateCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ENTAILED_PRESENT",
+        "ENTAILED_ABSENT",
+        "RAW_UNIDENTIFIABLE",
+        "OUT_OF_MODEL"
+      ],
+      "properties": {
+        "ENTAILED_PRESENT": {"$ref": "#/$defs/count"},
+        "ENTAILED_ABSENT": {"$ref": "#/$defs/count"},
+        "RAW_UNIDENTIFIABLE": {"$ref": "#/$defs/count"},
+        "OUT_OF_MODEL": {"$ref": "#/$defs/count"}
+      }
+    },
+    "referenceLabelCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["LESION_PRESENT", "LESION_ABSENT", "UNKNOWN"],
+      "properties": {
+        "LESION_PRESENT": {"$ref": "#/$defs/count"},
+        "LESION_ABSENT": {"$ref": "#/$defs/count"},
+        "UNKNOWN": {"$ref": "#/$defs/count"}
+      }
+    },
+    "stage4FailureReason": {
+      "enum": [
+        "EMPTY_TEST_SET",
+        "INVALID_CASE_RECORD",
+        "INVALID_CASE_ID",
+        "DUPLICATE_CASE_ID",
+        "NON_TEST_SPLIT",
+        "INVALID_REFERENCE_LABEL",
+        "INVALID_EVALUATION",
+        "CASE_ID_MISMATCH",
+        "LOCKED_ALPHA_MISMATCH",
+        "LOCKED_POSITIVE_THRESHOLD_MISMATCH",
+        "LOCKED_NEGATIVE_THRESHOLD_MISMATCH",
+        "LOCKED_POSITIVE_SAMPLE_COUNT_MISMATCH",
+        "LOCKED_NEGATIVE_SAMPLE_COUNT_MISMATCH",
+        "LOCKED_CONFIG_HASH_MISMATCH",
+        "LOCKED_DATA_HASH_MISMATCH",
+        "LOCKED_MODEL_HASH_MISMATCH",
+        "INVALID_CERTIFICATE",
+        "INVALID_DUAL_REPLAY",
+        "CERTIFICATE_EVALUATION_MISMATCH",
+        "CERTIFICATE_ARTIFACT_HASH_MISMATCH",
+        "CERTIFICATE_REPLAY_MISMATCH"
+      ]
+    },
+    "stage4ReasonCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "EMPTY_TEST_SET": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_CASE_RECORD": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_CASE_ID": {"$ref": "#/$defs/positiveCount"},
+        "DUPLICATE_CASE_ID": {"$ref": "#/$defs/positiveCount"},
+        "NON_TEST_SPLIT": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_REFERENCE_LABEL": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_EVALUATION": {"$ref": "#/$defs/positiveCount"},
+        "CASE_ID_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_ALPHA_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_POSITIVE_THRESHOLD_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_NEGATIVE_THRESHOLD_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_POSITIVE_SAMPLE_COUNT_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_NEGATIVE_SAMPLE_COUNT_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_CONFIG_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_DATA_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_MODEL_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_CERTIFICATE": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_DUAL_REPLAY": {"$ref": "#/$defs/positiveCount"},
+        "CERTIFICATE_EVALUATION_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "CERTIFICATE_ARTIFACT_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "CERTIFICATE_REPLAY_MISMATCH": {"$ref": "#/$defs/positiveCount"}
+      }
+    },
+    "failureReasonCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "INVALID_INPUT": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_CALIBRATION": {"$ref": "#/$defs/positiveCount"},
+        "MISSING_THRESHOLD": {"$ref": "#/$defs/positiveCount"},
+        "NONFINITE_THRESHOLD": {"$ref": "#/$defs/positiveCount"},
+        "MISSING_SCORE": {"$ref": "#/$defs/positiveCount"},
+        "NONFINITE_SCORE": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_SCORE_RANGE": {"$ref": "#/$defs/positiveCount"},
+        "UNKNOWN_DEGRADATION": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_WITNESS": {"$ref": "#/$defs/positiveCount"},
+        "SOLVER_NOT_SUCCESSFUL": {"$ref": "#/$defs/positiveCount"},
+        "OUT_OF_DISTRIBUTION": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_HASH": {"$ref": "#/$defs/positiveCount"},
+        "PROVENANCE_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_CASE_RECORD": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_CASE_ID": {"$ref": "#/$defs/positiveCount"},
+        "DUPLICATE_CASE_ID": {"$ref": "#/$defs/positiveCount"},
+        "NON_TEST_SPLIT": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_REFERENCE_LABEL": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_EVALUATION": {"$ref": "#/$defs/positiveCount"},
+        "CASE_ID_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_ALPHA_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_POSITIVE_THRESHOLD_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_NEGATIVE_THRESHOLD_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_POSITIVE_SAMPLE_COUNT_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_NEGATIVE_SAMPLE_COUNT_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_CONFIG_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_DATA_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "LOCKED_MODEL_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_CERTIFICATE": {"$ref": "#/$defs/positiveCount"},
+        "INVALID_DUAL_REPLAY": {"$ref": "#/$defs/positiveCount"},
+        "CERTIFICATE_EVALUATION_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "CERTIFICATE_ARTIFACT_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+        "CERTIFICATE_REPLAY_MISMATCH": {"$ref": "#/$defs/positiveCount"}
+      }
+    },
+    "nullableUnitNumber": {
+      "anyOf": [
+        {"type": "number", "minimum": 0, "maximum": 1},
+        {"type": "null"}
+      ]
+    },
+    "proportion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "numerator",
+        "denominator",
+        "estimate",
+        "lower",
+        "upper",
+        "confidence_level",
+        "method"
+      ],
+      "properties": {
+        "numerator": {"$ref": "#/$defs/count"},
+        "denominator": {"$ref": "#/$defs/count"},
+        "estimate": {"$ref": "#/$defs/nullableUnitNumber"},
+        "lower": {"$ref": "#/$defs/nullableUnitNumber"},
+        "upper": {"$ref": "#/$defs/nullableUnitNumber"},
+        "confidence_level": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "exclusiveMaximum": 1
+        },
+        "method": {"const": "wilson_score"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"denominator": {"const": 0}}, "required": ["denominator"]},
+          "then": {
+            "properties": {
+              "numerator": {"const": 0},
+              "estimate": {"type": "null"},
+              "lower": {"type": "null"},
+              "upper": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "estimate": {"type": "number", "minimum": 0, "maximum": 1},
+              "lower": {"type": "number", "minimum": 0, "maximum": 1},
+              "upper": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          }
+        }
+      ]
+    },
+    "stateProportions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ENTAILED_PRESENT",
+        "ENTAILED_ABSENT",
+        "RAW_UNIDENTIFIABLE",
+        "OUT_OF_MODEL"
+      ],
+      "properties": {
+        "ENTAILED_PRESENT": {"$ref": "#/$defs/proportion"},
+        "ENTAILED_ABSENT": {"$ref": "#/$defs/proportion"},
+        "RAW_UNIDENTIFIABLE": {"$ref": "#/$defs/proportion"},
+        "OUT_OF_MODEL": {"$ref": "#/$defs/proportion"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "SUCCESS"}}, "required": ["status"]},
+      "then": {"properties": {"aggregation_failure_reasons": {"maxItems": 0}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "FAIL_CLOSED"}}, "required": ["status"]},
+      "then": {"properties": {"aggregation_failure_reasons": {"minItems": 1}}}
+    }
+  ]
+}

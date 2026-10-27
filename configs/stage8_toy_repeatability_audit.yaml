@@ -1,0 +1,50 @@
+schema_version: "8.0"
+run_id: stage8-toy-repeatability-stability-001
+method: synthetic_locked_pilot_repeatability_witness_stability_v1
+scope: SYNTHETIC_FIXTURE
+source_contract:
+  stage7_scope: SYNTHETIC_ONLY
+  stage7_run_id: stage7-toy-authorization-consumption-001
+  stage7_authority_boundary: COMPLETE_VERIFIED_STAGE7_PACKAGE
+  stage7_package_sha256: 232506ae1514b8ff52b60621b73dcc3218c315277bd360efdacdf030c39eb61a
+  stage7_package_file_count: 130
+  stage7_audit_sha256: ada988dd84d27b99a9c78e593197521cd0a7feab090de6ac31991a6b9c99d9ad
+dataset_id: synthetic_stage2
+dataset_version: synthetic-fixture-v1
+split: test
+inclusion_policy: EXACT_FROZEN_CASE_SET_NO_REPLACEMENT
+inclusion_case_ids:
+  - stage4-toy-entailed-present
+  - stage4-toy-entailed-absent
+  - stage4-toy-raw-unidentifiable
+  - stage4-toy-infeasible-out-of-model
+  - stage4-toy-domain-out-of-model
+  - stage4-toy-unknown-degradation
+  - stage4-toy-invalid-witness
+degradation_replay_id: frozen_stage7_test_trace_set_v1
+degradation_replay_set_sha256: 3ecb4261c82250937253dea330ba898317ed7903416d88529fe10ef8fd6a9e76
+replay_runs:
+  - run_id: stage8-repeat-001
+    seed: 20260824
+  - run_id: stage8-repeat-002
+    seed: 20260824
+metrics:
+  confidence_level: 0.95
+  state_transition_matrix: true
+  fail_closed_stability: true
+  out_of_distribution_stability: true
+  positive_witness_replay_stability: true
+  negative_witness_replay_stability: true
+  dual_witness_replay_stability: true
+  positive_witness_hash_stability: true
+  negative_witness_hash_stability: true
+  dual_witness_hash_stability: true
+locked_policy:
+  alpha_and_thresholds_locked: true
+  config_data_model_hashes_locked: true
+  test_tuning_prohibited: true
+  threshold_reestimation_prohibited: true
+  sample_replacement_prohibited: true
+  network_used: false
+  gpu_used: false
+  real_data_access: false

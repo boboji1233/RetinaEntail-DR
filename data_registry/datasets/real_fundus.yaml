@@ -1,0 +1,21 @@
+schema_version: "1.0.0"
+dataset_id: real_fundus
+name: Real-Fundus
+version: "official_or_release_id"
+source_url: "https://github.com/dengzhuo-AI/Real-Fundus"
+alternate_source_urls: []
+access_mode: manual
+license_status: ambiguous
+license_review_status: pending_review
+license_notes: >-
+  The repository is an entry point, not proof of a data license. Data access,
+  use, and redistribution remain blocked until explicit dataset terms are found,
+  reviewed, and snapshotted. Do not infer data rights from a code license.
+expected_labels:
+  - paired_real_low_quality_and_high_quality_images
+  - pair_identifier
+label_verification_status: pending_review
+root_env: RETINAENTAIL_REAL_FUNDUS_ROOT
+patient_id_available: unknown
+source_image_id_rule: "Preserve the official pair identifier and both member identifiers."
+redistribution: false

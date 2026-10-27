@@ -1,0 +1,235 @@
+{
+  "adapter_spec_sha256": "15f1df233ac7d58c30e9acbc5019c4859480983e7dacf91908e41f35a2884111",
+  "development_label_path_checks": 106,
+  "excluded_unknown_entries": 27,
+  "exclusions": [
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_01",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_02",
+      "split": "CALIBRATION"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_04",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_05",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_06",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_07",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_09",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_10",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_11",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_12",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_15",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_16",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_20",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_21",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_24",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_26",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_27",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_28",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_29",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_34",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_36",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_37",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_40",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_41",
+      "split": "CALIBRATION"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_42",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_44",
+      "split": "TRAIN"
+    },
+    {
+      "missing_semantics": [
+        "SOFT_EXUDATE_MASK"
+      ],
+      "reason": "MISSING_LABEL_UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+      "source_image_id": "idrid-segmentation-IDRiD_45",
+      "split": "TRAIN"
+    }
+  ],
+  "freeze_id": "IDRID_MA_SE_S4_V1",
+  "locked_test_membership_entries": 27,
+  "locked_test_root_path_checks": 0,
+  "missing_label_policy": "UNKNOWN_EXCLUDED_NOT_NEGATIVE",
+  "schema_version": "1.0.0",
+  "scope": "TRAIN_AND_CALIBRATION_COMPLETE_LABEL_COHORT_ONLY",
+  "selected_complete_label_entries": 26,
+  "selected_split_counts": {
+    "CALIBRATION": 6,
+    "TRAIN": 20
+  },
+  "upstream_development_entries": 53
+}

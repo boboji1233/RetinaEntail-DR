@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage12-package-summary-v12.schema.json",
+  "title": "RetinaEntail-DR Stage 12 Local Package Summary v12",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "status", "scope", "source_stage11_package_sha256",
+    "independent_process_count", "physical_host_count", "random_ephemeral_private_keys",
+    "private_keys_exported", "compromised_generation", "recovered_generation",
+    "tamper_scenario_count", "tamper_rejection_count", "production_authentication",
+    "production_ceremony_executed", "real_data_read_count", "clinical_claim"
+  ],
+  "properties": {
+    "schema_version": {"const": "12.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+    "scope": {"const": "SYNTHETIC_FIXTURE"},
+    "source_stage11_package_sha256": {"$ref": "#/$defs/sha256"},
+    "independent_process_count": {"const": 2},
+    "physical_host_count": {"const": 1},
+    "random_ephemeral_private_keys": {"const": true},
+    "private_keys_exported": {"const": false},
+    "compromised_generation": {"const": 1},
+    "recovered_generation": {"const": 2},
+    "tamper_scenario_count": {"const": 10},
+    "tamper_rejection_count": {"type": "integer", "minimum": 0, "maximum": 10},
+    "production_authentication": {"const": false},
+    "production_ceremony_executed": {"const": false},
+    "real_data_read_count": {"const": 0},
+    "clinical_claim": {"const": false}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

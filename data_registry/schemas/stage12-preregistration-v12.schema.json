@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage12-preregistration-v12.schema.json",
+  "title": "RetinaEntail-DR Stage 12 Local Recovery Preregistration v12",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "trusted_time_epoch", "compromise_epoch",
+    "recovery_epoch", "runner_ids", "frozen_payload", "tamper_scenarios", "failure_state"
+  ],
+  "properties": {
+    "schema_version": {"const": "12.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "trusted_time_epoch": {"type": "integer", "minimum": 1},
+    "compromise_epoch": {"type": "integer", "minimum": 1},
+    "recovery_epoch": {"type": "integer", "minimum": 1},
+    "runner_ids": {
+      "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "frozen_payload": {"$ref": "#/$defs/frozen"},
+    "tamper_scenarios": {
+      "type": "array", "minItems": 10, "maxItems": 10, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "failure_state": {"const": "OUT_OF_MODEL"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "frozen": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "source_stage11_package_sha256", "source_stage11_package_file_count",
+        "source_stage11_manifest_sha256", "source_stage11_audit_sha256",
+        "source_stage11_summary_sha256", "alpha", "positive_threshold",
+        "negative_threshold", "positive_sample_count", "negative_sample_count",
+        "config_hash", "data_hash", "model_hash", "frozen_contract_sha256"
+      ],
+      "properties": {
+        "source_stage11_package_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage11_package_file_count": {"type": "integer", "minimum": 1},
+        "source_stage11_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage11_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage11_summary_sha256": {"$ref": "#/$defs/sha256"},
+        "alpha": {"type": "number"},
+        "positive_threshold": {"type": "number"},
+        "negative_threshold": {"type": "number"},
+        "positive_sample_count": {"type": "integer", "minimum": 1},
+        "negative_sample_count": {"type": "integer", "minimum": 1},
+        "config_hash": {"$ref": "#/$defs/sha256"},
+        "data_hash": {"$ref": "#/$defs/sha256"},
+        "model_hash": {"$ref": "#/$defs/sha256"},
+        "frozen_contract_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

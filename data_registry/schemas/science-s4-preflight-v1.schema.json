@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-preflight-v1.schema.json",
+  "title": "RetinaEntail-DR Science S4 preregistration preflight",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "preflight_only",
+    "config_sha256",
+    "scope",
+    "oracle_contract",
+    "upstream_checks",
+    "prerequisites",
+    "blockers",
+    "io_audit",
+    "prohibited"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S4_CONTROLLED_BENCHMARK_SUPPORT_ORACLE"},
+    "status": {"enum": ["BLOCKED_PREREQUISITES", "READY_FOR_S4_EXECUTION_AUTHORIZATION", "READY_FOR_S4_EXECUTION", "FAIL_CLOSED"]},
+    "preflight_only": {"const": true},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scope": {
+      "type": "object",
+      "required": ["dataset_order", "lesion_classes", "development_splits", "locked_test_membership_only"],
+      "properties": {
+        "dataset_order": {"const": ["IDRID"]},
+        "lesion_classes": {"const": ["HE", "EX", "MA", "SE"]},
+        "development_splits": {"const": ["TRAIN", "CALIBRATION"]},
+        "locked_test_membership_only": {"const": true}
+      }
+    },
+    "oracle_contract": {
+      "type": "object",
+      "required": ["truth_axes", "confirmatory_tiers", "exploratory_tiers", "unresolved_state", "retinaentail_independent", "forbidden_inputs"],
+      "properties": {
+        "truth_axes": {"const": ["SOURCE_TRUTH", "SUPPORT_TRUTH", "DOMAIN_TRUTH"]},
+        "confirmatory_tiers": {"const": ["EXACT_COLLISION", "CALIBRATED_SET_OVERLAP"]},
+        "exploratory_tiers": {"const": ["EMPIRICAL_EQUIVALENCE"]},
+        "unresolved_state": {"const": "ORACLE_UNRESOLVED"},
+        "retinaentail_independent": {"const": true},
+        "forbidden_inputs": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "upstream_checks": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "expected", "actual"],
+        "properties": {
+          "id": {"type": "string"},
+          "status": {"enum": ["PASS", "FAIL"]},
+          "expected": {"type": "string"},
+          "actual": {"type": "string"}
+        }
+      }
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "blocking", "evidence"],
+        "properties": {
+          "id": {"type": "string"},
+          "status": {"enum": ["PASS", "MISSING", "FAIL"]},
+          "blocking": {"type": "boolean"},
+          "evidence": {"type": "string"}
+        }
+      }
+    },
+    "blockers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_root_argument_accepted", "environment_root_discovery", "dataset_root_reads", "locked_test_root_reads", "image_decodes", "mask_decodes", "s3_artifact_files_hashed"],
+      "properties": {
+        "dataset_root_argument_accepted": {"const": false},
+        "environment_root_discovery": {"const": false},
+        "dataset_root_reads": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "image_decodes": {"const": 0},
+        "mask_decodes": {"const": 0},
+        "s3_artifact_files_hashed": {"type": "integer", "minimum": 1}
+      }
+    },
+    "prohibited": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-ddr-recovery-audit-v5.schema.json",
+  "title": "Science S4 DDR Tier-A-only recovery audit v5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "summary",
+    "gate",
+    "io_audit",
+    "hashes",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "5.0.0"},
+    "experiment_id": {"const": "S4_DDR_TIER_A_RECOVERY_V5"},
+    "status": {"enum": ["READY_FOR_AI_QC", "BLOCKED_SAMPLE_OR_CONSTRUCTION_QC"]},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter_source_count",
+        "component_count",
+        "component_counts",
+        "accepted_twin_count",
+        "rejected_attempt_count",
+        "paired_output_count",
+        "accepted_counts",
+        "accepted_distinct_sources",
+        "method_counts",
+        "raw_edit_array_equal_diagnostic",
+        "selection_record_count"
+      ],
+      "properties": {
+        "adapter_source_count": {"const": 532},
+        "component_count": {"type": "integer", "minimum": 0},
+        "component_counts": {"$ref": "#/$defs/classCounts"},
+        "accepted_twin_count": {"type": "integer", "minimum": 0},
+        "rejected_attempt_count": {"type": "integer", "minimum": 0},
+        "paired_output_count": {"type": "integer", "minimum": 0},
+        "accepted_counts": {"type": "object", "minProperties": 8, "maxProperties": 8},
+        "accepted_distinct_sources": {"type": "object", "minProperties": 8, "maxProperties": 8},
+        "method_counts": {"type": "object"},
+        "raw_edit_array_equal_diagnostic": {"$ref": "#/$defs/classCounts"},
+        "selection_record_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "upstream_hash_replay",
+        "adapter_hash_replay",
+        "target_count_sufficiency",
+        "distinct_source_sufficiency",
+        "complete_pairs",
+        "outside_edit_exact_preservation",
+        "target_preservation_in_sham",
+        "support_oracle",
+        "tier_b",
+        "ai_contact_sheet_review",
+        "s5_degradation_calibration_authorized",
+        "s6_or_later_authorized"
+      ],
+      "properties": {
+        "upstream_hash_replay": {"const": "PASS"},
+        "adapter_hash_replay": {"const": "PASS"},
+        "target_count_sufficiency": {"$ref": "#/$defs/classBooleans"},
+        "distinct_source_sufficiency": {"$ref": "#/$defs/classBooleans"},
+        "complete_pairs": {"const": "PASS"},
+        "outside_edit_exact_preservation": {"const": "PASS"},
+        "target_preservation_in_sham": {"const": "PASS"},
+        "support_oracle": {"const": "DEFERRED_TO_S5_DEGRADATION_OBSERVATION"},
+        "tier_b": {"const": "NOT_AVAILABLE"},
+        "ai_contact_sheet_review": {"const": "PENDING"},
+        "s5_degradation_calibration_authorized": {"const": false},
+        "s6_or_later_authorized": {"const": false}
+      }
+    },
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "development_image_hash_reads",
+        "development_mask_hash_reads",
+        "development_image_decodes",
+        "development_mask_decodes",
+        "development_bytes_hashed",
+        "ddr_test_content_reads",
+        "ddr_test_image_decodes",
+        "locked_test_root_reads",
+        "source_split_leaks"
+      ],
+      "properties": {
+        "development_image_hash_reads": {"type": "integer", "minimum": 532},
+        "development_mask_hash_reads": {"type": "integer", "minimum": 2128},
+        "development_image_decodes": {"type": "integer", "minimum": 532},
+        "development_mask_decodes": {"type": "integer", "minimum": 2128},
+        "development_bytes_hashed": {"type": "integer", "minimum": 634039906},
+        "ddr_test_content_reads": {"const": 0},
+        "ddr_test_image_decodes": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "source_split_leaks": {"const": 0}
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code_sha256",
+        "component_inventory_sha256",
+        "twin_manifest_sha256",
+        "selection_audit_sha256",
+        "accepted_rejected_sha256"
+      ],
+      "properties": {
+        "code_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "component_inventory_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "twin_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "selection_audit_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "accepted_rejected_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "classCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"type": "integer", "minimum": 0},
+        "EX": {"type": "integer", "minimum": 0},
+        "MA": {"type": "integer", "minimum": 0},
+        "SE": {"type": "integer", "minimum": 0}
+      }
+    },
+    "classBooleans": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"type": "boolean"},
+        "EX": {"type": "boolean"},
+        "MA": {"type": "boolean"},
+        "SE": {"type": "boolean"}
+      }
+    }
+  }
+}

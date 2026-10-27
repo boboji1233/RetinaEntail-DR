@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage11-certificate-v11.schema.json",
+  "title": "RetinaEntail-DR Stage 11 Runner Certificate v11",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "signature_b64"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "artifact_type", "algorithm", "serial", "subject",
+        "issuer_key_id", "public_key_b64", "key_id", "generation", "previous_key_id",
+        "usage", "scope", "not_before_epoch", "not_after_epoch", "production_authentication"
+      ],
+      "properties": {
+        "schema_version": {"const": "11.0.0"},
+        "artifact_type": {"const": "RUNNER_CERTIFICATE"},
+        "algorithm": {"const": "Ed25519"},
+        "serial": {"$ref": "#/$defs/sha256"},
+        "subject": {"type": "string", "minLength": 1},
+        "issuer_key_id": {"$ref": "#/$defs/sha256"},
+        "public_key_b64": {"type": "string", "minLength": 44, "maxLength": 44},
+        "key_id": {"$ref": "#/$defs/sha256"},
+        "generation": {"type": "integer", "minimum": 1},
+        "previous_key_id": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "usage": {"const": "RUNNER_ARTIFACT_SIGNING"},
+        "scope": {"const": "SYNTHETIC_ONLY"},
+        "not_before_epoch": {"type": "integer", "minimum": 1},
+        "not_after_epoch": {"type": "integer", "minimum": 1},
+        "production_authentication": {"const": false}
+      }
+    },
+    "signature_b64": {"type": "string", "minLength": 88, "maxLength": 88}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

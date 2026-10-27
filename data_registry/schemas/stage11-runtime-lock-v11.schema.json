@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage11-runtime-lock-v11.schema.json",
+  "title": "RetinaEntail-DR Stage 11 Runtime Lock v11",
+  "type": "object",
+  "required": [
+    "schema_version", "lock_kind", "python_implementation", "python_version",
+    "platform_system", "platform_release", "platform_machine", "cpu_profile_sha256",
+    "cpu_instruction_set_attested", "cpu_instruction_policy", "cryptography_version",
+    "openssl_version", "preferred_encoding", "filesystem_encoding",
+    "stage10_environment_lock_sha256", "stage10_blas_configuration_sha256",
+    "stage10_thread_policy", "stage10_locale_name", "dependency_lock_sha256",
+    "contains_host_name", "contains_install_paths", "production_hardware_attestation",
+    "runtime_lock_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "11.0.0"},
+    "lock_kind": {"const": "installed-runtime-evidence-v1"},
+    "python_implementation": {"type": "string", "minLength": 1},
+    "python_version": {"type": "string", "minLength": 1},
+    "platform_system": {"type": "string", "minLength": 1},
+    "platform_release": {"type": "string", "minLength": 1},
+    "platform_machine": {"type": "string", "minLength": 1},
+    "cpu_profile_sha256": {"$ref": "#/$defs/sha256"},
+    "cpu_instruction_set_attested": {"const": false},
+    "cpu_instruction_policy": {"const": "RECORDED_NOT_HARDWARE_ATTESTED"},
+    "cryptography_version": {"type": "string", "minLength": 1},
+    "openssl_version": {"type": "string", "minLength": 1},
+    "preferred_encoding": {"type": "string", "minLength": 1},
+    "filesystem_encoding": {"type": "string", "minLength": 1},
+    "stage10_environment_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "stage10_blas_configuration_sha256": {"$ref": "#/$defs/sha256"},
+    "stage10_thread_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "BLIS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS", "OMP_NUM_THREADS",
+        "OPENBLAS_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"
+      ],
+      "properties": {
+        "BLIS_NUM_THREADS": {"const": "1"},
+        "MKL_NUM_THREADS": {"const": "1"},
+        "NUMEXPR_NUM_THREADS": {"const": "1"},
+        "OMP_NUM_THREADS": {"const": "1"},
+        "OPENBLAS_NUM_THREADS": {"const": "1"},
+        "VECLIB_MAXIMUM_THREADS": {"const": "1"}
+      }
+    },
+    "stage10_locale_name": {"type": "string", "minLength": 1},
+    "dependency_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "contains_host_name": {"const": false},
+    "contains_install_paths": {"const": false},
+    "production_hardware_attestation": {"const": false},
+    "runtime_lock_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "additionalProperties": false,
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

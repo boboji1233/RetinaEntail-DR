@@ -1,0 +1,23 @@
+schema_version: "1.0.0"
+dataset_id: hrf_quality
+name: HRF Image Quality Assessment Dataset
+version: "hrf-quality-allquality-e0818e5e-v1"
+source_url: "https://www5.informatik.uni-erlangen.de/indexbbb3.html?L=&id=1531&type=98"
+alternate_source_urls: []
+access_mode: public_direct
+license_status: verified
+license_review_status: reviewed
+license_notes: >-
+  The official page states that the database is free for research use under CC BY 4.0. This entry
+  covers only the 18-pair Image Quality Assessment subset and does not authorize redistribution of
+  source or derived images through Git.
+expected_labels:
+  - same_eye_good_bad_acquisition_pair
+  - acquisition_quality_role
+label_verification_status: verified
+root_env: RETINAENTAIL_HRF_QUALITY_ROOT
+patient_id_available: false
+source_image_id_rule: >-
+  Pair the exact integer basename N across N_good.JPG and N_bad.JPG for N=1..18. Do not infer any
+  additional patient, eye, disease, lesion, or longitudinal identity.
+redistribution: false

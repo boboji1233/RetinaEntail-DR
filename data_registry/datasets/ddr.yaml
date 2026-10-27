@@ -1,0 +1,25 @@
+schema_version: "1.0.0"
+dataset_id: ddr
+name: DDR / OIA-DDR
+version: "ddr-oia-official-drive-2019-07-10-v1"
+source_url: "https://github.com/nkicsl/DDR-dataset"
+alternate_source_urls: []
+access_mode: public_direct
+license_status: verified
+license_review_status: reviewed
+license_notes: >-
+  The responsible data-governance operator explicitly approved the official release for
+  non-commercial research/training on 2026-08-25. The decision is recorded separately and is
+  not inferred from the repository's MIT code license. Redistribution and commercial use remain
+  prohibited by the task-scoped review.
+expected_labels:
+  - dr_grade
+  - lesion_detection_annotations
+  - lesion_segmentation_masks
+label_verification_status: verified
+root_env: RETINAENTAIL_DDR_ROOT
+patient_id_available: unknown
+source_image_id_rule: >-
+  Use the exact official release image identifier. Preserve the official TRAIN/VALID/TEST split;
+  never infer patient identity, laterality, or missing-mask negativity from filenames.
+redistribution: false

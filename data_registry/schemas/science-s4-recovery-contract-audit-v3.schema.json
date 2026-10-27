@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-recovery-contract-audit-v3.schema.json",
+  "title": "Science S4 evidence-gap recovery contract audit v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "contract_frozen",
+    "s4_overall_status",
+    "config_sha256",
+    "upstream_replay",
+    "ddr",
+    "tier_b",
+    "blockers",
+    "io_audit",
+    "downstream_authorization",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0.0"},
+    "experiment_id": {"const": "S4_EVIDENCE_GAP_RECOVERY_CONTRACT_V3"},
+    "status": {"enum": ["READY_FOR_S4_RECOVERY_IMAGE_AUDIT", "BLOCKED_PREREQUISITES"]},
+    "contract_frozen": {"type": "boolean"},
+    "s4_overall_status": {"const": "BLOCKED_PREREQUISITES"},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "upstream_replay": {"type": "object"},
+    "ddr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_hash_verified",
+        "central_directory_member_count",
+        "development_source_count",
+        "development_file_count",
+        "source_split_leaks",
+        "test_central_directory_member_count",
+        "test_content_reads",
+        "development_adapter_status"
+      ],
+      "properties": {
+        "archive_hash_verified": {"const": true},
+        "central_directory_member_count": {"const": 18249},
+        "development_source_count": {"const": 532},
+        "development_file_count": {"const": 2660},
+        "source_split_leaks": {"const": 0},
+        "test_central_directory_member_count": {"const": 5465},
+        "test_content_reads": {"const": 0},
+        "development_adapter_status": {"const": "READY"}
+      }
+    },
+    "tier_b": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public_image_count",
+        "accepted_pair_count",
+        "primary_unit_count",
+        "minimum_primary_unit_count",
+        "real_image_decodes",
+        "registration_status",
+        "overlap_witness_status",
+        "tier_b_status"
+      ],
+      "properties": {
+        "public_image_count": {"const": 399},
+        "accepted_pair_count": {"const": 175},
+        "primary_unit_count": {"const": 96},
+        "minimum_primary_unit_count": {"const": 59},
+        "real_image_decodes": {"const": 0},
+        "registration_status": {"const": "FROZEN_NOT_RUN"},
+        "overlap_witness_status": {"const": "FROZEN_NOT_FIT"},
+        "tier_b_status": {"const": "NOT_AVAILABLE"}
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ddr_archive_hash_reads",
+        "ddr_central_directory_reads",
+        "ddr_development_file_hash_reads",
+        "ddr_development_bytes_hashed",
+        "ddr_test_content_reads",
+        "ddr_test_image_decodes",
+        "paired_retina_file_hash_reads",
+        "paired_retina_bytes_hashed",
+        "paired_retina_image_decodes",
+        "locked_test_root_reads",
+        "locked_test_image_decodes"
+      ],
+      "properties": {
+        "ddr_archive_hash_reads": {"const": 1},
+        "ddr_central_directory_reads": {"const": 1},
+        "ddr_development_file_hash_reads": {"const": 2660},
+        "ddr_development_bytes_hashed": {"type": "integer", "minimum": 1},
+        "ddr_test_content_reads": {"const": 0},
+        "ddr_test_image_decodes": {"const": 0},
+        "paired_retina_file_hash_reads": {"const": 399},
+        "paired_retina_bytes_hashed": {"const": 686795759},
+        "paired_retina_image_decodes": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "locked_test_image_decodes": {"const": 0}
+      }
+    },
+    "downstream_authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "s4_recovery_image_audit",
+        "s4_recovery_twin_execution",
+        "s5_degradation_calibration",
+        "s6_verify",
+        "s7_lite",
+        "enhancer_training",
+        "locked_test_evaluation",
+        "fcr_estimation",
+        "paper_performance_experiment"
+      ],
+      "properties": {
+        "s4_recovery_image_audit": {"type": "boolean"},
+        "s4_recovery_twin_execution": {"const": false},
+        "s5_degradation_calibration": {"const": false},
+        "s6_verify": {"const": false},
+        "s7_lite": {"const": false},
+        "enhancer_training": {"const": false},
+        "locked_test_evaluation": {"const": false},
+        "fcr_estimation": {"const": false},
+        "paper_performance_experiment": {"const": false}
+      }
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

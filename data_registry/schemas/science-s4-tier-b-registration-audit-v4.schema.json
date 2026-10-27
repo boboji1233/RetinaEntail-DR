@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-tier-b-registration-audit-v4.schema.json",
+  "title": "Science S4 Tier-B registration audit v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "runtime",
+    "upstream_replay",
+    "scope",
+    "registration",
+    "overlap_witness",
+    "io_audit",
+    "downstream_authorization",
+    "limitations",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "4.0.0"},
+    "experiment_id": {"const": "S4_TIER_B_REGISTRATION_V4"},
+    "status": {"enum": ["READY_FOR_AI_VISUAL_QC", "BLOCKED_PREREQUISITES"]},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "python",
+        "pillow",
+        "numpy",
+        "opencv_python_headless",
+        "opencv_wheel_version",
+        "opencv_threads",
+        "opencl",
+        "platform"
+      ],
+      "properties": {
+        "python": {"const": "3.11"},
+        "pillow": {"const": "12.3.0"},
+        "numpy": {"const": "2.4.6"},
+        "opencv_python_headless": {"const": "4.13.0"},
+        "opencv_wheel_version": {"const": "4.13.0.92"},
+        "opencv_threads": {"const": 1},
+        "opencl": {"const": false},
+        "platform": {"type": "string", "minLength": 1}
+      }
+    },
+    "upstream_replay": {
+      "type": "object",
+      "minProperties": 7,
+      "maxProperties": 7,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "split",
+        "primary_pair_count",
+        "supplemental_pair_decodes",
+        "lesion_label_reads",
+        "ddr_reads",
+        "locked_test_root_reads",
+        "locked_test_image_decodes"
+      ],
+      "properties": {
+        "split": {"const": "CALIBRATION_ONLY"},
+        "primary_pair_count": {"const": 96},
+        "supplemental_pair_decodes": {"const": 0},
+        "lesion_label_reads": {"const": 0},
+        "ddr_reads": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "locked_test_image_decodes": {"const": 0}
+      }
+    },
+    "registration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_count",
+        "rejected_count",
+        "rejection_reason_counts",
+        "contact_sheet_accepted_count",
+        "contact_sheet_rejected_count"
+      ],
+      "properties": {
+        "accepted_count": {"type": "integer", "minimum": 0, "maximum": 96},
+        "rejected_count": {"type": "integer", "minimum": 0, "maximum": 96},
+        "rejection_reason_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        },
+        "contact_sheet_accepted_count": {"type": "integer", "minimum": 0, "maximum": 24},
+        "contact_sheet_rejected_count": {"type": "integer", "minimum": 0, "maximum": 24}
+      }
+    },
+    "overlap_witness": {"$ref": "#/$defs/overlapWitness"},
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_file_hash_reads",
+        "primary_bytes_hashed",
+        "primary_image_decodes",
+        "supplemental_image_decodes",
+        "ddr_reads",
+        "locked_test_root_reads"
+      ],
+      "properties": {
+        "primary_file_hash_reads": {"const": 192},
+        "primary_bytes_hashed": {"type": "integer", "minimum": 1},
+        "primary_image_decodes": {"const": 192},
+        "supplemental_image_decodes": {"const": 0},
+        "ddr_reads": {"const": 0},
+        "locked_test_root_reads": {"const": 0}
+      }
+    },
+    "downstream_authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ai_visual_qc",
+        "s4_recovery_twin_execution",
+        "s5_degradation_calibration",
+        "s6_verify",
+        "s7_lite",
+        "enhancer_training",
+        "locked_test_evaluation",
+        "fcr_estimation",
+        "paper_performance_experiment"
+      ],
+      "properties": {
+        "ai_visual_qc": {"type": "boolean"},
+        "s4_recovery_twin_execution": {"const": false},
+        "s5_degradation_calibration": {"const": false},
+        "s6_verify": {"const": false},
+        "s7_lite": {"const": false},
+        "enhancer_training": {"const": false},
+        "locked_test_evaluation": {"const": false},
+        "fcr_estimation": {"const": false},
+        "paper_performance_experiment": {"const": false}
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "contains": {"const": "PROVIDER_ASSERTION_WITHOUT_IMAGE_TIMESTAMP"}
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "overlapWitness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "experiment_id",
+        "status",
+        "accepted_primary_units",
+        "minimum_accepted_primary_units",
+        "alpha",
+        "rank",
+        "unit_residual_quantile",
+        "channel_radius",
+        "set_overlap_rule",
+        "accepted_record_hashes"
+      ],
+      "properties": {
+        "schema_version": {"const": "4.0.0"},
+        "experiment_id": {"const": "S4_TIER_B_REGISTRATION_V4"},
+        "status": {"enum": ["FIT", "NOT_FIT"]},
+        "accepted_primary_units": {"type": "integer", "minimum": 0, "maximum": 96},
+        "minimum_accepted_primary_units": {"const": 59},
+        "alpha": {"const": 0.05},
+        "rank": {"type": ["integer", "null"], "minimum": 1},
+        "unit_residual_quantile": {"const": 0.995},
+        "channel_radius": {
+          "type": ["array", "null"],
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+        },
+        "set_overlap_rule": {"const": "CHANNEL_DISTANCE_LE_TWO_TIMES_CALIBRATED_RADIUS"},
+        "accepted_record_hashes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  }
+}

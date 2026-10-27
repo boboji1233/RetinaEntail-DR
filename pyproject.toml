@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "retinaentail-dr"
+version = "0.1.0"
+description = "Offline reproducible scaffold for lesion-level fundus enhancement safety auditing"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "Proprietary research scaffold; license selection pending" }
+authors = [{ name = "邱海峰", email = "1063855025@qq.com" }]
+dependencies = [
+  "cryptography>=43,<47",
+  "numpy>=1.24,<3",
+  "Pillow>=9.5,<13",
+  "PyYAML>=6,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "hypothesis>=6.100,<7",
+  "mypy>=1.10,<2",
+  "pre-commit>=3.7,<5",
+  "pytest>=8,<9",
+  "ruff>=0.6,<1",
+  "types-PyYAML>=6.0.12",
+]
+
+[project.scripts]
+retinaentail = "retinaentail.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+extend-exclude = [".conda", "data", "outputs", "weights", "artifacts"]
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]
+
+[tool.pytest.ini_options]
+addopts = "--strict-config --strict-markers --import-mode=importlib -ra"
+testpaths = ["tests"]
+pythonpath = ["src", "scripts"]
+markers = [
+  "requires_data: needs legally acquired local medical data",
+  "slow: long-running test excluded from the offline smoke gate",
+]
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+packages = ["retinaentail"]
+strict = true
+warn_unreachable = true
+exclude = ["^outputs/", "^data/"]
+
+[[tool.mypy.overrides]]
+module = ["PIL.*"]
+ignore_missing_imports = true

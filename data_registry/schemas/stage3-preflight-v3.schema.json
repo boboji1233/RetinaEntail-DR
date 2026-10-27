@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage3-preflight-v3.schema.json",
+  "title": "RetinaEntail-DR Stage 3 Preflight Report v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "dataset_id",
+    "dataset_version",
+    "review_record_provided",
+    "dataset_root_provided",
+    "adapter_spec_provided",
+    "reasons",
+    "authorizes_data_access",
+    "real_data_read",
+    "sample_count"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_STAGE2_GATE"]},
+    "dataset_id": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "dataset_version": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "review_record_provided": {"type": "boolean"},
+    "dataset_root_provided": {"type": "boolean"},
+    "adapter_spec_provided": {"type": "boolean"},
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "DATASET_NOT_EXPLICIT",
+          "DATASET_VERSION_NOT_EXPLICIT",
+          "APPROVED_REVIEW_NOT_PROVIDED",
+          "DATASET_ROOT_NOT_PROVIDED",
+          "ADAPTER_SPEC_NOT_PROVIDED"
+        ]
+      }
+    },
+    "authorizes_data_access": {"const": false},
+    "real_data_read": {"const": false},
+    "sample_count": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+      "then": {"properties": {"reasons": {"minItems": 1}}}
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "READY_FOR_STAGE2_GATE"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "dataset_id": {"type": "string"},
+          "dataset_version": {"type": "string"},
+          "review_record_provided": {"const": true},
+          "dataset_root_provided": {"const": true},
+          "adapter_spec_provided": {"const": true},
+          "reasons": {"maxItems": 0}
+        }
+      }
+    }
+  ]
+}

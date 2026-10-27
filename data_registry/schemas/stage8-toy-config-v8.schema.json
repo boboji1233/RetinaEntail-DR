@@ -1,0 +1,148 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage8-toy-config-v8.schema.json",
+    "title": "RetinaEntail-DR Stage 8 Synthetic Repeatability Configuration v8",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "run_id",
+        "method",
+        "scope",
+        "source_contract",
+        "dataset_id",
+        "dataset_version",
+        "split",
+        "inclusion_policy",
+        "inclusion_case_ids",
+        "degradation_replay_id",
+        "degradation_replay_set_sha256",
+        "replay_runs",
+        "metrics",
+        "locked_policy"
+    ],
+    "properties": {
+        "schema_version": {"const": "8.0"},
+        "run_id": {"const": "stage8-toy-repeatability-stability-001"},
+        "method": {"const": "synthetic_locked_pilot_repeatability_witness_stability_v1"},
+        "scope": {"const": "SYNTHETIC_FIXTURE"},
+        "source_contract": {"$ref": "#/$defs/sourceContract"},
+        "dataset_id": {"const": "synthetic_stage2"},
+        "dataset_version": {"const": "synthetic-fixture-v1"},
+        "split": {"const": "test"},
+        "inclusion_policy": {"const": "EXACT_FROZEN_CASE_SET_NO_REPLACEMENT"},
+        "inclusion_case_ids": {
+            "const": [
+                "stage4-toy-entailed-present",
+                "stage4-toy-entailed-absent",
+                "stage4-toy-raw-unidentifiable",
+                "stage4-toy-infeasible-out-of-model",
+                "stage4-toy-domain-out-of-model",
+                "stage4-toy-unknown-degradation",
+                "stage4-toy-invalid-witness"
+            ]
+        },
+        "degradation_replay_id": {"const": "frozen_stage7_test_trace_set_v1"},
+        "degradation_replay_set_sha256": {
+            "const": "3ecb4261c82250937253dea330ba898317ed7903416d88529fe10ef8fd6a9e76"
+        },
+        "replay_runs": {
+            "const": [
+                {"run_id": "stage8-repeat-001", "seed": 20260824},
+                {"run_id": "stage8-repeat-002", "seed": 20260824}
+            ]
+        },
+        "metrics": {"$ref": "#/$defs/metrics"},
+        "locked_policy": {"$ref": "#/$defs/lockedPolicy"}
+    },
+    "$defs": {
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "safeIdentifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+        "sourceContract": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "stage7_scope",
+                "stage7_run_id",
+                "stage7_authority_boundary",
+                "stage7_package_sha256",
+                "stage7_package_file_count",
+                "stage7_audit_sha256"
+            ],
+            "properties": {
+                "stage7_scope": {"const": "SYNTHETIC_ONLY"},
+                "stage7_run_id": {"const": "stage7-toy-authorization-consumption-001"},
+                "stage7_authority_boundary": {"const": "COMPLETE_VERIFIED_STAGE7_PACKAGE"},
+                "stage7_package_sha256": {
+                    "const": "232506ae1514b8ff52b60621b73dcc3218c315277bd360efdacdf030c39eb61a"
+                },
+                "stage7_package_file_count": {"const": 130},
+                "stage7_audit_sha256": {
+                    "const": "ada988dd84d27b99a9c78e593197521cd0a7feab090de6ac31991a6b9c99d9ad"
+                }
+            }
+        },
+        "replayRun": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["run_id", "seed"],
+            "properties": {
+                "run_id": {"$ref": "#/$defs/safeIdentifier"},
+                "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295}
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "confidence_level",
+                "state_transition_matrix",
+                "fail_closed_stability",
+                "out_of_distribution_stability",
+                "positive_witness_replay_stability",
+                "negative_witness_replay_stability",
+                "dual_witness_replay_stability",
+                "positive_witness_hash_stability",
+                "negative_witness_hash_stability",
+                "dual_witness_hash_stability"
+            ],
+            "properties": {
+                "confidence_level": {"const": 0.95},
+                "state_transition_matrix": {"const": true},
+                "fail_closed_stability": {"const": true},
+                "out_of_distribution_stability": {"const": true},
+                "positive_witness_replay_stability": {"const": true},
+                "negative_witness_replay_stability": {"const": true},
+                "dual_witness_replay_stability": {"const": true},
+                "positive_witness_hash_stability": {"const": true},
+                "negative_witness_hash_stability": {"const": true},
+                "dual_witness_hash_stability": {"const": true}
+            }
+        },
+        "lockedPolicy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "alpha_and_thresholds_locked",
+                "config_data_model_hashes_locked",
+                "test_tuning_prohibited",
+                "threshold_reestimation_prohibited",
+                "sample_replacement_prohibited",
+                "network_used",
+                "gpu_used",
+                "real_data_access"
+            ],
+            "properties": {
+                "alpha_and_thresholds_locked": {"const": true},
+                "config_data_model_hashes_locked": {"const": true},
+                "test_tuning_prohibited": {"const": true},
+                "threshold_reestimation_prohibited": {"const": true},
+                "sample_replacement_prohibited": {"const": true},
+                "network_used": {"const": false},
+                "gpu_used": {"const": false},
+                "real_data_access": {"const": false}
+            }
+        }
+    },
+    "$comment": "Synthetic fixture only. This configuration freezes the exact case set, seeds, deterministic replay set, metrics, and no-tuning policies before any repeat observation is produced."
+}

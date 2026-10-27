@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage10-signed-envelope-v10.schema.json",
+  "title": "RetinaEntail-DR Stage 10 Synthetic Signed Envelope v10",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "integrity_algorithm", "authentication_scope", "key_id",
+    "fixture_key_derivation_public", "production_authentication", "real_key_material_embedded",
+    "payload", "integrity_tag"
+  ],
+  "properties": {
+    "schema_version": {"const": "10.0.0"},
+    "integrity_algorithm": {"const": "HMAC-SHA256"},
+    "authentication_scope": {"const": "SYNTHETIC_SELF_CONSISTENCY_ONLY"},
+    "key_id": {"$ref": "#/$defs/sha256"},
+    "fixture_key_derivation_public": {"const": true},
+    "production_authentication": {"const": false},
+    "real_key_material_embedded": {"const": false},
+    "payload": {"$ref": "#/$defs/payload"},
+    "integrity_tag": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "runner_id", "producer_process_id", "session_nonce_sha256",
+        "environment_lock_sha256", "host_profile_sha256", "dataset_id", "dataset_version",
+        "scope", "split", "source_stage9_package_sha256", "stage9_package_sha256",
+        "stage9_package_file_count", "stage9_manifest_sha256", "stage9_audit_sha256",
+        "stage9_preregistration_sha256", "source_stage7_package_sha256",
+        "source_stage8_package_sha256", "deterministic_projection_sha256",
+        "observation_set_sha256", "payload_contains_data", "payload_contains_root",
+        "authorizes_real_data", "authorizes_physical_root", "detached_envelope_authoritative"
+      ],
+      "properties": {
+        "schema_version": {"const": "10.0.0"},
+        "runner_id": {"$ref": "#/$defs/identifier"},
+        "producer_process_id": {"type": "integer", "minimum": 1},
+        "session_nonce_sha256": {"$ref": "#/$defs/sha256"},
+        "environment_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "host_profile_sha256": {"$ref": "#/$defs/sha256"},
+        "dataset_id": {"$ref": "#/$defs/identifier"},
+        "dataset_version": {"$ref": "#/$defs/identifier"},
+        "scope": {"const": "SYNTHETIC_ONLY"},
+        "split": {"const": "test"},
+        "source_stage9_package_sha256": {"$ref": "#/$defs/sha256"},
+        "stage9_package_sha256": {"$ref": "#/$defs/sha256"},
+        "stage9_package_file_count": {"type": "integer", "minimum": 1},
+        "stage9_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "stage9_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "stage9_preregistration_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage7_package_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage8_package_sha256": {"$ref": "#/$defs/sha256"},
+        "deterministic_projection_sha256": {"$ref": "#/$defs/sha256"},
+        "observation_set_sha256": {"$ref": "#/$defs/sha256"},
+        "payload_contains_data": {"const": false},
+        "payload_contains_root": {"const": false},
+        "authorizes_real_data": {"const": false},
+        "authorizes_physical_root": {"const": false},
+        "detached_envelope_authoritative": {"const": false}
+      }
+    }
+  }
+}

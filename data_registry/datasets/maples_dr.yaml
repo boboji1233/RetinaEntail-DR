@@ -1,0 +1,23 @@
+schema_version: "1.0.0"
+dataset_id: maples_dr
+name: MAPLES-DR
+version: "official_or_release_id"
+source_url: "https://github.com/LIV4D/MAPLES-DR"
+alternate_source_urls:
+  - "https://liv4d.github.io/MAPLES-DR/en/"
+access_mode: gated
+license_status: unknown
+license_review_status: pending_review
+license_notes: >-
+  MAPLES-DR annotations and the original MESSIDOR images are separate assets.
+  Acquire the source images legally from the MESSIDOR consortium and review both
+  sets of terms before matching them; annotations alone grant no image rights.
+expected_labels:
+  - expert_lesion_pixel_masks
+  - retinal_anatomy_pixel_masks
+  - source_messidor_mapping
+label_verification_status: pending_review
+root_env: RETINAENTAIL_MAPLES_DR_ROOT
+patient_id_available: unknown
+source_image_id_rule: "Preserve the explicit MAPLES-DR to MESSIDOR source-image mapping."
+redistribution: false

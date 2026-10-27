@@ -1,0 +1,58 @@
+# Python/build/tool caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+htmlcov/
+build/
+dist/
+.venv/
+venv/
+.conda/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials/
+secrets/
+
+# Medical data and derivatives (keep only the tracked guidance file)
+/data/*
+!/data/README.md
+!/data/.gitkeep
+/derived/
+/manifests/local/
+
+# Generated experiments and large/model artifacts
+/outputs/
+/weights/
+/checkpoints/
+/artifacts/
+/splits/local/
+/reports/generated/
+*.ckpt
+*.onnx
+*.pt
+*.pth
+*.safetensors
+*.npz
+*.npy
+*.parquet
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.bak

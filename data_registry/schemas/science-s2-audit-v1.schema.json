@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s2-audit-v1.schema.json",
+  "title": "RetinaEntail-DR Science S2 audit",
+  "type": "object",
+  "required": ["schema_version", "status", "summary"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "status": {"enum": ["READY_FOR_HUMAN_QC", "PASS_SYNTHETIC_FIXTURE_ONLY", "BLOCKED", "FAIL_CLOSED"]},
+    "summary": {
+      "type": "object",
+      "required": ["development_source_count", "development_mask_count", "component_count", "locked_test_root_reads"],
+      "properties": {
+        "development_source_count": {"type": "integer", "minimum": 0},
+        "development_mask_count": {"type": "integer", "minimum": 0},
+        "component_count": {"type": "integer", "minimum": 0},
+        "locked_test_root_reads": {"const": 0}
+      }
+    }
+  }
+}

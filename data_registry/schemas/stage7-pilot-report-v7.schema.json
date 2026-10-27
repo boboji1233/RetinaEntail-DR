@@ -1,0 +1,339 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage7-pilot-report-v7.schema.json",
+    "title": "RetinaEntail-DR Stage 7 Synthetic Authorization-Consumption Pilot Report v7",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "scope",
+        "method",
+        "run_id",
+        "split",
+        "source_digest_method",
+        "stage6_source",
+        "authorization_consumption",
+        "rebuild_equivalence",
+        "identity_isolation",
+        "locked_contract",
+        "evaluation",
+        "case_index",
+        "stage7_config_sha256",
+        "stage7_source_payload_sha256",
+        "stage7_model_provenance_sha256",
+        "thresholds_locked_before_transaction",
+        "thresholds_reestimated",
+        "test_split_used_for_calibration",
+        "test_tuning_prohibited",
+        "synthetic_capability_authorizes_real_data",
+        "real_authorization_issued",
+        "dataset_root_probed",
+        "real_data_used",
+        "real_data_read_count",
+        "cpu_only",
+        "gpu_used",
+        "network_used",
+        "clinical_claim",
+        "individual_report_authoritative",
+        "authority_boundary"
+    ],
+    "properties": {
+        "schema_version": {"const": "7.0.0"},
+        "scope": {"const": "SYNTHETIC_ONLY"},
+        "method": {"const": "synthetic_authorization_consumption_rebuild_locked_pilot_v1"},
+        "run_id": {"const": "stage7-toy-authorization-consumption-001"},
+        "split": {"const": "test"},
+        "source_digest_method": {"const": "sha256-canonical-file-manifest-v1"},
+        "stage6_source": {"$ref": "#/$defs/stage6Source"},
+        "authorization_consumption": {"$ref": "#/$defs/authorizationConsumption"},
+        "rebuild_equivalence": {"$ref": "#/$defs/rebuildEquivalence"},
+        "identity_isolation": {
+            "allOf": [
+                {"$ref": "stage5-identity-audit-v5.schema.json"},
+                {
+                    "properties": {
+                        "dataset_id": {"const": "retinaentail_stage5_toy"},
+                        "status": {"const": "PASS"},
+                        "isolation_proven": {"const": true},
+                        "record_count": {"$ref": "#/$defs/positiveCount"},
+                        "audited_record_count": {"$ref": "#/$defs/positiveCount"},
+                        "rejected_record_count": {"const": 0},
+                        "unknown_counts": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "source_image_id",
+                                "patient_id",
+                                "eye_id",
+                                "followup_id",
+                                "intervention_pair_id"
+                            ],
+                            "properties": {
+                                "source_image_id": {"const": 0},
+                                "patient_id": {"const": 0},
+                                "eye_id": {"const": 0},
+                                "followup_id": {"const": 0},
+                                "intervention_pair_id": {"const": 0}
+                            }
+                        },
+                        "reasons": {"maxItems": 0},
+                        "issues": {"maxItems": 0}
+                    },
+                    "required": [
+                        "dataset_id",
+                        "status",
+                        "isolation_proven",
+                        "record_count",
+                        "audited_record_count",
+                        "rejected_record_count",
+                        "unknown_counts",
+                        "reasons",
+                        "issues"
+                    ]
+                }
+            ]
+        },
+        "locked_contract": {"$ref": "#/$defs/lockedContract"},
+        "evaluation": {
+            "allOf": [
+                {"$ref": "stage4-evaluation-report-v4.schema.json"},
+                {
+                    "properties": {
+                        "scope": {"const": "SYNTHETIC_ONLY"},
+                        "split": {"const": "test"},
+                        "confidence_level": {"const": 0.95},
+                        "test_case_count": {"$ref": "#/$defs/positiveCount"}
+                    },
+                    "required": ["scope", "split", "confidence_level", "test_case_count"]
+                }
+            ]
+        },
+        "case_index": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {"$ref": "#/$defs/caseIndex"}
+        },
+        "stage7_config_sha256": {"$ref": "#/$defs/sha256"},
+        "stage7_source_payload_sha256": {"$ref": "#/$defs/sha256"},
+        "stage7_model_provenance_sha256": {"$ref": "#/$defs/sha256"},
+        "thresholds_locked_before_transaction": {"const": true},
+        "thresholds_reestimated": {"const": false},
+        "test_split_used_for_calibration": {"const": false},
+        "test_tuning_prohibited": {"const": true},
+        "synthetic_capability_authorizes_real_data": {"const": false},
+        "real_authorization_issued": {"const": false},
+        "dataset_root_probed": {"const": false},
+        "real_data_used": {"const": false},
+        "real_data_read_count": {"const": 0},
+        "cpu_only": {"const": true},
+        "gpu_used": {"const": false},
+        "network_used": {"const": false},
+        "clinical_claim": {"const": false},
+        "individual_report_authoritative": {"const": false},
+        "authority_boundary": {"const": "COMPLETE_VERIFIED_STAGE7_PACKAGE"}
+    },
+    "$defs": {
+        "count": {"type": "integer", "minimum": 0},
+        "positiveCount": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "safeIdentifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+        "stage6Source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "scope",
+                "run_id",
+                "authority_boundary",
+                "package_sha256",
+                "package_file_count",
+                "envelope_sha256",
+                "complete_byte_replay_verified"
+            ],
+            "properties": {
+                "scope": {"const": "SYNTHETIC_ONLY"},
+                "run_id": {"const": "stage6-toy-verifier-pilot-001"},
+                "authority_boundary": {"const": "COMPLETE_VERIFIED_STAGE6_PACKAGE"},
+                "package_sha256": {"$ref": "#/$defs/sha256"},
+                "package_file_count": {"const": 122},
+                "envelope_sha256": {"$ref": "#/$defs/sha256"},
+                "complete_byte_replay_verified": {"const": true}
+            }
+        },
+        "authorizationConsumption": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "scope",
+                "ttl_seconds",
+                "process_bound",
+                "non_serializable",
+                "one_shot",
+                "issued",
+                "consumed",
+                "second_consumption_rejected",
+                "authorizes_embedded_fixture_replay",
+                "authorizes_real_data",
+                "authorizes_physical_dataset_root",
+                "detached_receipt_authoritative"
+            ],
+            "properties": {
+                "scope": {"const": "SYNTHETIC_ONLY"},
+                "ttl_seconds": {"const": 5},
+                "process_bound": {"const": true},
+                "non_serializable": {"const": true},
+                "one_shot": {"const": true},
+                "issued": {"const": true},
+                "consumed": {"const": true},
+                "second_consumption_rejected": {"const": true},
+                "authorizes_embedded_fixture_replay": {"const": true},
+                "authorizes_real_data": {"const": false},
+                "authorizes_physical_dataset_root": {"const": false},
+                "detached_receipt_authoritative": {"const": false}
+            }
+        },
+        "rebuildEquivalence": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "mode",
+                "dataset_id",
+                "dataset_version",
+                "record_count",
+                "original_manifest_sha256",
+                "rebuilt_manifest_sha256",
+                "record_fingerprints_sha256",
+                "canonical_equivalent",
+                "byte_equivalent",
+                "mismatch_count",
+                "physical_dataset_root_used",
+                "missing_label_policy"
+            ],
+            "properties": {
+                "mode": {"const": "EMBEDDED_STAGE2_TYPED_ROUNDTRIP"},
+                "dataset_id": {"const": "synthetic_stage2"},
+                "dataset_version": {"const": "synthetic-fixture-v1"},
+                "record_count": {"$ref": "#/$defs/positiveCount"},
+                "original_manifest_sha256": {"$ref": "#/$defs/sha256"},
+                "rebuilt_manifest_sha256": {"$ref": "#/$defs/sha256"},
+                "record_fingerprints_sha256": {"$ref": "#/$defs/sha256"},
+                "canonical_equivalent": {"const": true},
+                "byte_equivalent": {"const": true},
+                "mismatch_count": {"const": 0},
+                "physical_dataset_root_used": {"const": false},
+                "missing_label_policy": {"const": "UNKNOWN_NEVER_NEGATIVE"}
+            }
+        },
+        "lockedContract": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "alpha",
+                "positive_threshold",
+                "negative_threshold",
+                "positive_sample_count",
+                "negative_sample_count",
+                "total_sample_count",
+                "calibration_artifact_hash",
+                "config_hash",
+                "data_hash",
+                "model_hash"
+            ],
+            "properties": {
+                "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+                "positive_threshold": {"type": "number", "minimum": 0},
+                "negative_threshold": {"type": "number", "minimum": 0},
+                "positive_sample_count": {"$ref": "#/$defs/positiveCount"},
+                "negative_sample_count": {"$ref": "#/$defs/positiveCount"},
+                "total_sample_count": {"$ref": "#/$defs/positiveCount"},
+                "calibration_artifact_hash": {"$ref": "#/$defs/sha256"},
+                "config_hash": {"$ref": "#/$defs/sha256"},
+                "data_hash": {"$ref": "#/$defs/sha256"},
+                "model_hash": {"$ref": "#/$defs/sha256"}
+            }
+        },
+        "failureReason": {
+            "enum": [
+                "INVALID_INPUT",
+                "INVALID_CALIBRATION",
+                "MISSING_THRESHOLD",
+                "NONFINITE_THRESHOLD",
+                "MISSING_SCORE",
+                "NONFINITE_SCORE",
+                "INVALID_SCORE_RANGE",
+                "UNKNOWN_DEGRADATION",
+                "INVALID_WITNESS",
+                "SOLVER_NOT_SUCCESSFUL",
+                "OUT_OF_DISTRIBUTION",
+                "INVALID_HASH",
+                "PROVENANCE_MISMATCH"
+            ]
+        },
+        "caseIndex": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "pilot_index",
+                "case_id",
+                "reference_label",
+                "state",
+                "status",
+                "failure_reasons",
+                "dual_witness_replay_passed",
+                "positive_witness_replay_passed",
+                "negative_witness_replay_passed",
+                "evaluation_sha256",
+                "certificate_sha256",
+                "dual_replay_sha256",
+                "positive_witness_sha256",
+                "negative_witness_sha256"
+            ],
+            "properties": {
+                "pilot_index": {"type": "integer", "minimum": 0, "maximum": 6},
+                "case_id": {"$ref": "#/$defs/safeIdentifier"},
+                "reference_label": {"enum": ["LESION_PRESENT", "LESION_ABSENT", "UNKNOWN"]},
+                "state": {
+                    "enum": [
+                        "ENTAILED_PRESENT",
+                        "ENTAILED_ABSENT",
+                        "RAW_UNIDENTIFIABLE",
+                        "OUT_OF_MODEL"
+                    ]
+                },
+                "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+                "failure_reasons": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {"$ref": "#/$defs/failureReason"}
+                },
+                "dual_witness_replay_passed": {"type": "boolean"},
+                "positive_witness_replay_passed": {"type": "boolean"},
+                "negative_witness_replay_passed": {"type": "boolean"},
+                "evaluation_sha256": {"$ref": "#/$defs/sha256"},
+                "certificate_sha256": {"$ref": "#/$defs/sha256"},
+                "dual_replay_sha256": {"$ref": "#/$defs/sha256"},
+                "positive_witness_sha256": {"$ref": "#/$defs/sha256"},
+                "negative_witness_sha256": {"$ref": "#/$defs/sha256"}
+            },
+            "allOf": [
+                {
+                    "if": {"properties": {"status": {"const": "SUCCESS"}}, "required": ["status"]},
+                    "then": {"properties": {"failure_reasons": {"maxItems": 0}}}
+                },
+                {
+                    "if": {
+                        "properties": {"status": {"const": "FAIL_CLOSED"}},
+                        "required": ["status"]
+                    },
+                    "then": {
+                        "properties": {
+                            "state": {"const": "OUT_OF_MODEL"},
+                            "failure_reasons": {"minItems": 1}
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "$comment": "This JSON is a non-authoritative receipt. Python replays the complete package and verifies lock equality, all aggregate counts and Wilson intervals, case ordering, witness replay booleans, and provenance digests."
+}

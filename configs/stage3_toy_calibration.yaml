@@ -1,0 +1,15 @@
+schema_version: "3.0"
+case_id: stage3-toy-calibration-001
+seed: 20260823
+image_size: 96
+lesion_class: MA
+lesion_radius: 4
+alpha: 0.25
+calibration_residual_levels: [1, 2, 3, 4]
+degradations:
+  - name: gaussian_blur
+    severity: 0.55
+  - name: downsample_restore
+    severity: 0.35
+  - name: jpeg_compression
+    severity: 0.25

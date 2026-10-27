@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage5-toy-config-v5.schema.json",
+  "title": "RetinaEntail-DR Stage 5 Synthetic Locked-Pilot Configuration v5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pilot_id",
+    "source_stage4",
+    "confidence_level",
+    "train_identity_control_count",
+    "pilot_case_ids",
+    "threshold_policy",
+    "test_tuning_prohibited",
+    "real_data_access"
+  ],
+  "properties": {
+    "schema_version": {"const": "5.0"},
+    "pilot_id": {"const": "stage5-toy-locked-pilot-001"},
+    "source_stage4": {"$ref": "#/$defs/stage4Source"},
+    "confidence_level": {"const": 0.95},
+    "train_identity_control_count": {"const": 2},
+    "pilot_case_ids": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        {"const": "stage4-toy-entailed-present"},
+        {"const": "stage4-toy-entailed-absent"},
+        {"const": "stage4-toy-raw-unidentifiable"},
+        {"const": "stage4-toy-infeasible-out-of-model"},
+        {"const": "stage4-toy-domain-out-of-model"},
+        {"const": "stage4-toy-unknown-degradation"},
+        {"const": "stage4-toy-invalid-witness"}
+      ],
+      "items": false
+    },
+    "threshold_policy": {"const": "LOCKED_STAGE3_NO_REESTIMATION"},
+    "test_tuning_prohibited": {"const": true},
+    "real_data_access": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stage4Source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package_schema_version",
+        "run_id",
+        "package_sha256",
+        "package_file_count",
+        "stage4_config_sha256",
+        "test_plan_sha256",
+        "test_data_sha256",
+        "stage4_model_provenance_sha256",
+        "calibration_artifact_sha256",
+        "calibration_config_sha256",
+        "calibration_data_sha256",
+        "calibration_model_sha256",
+        "alpha",
+        "positive_threshold",
+        "negative_threshold",
+        "positive_sample_count",
+        "negative_sample_count",
+        "total_sample_count"
+      ],
+      "properties": {
+        "package_schema_version": {"const": "4.0.0"},
+        "run_id": {"const": "stage4-toy-locked-test-001"},
+        "package_sha256": {
+          "allOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"const": "bfb7b22393bf6bafd6944a6ef091fa2464d70b95a344ad5d78cbd0fb3d1713df"}
+          ]
+        },
+        "package_file_count": {"const": 88},
+        "stage4_config_sha256": {"const": "ea417983d85b9564d4ec8b217966dc31d734734fe074b12beb48c34cfe933680"},
+        "test_plan_sha256": {"const": "e1c667954725800f8a5a2d0e012313ccca738247678d26f9a6400aadcf927094"},
+        "test_data_sha256": {"const": "c10341f6f466c2222587568ffdd2715d7460b23e748b79683c9d47f2f73a20d1"},
+        "stage4_model_provenance_sha256": {"const": "213dae8b86972b551b60042e69e2ec2551f34947c2bab61298c412d9ebadf23b"},
+        "calibration_artifact_sha256": {"const": "c84762f2d44d345cd39732e1ce0f5a44003e0a635e482f28d3f8abcd6395e78e"},
+        "calibration_config_sha256": {"const": "0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52"},
+        "calibration_data_sha256": {"const": "ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd"},
+        "calibration_model_sha256": {"const": "ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1"},
+        "alpha": {"const": 0.25},
+        "positive_threshold": {"const": 0.000012299400515471258},
+        "negative_threshold": {"const": 0.000012299400515471254},
+        "positive_sample_count": {"const": 4},
+        "negative_sample_count": {"const": 4},
+        "total_sample_count": {"const": 8}
+      }
+    }
+  },
+  "$comment": "The Python parser repeats all const constraints. This fixture is synthetic-only and authorizes no data access."
+}

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage10-toy-config-v10.schema.json",
+  "title": "RetinaEntail-DR Stage 10 Local Dual-Runner Config v10",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_id", "method", "scope", "dataset_id", "dataset_version",
+    "split", "runner_ids", "physical_host_count", "cross_physical_host_claim",
+    "source_contract", "environment_policy", "inclusion_case_ids", "replay_runs",
+    "degradation_replay_set_sha256", "locked_contract", "artifact_exchange",
+    "confidence_level", "locked_policy"
+  ],
+  "properties": {
+    "schema_version": {"const": "10.0.0"},
+    "run_id": {"const": "stage10-toy-runner-portability-001"},
+    "method": {"const": "local_dual_runner_signed_exchange_v1"},
+    "scope": {"const": "SYNTHETIC_FIXTURE"},
+    "dataset_id": {"$ref": "#/$defs/identifier"},
+    "dataset_version": {"$ref": "#/$defs/identifier"},
+    "split": {"const": "test"},
+    "runner_ids": {"type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/identifier"}},
+    "physical_host_count": {"const": 1},
+    "cross_physical_host_claim": {"const": false},
+    "source_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["stage9_package_sha256", "stage9_package_file_count", "stage9_preregistration_sha256", "stage8_package_sha256", "stage7_package_sha256"],
+      "properties": {
+        "stage9_package_sha256": {"$ref": "#/$defs/sha256"},
+        "stage9_package_file_count": {"type": "integer", "minimum": 1},
+        "stage9_preregistration_sha256": {"$ref": "#/$defs/sha256"},
+        "stage8_package_sha256": {"$ref": "#/$defs/sha256"},
+        "stage7_package_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "environment_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["capture_probe_before_runners", "python_hash_seed", "python_utf8_mode", "thread_count", "locale", "exact_match_fields"],
+      "properties": {
+        "capture_probe_before_runners": {"const": true},
+        "python_hash_seed": {"const": "0"},
+        "python_utf8_mode": {"const": true},
+        "thread_count": {"const": 1},
+        "locale": {"const": "C"},
+        "exact_match_fields": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/identifier"}}
+      }
+    },
+    "inclusion_case_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/identifier"}},
+    "replay_runs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/replay"}},
+    "degradation_replay_set_sha256": {"$ref": "#/$defs/sha256"},
+    "locked_contract": {
+      "type": "object", "additionalProperties": false,
+      "required": ["alpha", "positive_threshold", "negative_threshold", "positive_sample_count", "negative_sample_count", "config_hash", "data_hash", "model_hash"],
+      "properties": {
+        "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "positive_threshold": {"type": "number", "minimum": 0},
+        "negative_threshold": {"type": "number", "minimum": 0},
+        "positive_sample_count": {"type": "integer", "minimum": 1},
+        "negative_sample_count": {"type": "integer", "minimum": 1},
+        "config_hash": {"$ref": "#/$defs/sha256"},
+        "data_hash": {"$ref": "#/$defs/sha256"},
+        "model_hash": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifact_exchange": {
+      "type": "object", "additionalProperties": false,
+      "required": ["envelope_payload_contains_data", "envelope_payload_contains_root", "integrity_algorithm", "authentication_scope", "offline_verification_required", "detached_envelope_authoritative", "real_key_material_embedded", "allowed_stage9_provenance_paths"],
+      "properties": {
+        "envelope_payload_contains_data": {"const": false},
+        "envelope_payload_contains_root": {"const": false},
+        "integrity_algorithm": {"const": "HMAC-SHA256"},
+        "authentication_scope": {"const": "SYNTHETIC_SELF_CONSISTENCY_ONLY"},
+        "offline_verification_required": {"const": true},
+        "detached_envelope_authoritative": {"const": false},
+        "real_key_material_embedded": {"const": false},
+        "allowed_stage9_provenance_paths": {"type": "array", "uniqueItems": true, "items": {"enum": ["audit.html", "audit.json", "package_manifest.json", "session_a.json", "session_b.json"]}}
+      }
+    },
+    "confidence_level": {"const": 0.95},
+    "locked_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["test_tuning_prohibited", "threshold_reestimation_prohibited", "sample_replacement_prohibited", "network_used", "gpu_used", "real_data_access", "deterministic_difference_fail_closed", "large_model_training_prohibited", "weights_download_prohibited"],
+      "properties": {
+        "test_tuning_prohibited": {"const": true},
+        "threshold_reestimation_prohibited": {"const": true},
+        "sample_replacement_prohibited": {"const": true},
+        "network_used": {"const": false},
+        "gpu_used": {"const": false},
+        "real_data_access": {"const": false},
+        "deterministic_difference_fail_closed": {"const": true},
+        "large_model_training_prohibited": {"const": true},
+        "weights_download_prohibited": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+    "replay": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "seed"],
+      "properties": {
+        "run_id": {"$ref": "#/$defs/identifier"},
+        "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295}
+      }
+    }
+  }
+}

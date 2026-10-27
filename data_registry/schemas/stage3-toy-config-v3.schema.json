@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage3-toy-config-v3.schema.json",
+  "title": "RetinaEntail-DR Stage 3 Toy Calibration Configuration v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "seed",
+    "image_size",
+    "lesion_class",
+    "lesion_radius",
+    "alpha",
+    "calibration_residual_levels",
+    "degradations"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0"},
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\r\\n\\u0000]*\\S)?$"
+    },
+    "seed": {"type": "integer", "minimum": 0, "maximum": 2000000000},
+    "image_size": {"type": "integer", "minimum": 48, "maximum": 512},
+    "lesion_class": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S(?:[^\\r\\n\\u0000]*\\S)?$"
+    },
+    "lesion_radius": {"type": "integer", "minimum": 2, "maximum": 64},
+    "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "calibration_residual_levels": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "integer", "minimum": 1, "maximum": 32}
+    },
+    "degradations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/identity"},
+          {"$ref": "#/$defs/gaussianBlur"},
+          {"$ref": "#/$defs/defocusBlur"},
+          {"$ref": "#/$defs/motionBlur"},
+          {"$ref": "#/$defs/downsampleRestore"},
+          {"$ref": "#/$defs/jpegCompression"},
+          {"$ref": "#/$defs/poissonGaussianNoise"},
+          {"$ref": "#/$defs/gammaExposure"},
+          {"$ref": "#/$defs/vignetting"},
+          {"$ref": "#/$defs/nonuniformIllumination"}
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "knownDegradation": {
+      "enum": [
+        "identity",
+        "gaussian_blur",
+        "defocus_blur",
+        "motion_blur",
+        "downsample_restore",
+        "jpeg_compression",
+        "poisson_gaussian_noise",
+        "gamma_exposure",
+        "vignetting",
+        "nonuniform_illumination"
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {"allOf": [{"$ref": "#/$defs/knownDegradation"}, {"const": "identity"}]},
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {"$ref": "#/$defs/noParameters"}
+      }
+    },
+    "gaussianBlur": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [{"$ref": "#/$defs/knownDegradation"}, {"const": "gaussian_blur"}]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "radius": {"type": "number", "minimum": 0, "maximum": 64}
+          }
+        }
+      }
+    },
+    "defocusBlur": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [{"$ref": "#/$defs/knownDegradation"}, {"const": "defocus_blur"}]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "radius": {"type": "integer", "minimum": 1, "maximum": 32}
+          }
+        }
+      }
+    },
+    "motionBlur": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [{"$ref": "#/$defs/knownDegradation"}, {"const": "motion_blur"}]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "length": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65,
+              "not": {"multipleOf": 2}
+            },
+            "angle_degrees": {"type": "number", "minimum": -360, "maximum": 360}
+          }
+        }
+      }
+    },
+    "downsampleRestore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [
+            {"$ref": "#/$defs/knownDegradation"},
+            {"const": "downsample_restore"}
+          ]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {"type": "number", "minimum": 0.01, "maximum": 1}
+          }
+        }
+      }
+    },
+    "jpegCompression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [{"$ref": "#/$defs/knownDegradation"}, {"const": "jpeg_compression"}]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "quality": {"type": "integer", "minimum": 1, "maximum": 100}
+          }
+        }
+      }
+    },
+    "poissonGaussianNoise": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [
+            {"$ref": "#/$defs/knownDegradation"},
+            {"const": "poisson_gaussian_noise"}
+          ]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "peak_photons": {"type": "number", "minimum": 0.001, "maximum": 1000000},
+            "gaussian_sigma": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        }
+      }
+    },
+    "gammaExposure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [{"$ref": "#/$defs/knownDegradation"}, {"const": "gamma_exposure"}]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "gamma": {"type": "number", "minimum": 0.05, "maximum": 20},
+            "gain": {"type": "number", "minimum": 0.01, "maximum": 20}
+          }
+        }
+      }
+    },
+    "vignetting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {"allOf": [{"$ref": "#/$defs/knownDegradation"}, {"const": "vignetting"}]},
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "strength": {"type": "number", "minimum": 0, "maximum": 1},
+            "center_x": {"type": "number", "minimum": 0, "maximum": 1},
+            "center_y": {"type": "number", "minimum": 0, "maximum": 1},
+            "exponent": {"type": "number", "minimum": 0.1, "maximum": 10}
+          }
+        }
+      }
+    },
+    "nonuniformIllumination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity"],
+      "properties": {
+        "name": {
+          "allOf": [
+            {"$ref": "#/$defs/knownDegradation"},
+            {"const": "nonuniform_illumination"}
+          ]
+        },
+        "severity": {"$ref": "#/$defs/severity"},
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "strength": {"type": "number", "minimum": 0, "maximum": 1},
+            "angle_degrees": {"type": "number", "minimum": -360, "maximum": 360},
+            "phase": {
+              "type": "number",
+              "minimum": -314.1592653589793,
+              "maximum": 314.1592653589793
+            },
+            "frequency": {"type": "number", "minimum": 0.01, "maximum": 10}
+          }
+        }
+      }
+    },
+    "severity": {"type": "number", "minimum": 0, "maximum": 1},
+    "noParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "maxProperties": 0
+    }
+  },
+  "$comment": "The Python parser additionally enforces lesion_radius * 6 < image_size and a finite conservative order rank for alpha and calibration sample count."
+}

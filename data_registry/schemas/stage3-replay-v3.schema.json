@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage3-replay-v3.schema.json",
+  "title": "RetinaEntail-DR Stage 3 Dual Witness Replay v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "positive",
+    "negative",
+    "passed",
+    "failure_reasons"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0.0"},
+    "positive": {"$ref": "#/$defs/positiveReplay"},
+    "negative": {"$ref": "#/$defs/negativeReplay"},
+    "passed": {"type": "boolean"},
+    "failure_reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/pairFailureReason"}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"passed": {"const": true}}, "required": ["passed"]},
+      "then": {
+        "properties": {
+          "positive": {"$ref": "#/$defs/passedPositiveReplay"},
+          "negative": {"$ref": "#/$defs/passedNegativeReplay"},
+          "failure_reasons": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"passed": {"const": false}}, "required": ["passed"]},
+      "then": {"properties": {"failure_reasons": {"minItems": 1}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableSha256": {
+      "oneOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "nullableIdentifier": {
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {"type": "null"}
+      ]
+    },
+    "nullableReplayError": {
+      "oneOf": [
+        {"type": "number", "minimum": 0},
+        {"type": "null"}
+      ]
+    },
+    "replayFailureReason": {
+      "enum": [
+        "INVALID_INPUT",
+        "INVALID_EXPECTED_HASH",
+        "INVALID_PREDICATE",
+        "INVALID_ROOT",
+        "CASE_MISMATCH",
+        "LESION_CLASS_MISMATCH",
+        "SIDE_MISMATCH",
+        "ARTIFACT_PATH_INVALID",
+        "ARTIFACT_PATH_ESCAPE",
+        "ARTIFACT_MISSING",
+        "ARTIFACT_NOT_FILE",
+        "LATENT_HASH_MISMATCH",
+        "OBSERVATION_HASH_MISMATCH",
+        "TRACE_HASH_MISMATCH",
+        "TRACE_SERIALIZATION_FAILED",
+        "UNKNOWN_DEGRADATION",
+        "IMAGE_DECODE_FAILED",
+        "UNSUPPORTED_COORDINATE_SPACE",
+        "REGION_OUT_OF_BOUNDS",
+        "REPLAY_FAILED",
+        "NONFINITE_REPLAY_ERROR",
+        "REPLAY_ERROR_MISMATCH",
+        "PREDICATE_EXCEPTION",
+        "INVALID_PREDICATE_RESULT",
+        "PREDICATE_MISMATCH",
+        "RECORDED_PREDICATE_INVALID",
+        "MISSING_WITNESS"
+      ]
+    },
+    "pairFailureReason": {
+      "enum": [
+        "POSITIVE_REPLAY_FAILED",
+        "NEGATIVE_REPLAY_FAILED",
+        "DUPLICATE_WITNESS_ID"
+      ]
+    },
+    "replayResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "witness_id",
+        "case_id",
+        "lesion_class",
+        "side",
+        "predicate_id",
+        "region_sha256",
+        "expected_latent_sha256",
+        "actual_latent_sha256",
+        "expected_observation_sha256",
+        "actual_observation_sha256",
+        "expected_trace_sha256",
+        "actual_trace_sha256",
+        "replay_error",
+        "predicate_valid",
+        "passed",
+        "failure_reasons"
+      ],
+      "properties": {
+        "schema_version": {"const": "3.0.0"},
+        "witness_id": {"$ref": "#/$defs/nullableIdentifier"},
+        "case_id": {"type": "string", "minLength": 1},
+        "lesion_class": {"type": "string", "minLength": 1},
+        "side": {"enum": ["positive", "negative"]},
+        "predicate_id": {"type": "string", "minLength": 1},
+        "region_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "expected_latent_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "actual_latent_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "expected_observation_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "actual_observation_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "expected_trace_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "actual_trace_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "replay_error": {"$ref": "#/$defs/nullableReplayError"},
+        "predicate_valid": {"type": "boolean"},
+        "passed": {"type": "boolean"},
+        "failure_reasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/replayFailureReason"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"passed": {"const": true}}, "required": ["passed"]},
+          "then": {
+            "properties": {
+              "witness_id": {"type": "string", "minLength": 1},
+              "region_sha256": {"$ref": "#/$defs/sha256"},
+              "expected_latent_sha256": {"$ref": "#/$defs/sha256"},
+              "actual_latent_sha256": {"$ref": "#/$defs/sha256"},
+              "expected_observation_sha256": {"$ref": "#/$defs/sha256"},
+              "actual_observation_sha256": {"$ref": "#/$defs/sha256"},
+              "expected_trace_sha256": {"$ref": "#/$defs/sha256"},
+              "actual_trace_sha256": {"$ref": "#/$defs/sha256"},
+              "replay_error": {"type": "number", "minimum": 0},
+              "predicate_valid": {"const": true},
+              "failure_reasons": {"maxItems": 0}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"passed": {"const": false}}, "required": ["passed"]},
+          "then": {"properties": {"failure_reasons": {"minItems": 1}}}
+        }
+      ]
+    },
+    "positiveReplay": {
+      "allOf": [
+        {"$ref": "#/$defs/replayResult"},
+        {"properties": {"side": {"const": "positive"}}}
+      ]
+    },
+    "negativeReplay": {
+      "allOf": [
+        {"$ref": "#/$defs/replayResult"},
+        {"properties": {"side": {"const": "negative"}}}
+      ]
+    },
+    "passedPositiveReplay": {
+      "allOf": [
+        {"$ref": "#/$defs/positiveReplay"},
+        {"properties": {"passed": {"const": true}}}
+      ]
+    },
+    "passedNegativeReplay": {
+      "allOf": [
+        {"$ref": "#/$defs/negativeReplay"},
+        {"properties": {"passed": {"const": true}}}
+      ]
+    }
+  }
+}

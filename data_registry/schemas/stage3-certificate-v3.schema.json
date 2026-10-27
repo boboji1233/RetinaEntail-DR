@@ -1,0 +1,376 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage3-certificate-v3.schema.json",
+  "title": "RetinaEntail-DR Synthetic Stage 3 Certificate v3",
+  "type": "object",
+  "additionalProperties": false,
+  "$comment": "Cross-field digest equality, score/replay equality, and case/lesion binding are additionally enforced by Stage3SyntheticCertificate.from_dict.",
+  "required": [
+    "schema_version",
+    "scope",
+    "evaluation",
+    "region",
+    "predicate_id",
+    "calibration_artifact_hash",
+    "observation_sha256",
+    "degradation_trace_sha256",
+    "positive_evidence",
+    "negative_evidence"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0.0"},
+    "scope": {"const": "SYNTHETIC_TOY"},
+    "evaluation": {
+      "allOf": [
+        {"$ref": "evaluation-result-v3.schema.json"},
+        {
+          "properties": {
+            "config_hash": {"$ref": "#/$defs/sha256"},
+            "data_hash": {"$ref": "#/$defs/sha256"},
+            "model_hash": {"$ref": "#/$defs/sha256"},
+            "input_config_hash": {"$ref": "#/$defs/sha256"},
+            "input_data_hash": {"$ref": "#/$defs/sha256"},
+            "input_model_hash": {"$ref": "#/$defs/sha256"}
+          }
+        }
+      ]
+    },
+    "region": {"$ref": "#/$defs/region"},
+    "predicate_id": {"type": "string", "minLength": 1},
+    "calibration_artifact_hash": {"$ref": "#/$defs/sha256"},
+    "observation_sha256": {"$ref": "#/$defs/sha256"},
+    "degradation_trace_sha256": {"$ref": "#/$defs/sha256"},
+    "positive_evidence": {
+      "allOf": [
+        {"$ref": "#/$defs/evidence"},
+        {
+          "properties": {
+            "side": {"const": "positive"},
+            "replay": {"properties": {"side": {"const": "positive"}}},
+            "witness": {
+              "properties": {
+                "witness_kind": {"enum": ["positive", "lesion_present"]}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "negative_evidence": {
+      "allOf": [
+        {"$ref": "#/$defs/evidence"},
+        {
+          "properties": {
+            "side": {"const": "negative"},
+            "replay": {"properties": {"side": {"const": "negative"}}},
+            "witness": {
+              "properties": {
+                "witness_kind": {"enum": ["negative", "lesion_absent"]}
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {"status": {"const": "SUCCESS"}},
+            "required": ["status"]
+          }
+        },
+        "required": ["evaluation"]
+      },
+      "then": {
+        "properties": {
+          "positive_evidence": {
+            "properties": {"replay": {"properties": {"passed": {"const": true}}}}
+          },
+          "negative_evidence": {
+            "properties": {"replay": {"properties": {"passed": {"const": true}}}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {"status": {"const": "FAIL_CLOSED"}},
+            "required": ["status"]
+          }
+        },
+        "required": ["evaluation"]
+      },
+      "then": {
+        "properties": {
+          "evaluation": {"properties": {"state": {"const": "OUT_OF_MODEL"}}}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^/]+(?:/[^/]+)*$"
+    },
+    "region": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "x",
+        "y",
+        "width",
+        "height",
+        "region_id",
+        "coordinate_space"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "x": {"type": "integer", "minimum": 0},
+        "y": {"type": "integer", "minimum": 0},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "region_id": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        },
+        "coordinate_space": {"const": "pixel"}
+      }
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "operations"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/operation"}
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "severity", "seed", "parameters"],
+      "properties": {
+        "name": {
+          "enum": [
+            "identity",
+            "gaussian_blur",
+            "defocus_blur",
+            "motion_blur",
+            "downsample_restore",
+            "jpeg_compression",
+            "poisson_gaussian_noise",
+            "gamma_exposure",
+            "vignetting",
+            "nonuniform_illumination"
+          ]
+        },
+        "severity": {"type": "number", "minimum": 0, "maximum": 1},
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "parameters": {}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"name": {"const": "identity"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/identityParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "gaussian_blur"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/gaussianParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "defocus_blur"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/defocusParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "motion_blur"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/motionParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "downsample_restore"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/downsampleParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "jpeg_compression"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/jpegParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "poisson_gaussian_noise"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/noiseParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "gamma_exposure"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/gammaParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "vignetting"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/vignettingParameters"}}}
+        },
+        {
+          "if": {"properties": {"name": {"const": "nonuniform_illumination"}}},
+          "then": {"properties": {"parameters": {"$ref": "#/$defs/illuminationParameters"}}}
+        }
+      ]
+    },
+    "identityParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {}
+    },
+    "gaussianParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["radius"],
+      "properties": {"radius": {"type": "number", "minimum": 0, "maximum": 64}}
+    },
+    "defocusParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["radius"],
+      "properties": {"radius": {"type": "integer", "minimum": 1, "maximum": 32}}
+    },
+    "motionParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["length", "angle_degrees"],
+      "properties": {
+        "length": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65,
+          "not": {"multipleOf": 2}
+        },
+        "angle_degrees": {"type": "number", "minimum": -360, "maximum": 360}
+      }
+    },
+    "downsampleParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scale"],
+      "properties": {"scale": {"type": "number", "minimum": 0.01, "maximum": 1}}
+    },
+    "jpegParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quality"],
+      "properties": {"quality": {"type": "integer", "minimum": 1, "maximum": 100}}
+    },
+    "noiseParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["peak_photons", "gaussian_sigma"],
+      "properties": {
+        "peak_photons": {"type": "number", "minimum": 0.001, "maximum": 1000000},
+        "gaussian_sigma": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "gammaParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gamma", "gain"],
+      "properties": {
+        "gamma": {"type": "number", "minimum": 0.05, "maximum": 20},
+        "gain": {"type": "number", "minimum": 0.01, "maximum": 20}
+      }
+    },
+    "vignettingParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strength", "center_x", "center_y", "exponent"],
+      "properties": {
+        "strength": {"type": "number", "minimum": 0, "maximum": 1},
+        "center_x": {"type": "number", "minimum": 0, "maximum": 1},
+        "center_y": {"type": "number", "minimum": 0, "maximum": 1},
+        "exponent": {"type": "number", "minimum": 0.1, "maximum": 10}
+      }
+    },
+    "illuminationParameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strength", "angle_degrees", "phase", "frequency"],
+      "properties": {
+        "strength": {"type": "number", "minimum": 0, "maximum": 1},
+        "angle_degrees": {"type": "number", "minimum": -360, "maximum": 360},
+        "phase": {"type": "number", "minimum": -314.1592653589793, "maximum": 314.1592653589793},
+        "frequency": {"type": "number", "minimum": 0.01, "maximum": 10}
+      }
+    },
+    "witness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "witness_id",
+        "case_id",
+        "lesion_class",
+        "witness_kind",
+        "relative_path",
+        "observation_path",
+        "sha256",
+        "degradation_trace",
+        "replay_seed",
+        "replay_error",
+        "predicate_valid"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "witness_id": {"type": "string", "minLength": 1},
+        "case_id": {"type": "string", "minLength": 1},
+        "lesion_class": {"type": "string", "minLength": 1},
+        "witness_kind": {
+          "enum": ["positive", "negative", "lesion_present", "lesion_absent"]
+        },
+        "relative_path": {"$ref": "#/$defs/relativePath"},
+        "observation_path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "degradation_trace": {"$ref": "#/$defs/trace"},
+        "replay_seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 18446744073709551615
+        },
+        "replay_error": {"type": "number", "minimum": 0},
+        "predicate_valid": {"type": "boolean"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "side", "witness", "replay"],
+      "properties": {
+        "schema_version": {"const": "3.0.0"},
+        "side": {"enum": ["positive", "negative"]},
+        "witness": {"$ref": "#/$defs/witness"},
+        "replay": {
+          "allOf": [
+            {"$ref": "stage3-replay-v3.schema.json#/$defs/replayResult"},
+            {
+              "properties": {
+                "region_sha256": {"$ref": "#/$defs/sha256"},
+                "expected_observation_sha256": {"$ref": "#/$defs/sha256"},
+                "expected_trace_sha256": {"$ref": "#/$defs/sha256"}
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

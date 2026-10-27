@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage6-prerequisite-v6.schema.json",
+  "title": "RetinaEntail-DR Stage 6 Prerequisite Verification Receipt v6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "verification_context",
+    "dataset_id",
+    "dataset_version",
+    "reasons",
+    "binding_sha256",
+    "root_binding_sha256",
+    "authorization_ttl_seconds",
+    "prerequisites_verified",
+    "authorization_issued",
+    "real_authorization_issued",
+    "authorizes_file_open",
+    "dataset_root_probed",
+    "real_data_read",
+    "same_dataset_provenance_verified",
+    "synthetic_components_independent"
+  ],
+  "properties": {
+    "schema_version": {"const": "6.0.0"},
+    "status": {"enum": ["BLOCKED", "VERIFIED"]},
+    "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+    "dataset_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "dataset_version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reason"}
+    },
+    "binding_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z][a-z0-9_]*$": {"$ref": "#/$defs/sha256"}
+      },
+      "maxProperties": 6
+    },
+    "root_binding_sha256": {
+      "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+    },
+    "authorization_ttl_seconds": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5
+    },
+    "prerequisites_verified": {"type": "boolean"},
+    "authorization_issued": {"type": "boolean"},
+    "real_authorization_issued": {"type": "boolean"},
+    "authorizes_file_open": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false},
+    "same_dataset_provenance_verified": {"type": "boolean"},
+    "synthetic_components_independent": {"type": "boolean"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reason": {
+      "enum": [
+        "INPUT_INVALID",
+        "DATASET_NOT_EXPLICIT",
+        "DATASET_VERSION_NOT_EXPLICIT",
+        "READ_ONLY_AUDIT_PURPOSE_NOT_APPROVED",
+        "LESION_CALIBRATION_PURPOSE_NOT_APPROVED",
+        "LOCKED_TEST_EVALUATION_PURPOSE_NOT_APPROVED",
+        "DATASET_ROOT_NOT_EXPLICIT",
+        "STAGE2_ACCESS_PERMIT_NOT_PROVIDED",
+        "STAGE2_PACKAGE_CAPABILITY_NOT_PROVIDED",
+        "STAGE3_PACKAGE_CAPABILITY_NOT_PROVIDED",
+        "FROZEN_DATA_CARD_NOT_PROVIDED",
+        "MANUAL_CONFIRMATION_NOT_PROVIDED",
+        "LOCKED_EVIDENCE_NOT_PROVIDED",
+        "ROOT_INVALID",
+        "TTL_INVALID",
+        "STAGE2_ACCESS_PERMIT_INVALID",
+        "STAGE2_PACKAGE_CAPABILITY_API_UNAVAILABLE",
+        "STAGE2_PACKAGE_CAPABILITY_INVALID",
+        "STAGE3_PACKAGE_CAPABILITY_API_UNAVAILABLE",
+        "STAGE3_PACKAGE_CAPABILITY_INVALID",
+        "STAGE5_SYNTHETIC_PILOT_NOT_PROVIDED",
+        "STAGE5_SYNTHETIC_PILOT_INVALID",
+        "FROZEN_DATA_CARD_INVALID",
+        "MANUAL_CONFIRMATION_INVALID",
+        "LOCKED_EVIDENCE_INVALID",
+        "DATASET_MISMATCH",
+        "DATASET_VERSION_MISMATCH",
+        "SCOPE_MISMATCH",
+        "SPLIT_MISMATCH",
+        "HASH_MISMATCH",
+        "PROVENANCE_MISMATCH"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "reasons": {"minItems": 1},
+          "binding_sha256": {"maxProperties": 0},
+          "root_binding_sha256": {"type": "null"},
+          "authorization_ttl_seconds": {"type": "null"},
+          "prerequisites_verified": {"const": false},
+          "authorization_issued": {"const": false},
+          "real_authorization_issued": {"const": false},
+          "same_dataset_provenance_verified": {"const": false},
+          "synthetic_components_independent": {"const": false}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "VERIFIED"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "reasons": {"maxItems": 0},
+          "binding_sha256": {"minProperties": 3},
+          "root_binding_sha256": {"$ref": "#/$defs/sha256"},
+          "authorization_ttl_seconds": {"type": "integer"},
+          "prerequisites_verified": {"const": true},
+          "authorization_issued": {"const": true}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {"const": "VERIFIED"},
+          "verification_context": {"const": "REAL_PREREQUISITE"}
+        },
+        "required": ["status", "verification_context"]
+      },
+      "then": {
+        "properties": {
+          "real_authorization_issued": {"const": true},
+          "same_dataset_provenance_verified": {"const": true},
+          "synthetic_components_independent": {"const": false}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {"const": "VERIFIED"},
+          "verification_context": {"const": "SYNTHETIC_FIXTURE"}
+        },
+        "required": ["status", "verification_context"]
+      },
+      "then": {
+        "properties": {
+          "real_authorization_issued": {"const": false},
+          "same_dataset_provenance_verified": {"const": false},
+          "synthetic_components_independent": {"const": true}
+        }
+      }
+    }
+  ],
+  "$comment": "This receipt is descriptive only. The non-serializable process capability remains the authority and must be replayed before root binding."
+}

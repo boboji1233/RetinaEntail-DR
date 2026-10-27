@@ -1,0 +1,428 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage8-pilot-report-v8.schema.json",
+    "title": "RetinaEntail-DR Stage 8 Synthetic Repeatability Pilot Report v8",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "scope",
+        "method",
+        "run_id",
+        "source_package",
+        "capability_lifecycle",
+        "preregistration",
+        "stability_audit",
+        "replay_receipts",
+        "stage8_config_sha256",
+        "stage8_observations_sha256",
+        "stage8_model_provenance_sha256",
+        "preregistered_before_replay",
+        "exact_case_set_enforced",
+        "sample_replacement_performed",
+        "thresholds_reestimated",
+        "test_split_used_for_tuning",
+        "locked_baseline_only",
+        "process_capability_required",
+        "process_capability_serialized",
+        "detached_receipt_authoritative",
+        "synthetic_authorizes_real_data",
+        "synthetic_authorizes_physical_root",
+        "dataset_root_probed",
+        "real_data_read_count",
+        "cpu_only",
+        "gpu_used",
+        "network_used",
+        "clinical_claim",
+        "individual_report_authoritative",
+        "authority_boundary"
+    ],
+    "properties": {
+        "schema_version": {"const": "8.0.0"},
+        "scope": {"const": "SYNTHETIC_FIXTURE"},
+        "method": {"const": "synthetic_locked_pilot_repeatability_witness_stability_v1"},
+        "run_id": {"const": "stage8-toy-repeatability-stability-001"},
+        "source_package": {"$ref": "#/$defs/sourcePackage"},
+        "capability_lifecycle": {"$ref": "#/$defs/capabilityLifecycle"},
+        "preregistration": {"$ref": "#/$defs/fixedPreregistration"},
+        "stability_audit": {
+            "allOf": [
+                {"$ref": "stage8-stability-v8.schema.json"},
+                {
+                    "properties": {"preregistration": {"$ref": "#/$defs/fixedPreregistration"}},
+                    "required": ["preregistration"]
+                }
+            ]
+        },
+        "replay_receipts": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+                {
+                    "allOf": [
+                        {"$ref": "#/$defs/replayReceipt"},
+                        {
+                            "properties": {
+                                "run_id": {"const": "stage8-repeat-001"},
+                                "seed": {"const": 20260824}
+                            },
+                            "required": ["run_id", "seed"]
+                        }
+                    ]
+                },
+                {
+                    "allOf": [
+                        {"$ref": "#/$defs/replayReceipt"},
+                        {
+                            "properties": {
+                                "run_id": {"const": "stage8-repeat-002"},
+                                "seed": {"const": 20260824}
+                            },
+                            "required": ["run_id", "seed"]
+                        }
+                    ]
+                }
+            ],
+            "items": false
+        },
+        "stage8_config_sha256": {
+            "const": "726b8a70c4f296e3ad5c6a93c7dfe94195bb311d1a11e9b8d374566c2111feb6"
+        },
+        "stage8_observations_sha256": {"$ref": "#/$defs/sha256"},
+        "stage8_model_provenance_sha256": {"$ref": "#/$defs/sha256"},
+        "preregistered_before_replay": {"const": true},
+        "exact_case_set_enforced": {"const": true},
+        "sample_replacement_performed": {"const": false},
+        "thresholds_reestimated": {"const": false},
+        "test_split_used_for_tuning": {"const": false},
+        "locked_baseline_only": {"const": true},
+        "process_capability_required": {"const": true},
+        "process_capability_serialized": {"const": false},
+        "detached_receipt_authoritative": {"const": false},
+        "synthetic_authorizes_real_data": {"const": false},
+        "synthetic_authorizes_physical_root": {"const": false},
+        "dataset_root_probed": {"const": false},
+        "real_data_read_count": {"const": 0},
+        "cpu_only": {"const": true},
+        "gpu_used": {"const": false},
+        "network_used": {"const": false},
+        "clinical_claim": {"const": false},
+        "individual_report_authoritative": {"const": false},
+        "authority_boundary": {"const": "COMPLETE_VERIFIED_STAGE8_SYNTHETIC_PACKAGE"}
+    },
+    "$defs": {
+        "count": {"type": "integer", "minimum": 0},
+        "positiveCount": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "safeIdentifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+        "frozenBindings": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "schema_version",
+                "split",
+                "fixed_seed",
+                "degradation_replay_set_sha256",
+                "inclusion_rules_sha256",
+                "stability_metrics_sha256",
+                "locked_contract_sha256",
+                "test_split_sha256",
+                "config_hash",
+                "data_hash",
+                "model_hash",
+                "provenance_sha256",
+                "preregistration_sha256"
+            ],
+            "properties": {
+                "schema_version": {"const": "8.0.0"},
+                "split": {"const": "test"},
+                "fixed_seed": {"const": 20260824},
+                "degradation_replay_set_sha256": {
+                    "const": "3ecb4261c82250937253dea330ba898317ed7903416d88529fe10ef8fd6a9e76"
+                },
+                "inclusion_rules_sha256": {"$ref": "#/$defs/sha256"},
+                "stability_metrics_sha256": {"$ref": "#/$defs/sha256"},
+                "locked_contract_sha256": {"$ref": "#/$defs/sha256"},
+                "test_split_sha256": {"$ref": "#/$defs/sha256"},
+                "config_hash": {
+                    "const": "0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52"
+                },
+                "data_hash": {
+                    "const": "ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd"
+                },
+                "model_hash": {
+                    "const": "ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1"
+                },
+                "provenance_sha256": {
+                    "const": "ada988dd84d27b99a9c78e593197521cd0a7feab090de6ac31991a6b9c99d9ad"
+                },
+                "preregistration_sha256": {
+                    "const": "726b8a70c4f296e3ad5c6a93c7dfe94195bb311d1a11e9b8d374566c2111feb6"
+                }
+            }
+        },
+        "sourcePackage": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "schema_version",
+                "scope",
+                "dataset_id",
+                "dataset_version",
+                "package_sha256",
+                "package_file_count",
+                "stage2_package_sha256",
+                "stage3_package_sha256",
+                "physical_root_identity_sha256",
+                "frozen_bindings",
+                "fixture_only"
+            ],
+            "properties": {
+                "schema_version": {"const": "8.0.0"},
+                "scope": {"const": "SYNTHETIC_FIXTURE"},
+                "dataset_id": {"const": "synthetic_stage2"},
+                "dataset_version": {"const": "synthetic-fixture-v1"},
+                "package_sha256": {
+                    "const": "232506ae1514b8ff52b60621b73dcc3218c315277bd360efdacdf030c39eb61a"
+                },
+                "package_file_count": {"const": 130},
+                "stage2_package_sha256": {"$ref": "#/$defs/sha256"},
+                "stage3_package_sha256": {"$ref": "#/$defs/sha256"},
+                "physical_root_identity_sha256": {
+                    "const": "7d4d27e2043f80371b2314f4011d947cfbcd33a1d072ce4f793a2b3ce210ca65"
+                },
+                "frozen_bindings": {"$ref": "#/$defs/frozenBindings"},
+                "fixture_only": {"const": true}
+            }
+        },
+        "perRunCapability": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "run_id",
+                "seed",
+                "scope",
+                "dataset_id",
+                "dataset_version",
+                "ttl_seconds",
+                "process_bound",
+                "non_serializable",
+                "one_shot",
+                "issued",
+                "consumed",
+                "complete_stage7_package_replayed",
+                "second_consumption_rejected",
+                "authorizes_embedded_package_replay",
+                "authorizes_real_data",
+                "authorizes_physical_dataset_root",
+                "detached_receipt_authoritative",
+                "authorizes_file_open"
+            ],
+            "properties": {
+                "run_id": {"$ref": "#/$defs/safeIdentifier"},
+                "seed": {"const": 20260824},
+                "scope": {"const": "SYNTHETIC_FIXTURE"},
+                "dataset_id": {"const": "synthetic_stage2"},
+                "dataset_version": {"const": "synthetic-fixture-v1"},
+                "ttl_seconds": {"const": 5},
+                "process_bound": {"const": true},
+                "non_serializable": {"const": true},
+                "one_shot": {"const": true},
+                "issued": {"const": true},
+                "consumed": {"const": true},
+                "complete_stage7_package_replayed": {"const": true},
+                "second_consumption_rejected": {"const": true},
+                "authorizes_embedded_package_replay": {"const": true},
+                "authorizes_real_data": {"const": false},
+                "authorizes_physical_dataset_root": {"const": false},
+                "detached_receipt_authoritative": {"const": false},
+                "authorizes_file_open": {"const": false}
+            }
+        },
+        "capabilityLifecycle": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "scope",
+                "issued_count",
+                "consumed_count",
+                "second_use_rejected_count",
+                "complete_stage7_replay_count",
+                "process_bound",
+                "non_serializable",
+                "one_shot",
+                "all_capabilities_fresh",
+                "authorizes_embedded_package_replay",
+                "authorizes_real_data",
+                "authorizes_physical_dataset_root",
+                "detached_receipt_authoritative",
+                "authorizes_file_open",
+                "per_run"
+            ],
+            "properties": {
+                "scope": {"const": "SYNTHETIC_FIXTURE"},
+                "issued_count": {"const": 2},
+                "consumed_count": {"const": 2},
+                "second_use_rejected_count": {"const": 2},
+                "complete_stage7_replay_count": {"const": 2},
+                "process_bound": {"const": true},
+                "non_serializable": {"const": true},
+                "one_shot": {"const": true},
+                "all_capabilities_fresh": {"const": true},
+                "authorizes_embedded_package_replay": {"const": true},
+                "authorizes_real_data": {"const": false},
+                "authorizes_physical_dataset_root": {"const": false},
+                "detached_receipt_authoritative": {"const": false},
+                "authorizes_file_open": {"const": false},
+                "per_run": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "prefixItems": [
+                        {
+                            "allOf": [
+                                {"$ref": "#/$defs/perRunCapability"},
+                                {"properties": {"run_id": {"const": "stage8-repeat-001"}}}
+                            ]
+                        },
+                        {
+                            "allOf": [
+                                {"$ref": "#/$defs/perRunCapability"},
+                                {"properties": {"run_id": {"const": "stage8-repeat-002"}}}
+                            ]
+                        }
+                    ],
+                    "items": false
+                }
+            }
+        },
+        "fixedPreregistration": {
+            "allOf": [
+                {"$ref": "stage8-stability-v8.schema.json#/$defs/preregistration"},
+                {
+                    "properties": {
+                        "dataset_id": {"const": "synthetic_stage2"},
+                        "dataset_version": {"const": "synthetic-fixture-v1"},
+                        "scope": {"const": "SYNTHETIC_ONLY"},
+                        "split": {"const": "test"},
+                        "inclusion_case_ids": {
+                            "const": [
+                                "stage4-toy-entailed-present",
+                                "stage4-toy-entailed-absent",
+                                "stage4-toy-raw-unidentifiable",
+                                "stage4-toy-infeasible-out-of-model",
+                                "stage4-toy-domain-out-of-model",
+                                "stage4-toy-unknown-degradation",
+                                "stage4-toy-invalid-witness"
+                            ]
+                        },
+                        "replay_specs": {
+                            "const": [
+                                {
+                                    "schema_version": "8.0.0",
+                                    "run_id": "stage8-repeat-001",
+                                    "seed": 20260824,
+                                    "degradation_replay_id": "frozen_stage7_test_trace_set_v1",
+                                    "degradation_replay_set_sha256": "3ecb4261c82250937253dea330ba898317ed7903416d88529fe10ef8fd6a9e76"
+                                },
+                                {
+                                    "schema_version": "8.0.0",
+                                    "run_id": "stage8-repeat-002",
+                                    "seed": 20260824,
+                                    "degradation_replay_id": "frozen_stage7_test_trace_set_v1",
+                                    "degradation_replay_set_sha256": "3ecb4261c82250937253dea330ba898317ed7903416d88529fe10ef8fd6a9e76"
+                                }
+                            ]
+                        },
+                        "alpha": {"const": 0.25},
+                        "positive_threshold": {"const": 0.000012299400515471258},
+                        "negative_threshold": {"const": 0.000012299400515471254},
+                        "positive_sample_count": {"const": 4},
+                        "negative_sample_count": {"const": 4},
+                        "config_hash": {
+                            "const": "0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52"
+                        },
+                        "data_hash": {
+                            "const": "ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd"
+                        },
+                        "model_hash": {
+                            "const": "ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1"
+                        },
+                        "stage7_package_sha256": {
+                            "const": "232506ae1514b8ff52b60621b73dcc3218c315277bd360efdacdf030c39eb61a"
+                        },
+                        "provenance_sha256": {
+                            "const": "ada988dd84d27b99a9c78e593197521cd0a7feab090de6ac31991a6b9c99d9ad"
+                        },
+                        "confidence_level": {"const": 0.95},
+                        "clinical_claim": {"const": false}
+                    },
+                    "required": [
+                        "dataset_id",
+                        "dataset_version",
+                        "scope",
+                        "split",
+                        "inclusion_case_ids",
+                        "replay_specs",
+                        "alpha",
+                        "positive_threshold",
+                        "negative_threshold",
+                        "positive_sample_count",
+                        "negative_sample_count",
+                        "config_hash",
+                        "data_hash",
+                        "model_hash",
+                        "stage7_package_sha256",
+                        "provenance_sha256",
+                        "confidence_level",
+                        "clinical_claim"
+                    ]
+                }
+            ]
+        },
+        "replayReceipt": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "schema_version",
+                "run_id",
+                "seed",
+                "degradation_replay_id",
+                "degradation_replay_set_sha256",
+                "stage7_package_sha256",
+                "stage7_tree_sha256",
+                "case_observations_sha256",
+                "dual_witness_replay_set_sha256",
+                "complete_stage7_package_replay_verified",
+                "locked_baseline_reexecuted",
+                "thresholds_reestimated",
+                "test_tuning_performed",
+                "sample_replacement_performed"
+            ],
+            "properties": {
+                "schema_version": {"const": "8.0.0"},
+                "run_id": {"$ref": "#/$defs/safeIdentifier"},
+                "seed": {"const": 20260824},
+                "degradation_replay_id": {"const": "frozen_stage7_test_trace_set_v1"},
+                "degradation_replay_set_sha256": {
+                    "const": "3ecb4261c82250937253dea330ba898317ed7903416d88529fe10ef8fd6a9e76"
+                },
+                "stage7_package_sha256": {
+                    "const": "232506ae1514b8ff52b60621b73dcc3218c315277bd360efdacdf030c39eb61a"
+                },
+                "stage7_tree_sha256": {
+                    "const": "6aa58bdfbd304b2a1109ea35733e1580a1f8c7b549efb2d35fc75d1a2d503964"
+                },
+                "case_observations_sha256": {"$ref": "#/$defs/sha256"},
+                "dual_witness_replay_set_sha256": {"$ref": "#/$defs/sha256"},
+                "complete_stage7_package_replay_verified": {"const": true},
+                "locked_baseline_reexecuted": {"const": true},
+                "thresholds_reestimated": {"const": false},
+                "test_tuning_performed": {"const": false},
+                "sample_replacement_performed": {"const": false}
+            }
+        }
+    },
+    "$comment": "Synthetic fixture report only. Serialized reports and receipts are evidence, never capabilities; REAL authority requires a newly issued process-local verifier capability."
+}

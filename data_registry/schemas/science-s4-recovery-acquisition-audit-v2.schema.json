@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-recovery-acquisition-audit-v2.schema.json",
+  "title": "Science S4 evidence-gap recovery acquisition audit v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "acquisition_ready",
+    "s4_overall_status",
+    "config_sha256",
+    "upstream_replay",
+    "source_recovery",
+    "tier_b_metadata",
+    "blockers",
+    "io_audit",
+    "downstream_authorization",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "experiment_id": {"const": "S4_EVIDENCE_GAP_RECOVERY_ACQUISITION_V2"},
+    "status": {
+      "enum": ["READY_FOR_S4_RECOVERY_CONTRACT_FREEZE", "BLOCKED_PREREQUISITES"]
+    },
+    "acquisition_ready": {"type": "boolean"},
+    "s4_overall_status": {"const": "BLOCKED_PREREQUISITES"},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "upstream_replay": {"type": "object"},
+    "source_recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "complete_part_count",
+        "expected_part_count",
+        "total_complete_bytes",
+        "all_parts_complete",
+        "archive_concatenated",
+        "archive_extracted",
+        "development_adapter_built"
+      ],
+      "properties": {
+        "complete_part_count": {"type": "integer", "minimum": 0, "maximum": 10},
+        "expected_part_count": {"const": 10},
+        "total_complete_bytes": {"type": "integer", "minimum": 0},
+        "all_parts_complete": {"type": "boolean"},
+        "archive_concatenated": {"const": false},
+        "archive_extracted": {"const": false},
+        "development_adapter_built": {"const": false}
+      }
+    },
+    "tier_b_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_pair_count",
+        "independent_subject_eye_count",
+        "minimum_independent_pairs",
+        "pair_metadata_gate",
+        "conditions_frozen",
+        "tier_b_status"
+      ],
+      "properties": {
+        "accepted_pair_count": {"type": "integer", "minimum": 0},
+        "independent_subject_eye_count": {"type": "integer", "minimum": 0},
+        "minimum_independent_pairs": {"const": 59},
+        "pair_metadata_gate": {"enum": ["PASS", "FAIL"]},
+        "conditions_frozen": {"type": "boolean"},
+        "tier_b_status": {"enum": ["AVAILABLE", "NOT_AVAILABLE"]}
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ddr_part_file_reads",
+        "ddr_part_bytes_hashed",
+        "ddr_archive_concatenations",
+        "ddr_archive_extractions",
+        "ddr_dataset_root_reads",
+        "ddr_image_decodes",
+        "tier_b_metadata_file_reads",
+        "tier_b_image_decodes",
+        "fgadr_root_reads",
+        "locked_test_root_reads",
+        "locked_test_image_decodes"
+      ],
+      "properties": {
+        "ddr_part_file_reads": {"type": "integer", "minimum": 0, "maximum": 10},
+        "ddr_part_bytes_hashed": {"type": "integer", "minimum": 0},
+        "ddr_archive_concatenations": {"const": 0},
+        "ddr_archive_extractions": {"const": 0},
+        "ddr_dataset_root_reads": {"const": 0},
+        "ddr_image_decodes": {"const": 0},
+        "tier_b_metadata_file_reads": {"const": 3},
+        "tier_b_image_decodes": {"const": 0},
+        "fgadr_root_reads": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "locked_test_image_decodes": {"const": 0}
+      }
+    },
+    "downstream_authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "s4_recovery_contract_freeze",
+        "s4_recovery_twin_execution",
+        "s5_degradation_calibration",
+        "s6_verify",
+        "s7_lite",
+        "enhancer_training",
+        "locked_test_evaluation",
+        "fcr_estimation",
+        "paper_performance_experiment"
+      ],
+      "properties": {
+        "s4_recovery_contract_freeze": {"type": "boolean"},
+        "s4_recovery_twin_execution": {"const": false},
+        "s5_degradation_calibration": {"const": false},
+        "s6_verify": {"const": false},
+        "s7_lite": {"const": false},
+        "enhancer_training": {"const": false},
+        "locked_test_evaluation": {"const": false},
+        "fcr_estimation": {"const": false},
+        "paper_performance_experiment": {"const": false}
+      }
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

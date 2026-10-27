@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s10-final-locked-v1.schema.json",
+  "title": "Science S10 final locked HE/EX result v1",
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "determinate", "coverage", "false", "fcr", "coverage_wilson95", "fcr_wilson95"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "determinate": {"type": "integer", "minimum": 0},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "false": {"type": "integer", "minimum": 0},
+        "fcr": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "coverage_wilson95": {"type": ["array", "null"], "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+        "fcr_wilson95": {"type": ["array", "null"], "items": {"type": "number"}, "minItems": 2, "maxItems": 2}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment_id", "status", "bindings", "construction", "source_roles", "condition_count", "row_count", "primary_policy", "metrics", "bootstrap", "runtime", "audit", "evidence_boundary"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S10_FINAL_LOCKED_HE_EX_V1"},
+    "status": {"enum": ["COMPLETE_FINAL_LOCKED_RESULT", "BLOCKED_FAIL_CLOSED"]},
+    "bindings": {"type": "object"},
+    "construction": {"type": "object"},
+    "source_roles": {"type": "object"},
+    "condition_count": {"const": 19},
+    "row_count": {"type": "integer", "minimum": 1},
+    "primary_policy": {"const": "state_hybrid_factor_1_5"},
+    "metrics": {
+      "type": "object",
+      "required": ["overall", "by_lesion", "by_truth", "by_severity", "by_condition"],
+      "properties": {
+        "overall": {"$ref": "#/$defs/metric"},
+        "by_lesion": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}},
+        "by_truth": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}},
+        "by_severity": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}},
+        "by_condition": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}}
+      }
+    },
+    "bootstrap": {"type": "object"},
+    "runtime": {"type": "object"},
+    "audit": {"type": "object"},
+    "evidence_boundary": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}

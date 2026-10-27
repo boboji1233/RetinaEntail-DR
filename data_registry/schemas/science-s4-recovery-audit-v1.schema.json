@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-recovery-audit-v1.schema.json",
+  "title": "Science S4 evidence-gap recovery audit v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "experiment_id", "status", "config_sha256", "upstream_replay",
+    "source_recovery", "measurement_error_candidate", "io_audit", "blockers",
+    "downstream_authorization", "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S4_EVIDENCE_GAP_RECOVERY_PREFLIGHT"},
+    "status": {"enum": ["READY_FOR_S4_RECOVERY_EXECUTION", "BLOCKED_PREREQUISITES"]},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "upstream_replay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "verified_binding_count", "artifact_file_count", "artifact_byte_count", "s4_status", "accepted_counts", "distinct_sources", "raw_exact_collisions"],
+      "properties": {
+        "status": {"const": "PASS"},
+        "verified_binding_count": {"type": "integer", "minimum": 1},
+        "artifact_file_count": {"type": "integer", "minimum": 1},
+        "artifact_byte_count": {"type": "integer", "minimum": 1},
+        "s4_status": {"const": "BLOCKED_SAMPLE_OR_ORACLE_SUFFICIENCY"},
+        "accepted_counts": {"$ref": "#/$defs/classCounts"},
+        "distinct_sources": {"$ref": "#/$defs/classCounts"},
+        "raw_exact_collisions": {"$ref": "#/$defs/classCounts"}
+      }
+    },
+    "source_recovery": {"type": "object"},
+    "measurement_error_candidate": {"type": "object"},
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measurement_root_entries", "measurement_image_decodes", "ddr_root_reads", "fgadr_root_reads", "locked_test_root_reads", "locked_test_image_decodes"],
+      "properties": {
+        "measurement_root_entries": {"type": "integer", "minimum": 0},
+        "measurement_image_decodes": {"type": "integer", "minimum": 0},
+        "ddr_root_reads": {"const": 0},
+        "fgadr_root_reads": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "locked_test_image_decodes": {"const": 0}
+      }
+    },
+    "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "downstream_authorization": {"type": "object"},
+    "evidence_boundary": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "classCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"type": "integer", "minimum": 0},
+        "EX": {"type": "integer", "minimum": 0},
+        "MA": {"type": "integer", "minimum": 0},
+        "SE": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

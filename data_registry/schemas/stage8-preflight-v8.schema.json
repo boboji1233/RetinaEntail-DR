@@ -1,0 +1,105 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage8-preflight-v8.schema.json",
+    "title": "RetinaEntail-DR Stage 8 Zero-I/O Preflight v8",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "status",
+        "verification_context",
+        "dataset_id",
+        "dataset_version",
+        "reasons",
+        "accepts_paths",
+        "reads_environment",
+        "authorizes_file_open",
+        "dataset_root_probed",
+        "real_data_read",
+        "detached_receipt_authoritative",
+        "synthetic_authorizes_real"
+    ],
+    "properties": {
+        "schema_version": {"const": "8.0.0"},
+        "status": {"enum": ["BLOCKED", "READY_FOR_PROCESS_CAPABILITY_VERIFICATION"]},
+        "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+        "dataset_id": {
+            "oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}]
+        },
+        "dataset_version": {
+            "oneOf": [
+                {"type": "null"},
+                {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"}
+            ]
+        },
+        "reasons": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/reason"}},
+        "accepts_paths": {"const": false},
+        "reads_environment": {"const": false},
+        "authorizes_file_open": {"const": false},
+        "dataset_root_probed": {"const": false},
+        "real_data_read": {"const": false},
+        "detached_receipt_authoritative": {"const": false},
+        "synthetic_authorizes_real": {"const": false}
+    },
+    "$defs": {
+        "reason": {
+            "enum": [
+                "INPUT_INVALID",
+                "DATASET_NOT_EXPLICIT",
+                "DATASET_VERSION_NOT_EXPLICIT",
+                "COMPLETE_REAL_STAGE7_PACKAGE_CAPABILITY_NOT_PROVIDED",
+                "FRESH_ROOT_RUN_CAPABILITY_NOT_PROVIDED",
+                "FIXED_SEED_NOT_PREREGISTERED",
+                "DEGRADATION_REPLAY_SET_NOT_PREREGISTERED",
+                "INCLUSION_RULES_NOT_PREREGISTERED",
+                "STABILITY_METRICS_NOT_PREREGISTERED",
+                "LOCKED_CONTRACT_NOT_PROVIDED"
+            ]
+        }
+    },
+    "allOf": [
+        {
+            "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+            "then": {"properties": {"reasons": {"minItems": 1}}}
+        },
+        {
+            "if": {
+                "properties": {"status": {"const": "READY_FOR_PROCESS_CAPABILITY_VERIFICATION"}},
+                "required": ["status"]
+            },
+            "then": {
+                "properties": {
+                    "dataset_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+                    "dataset_version": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+                    },
+                    "reasons": {"maxItems": 0}
+                }
+            }
+        },
+        {
+            "if": {"properties": {"dataset_id": {"type": "null"}}, "required": ["dataset_id"]},
+            "then": {
+                "properties": {
+                    "reasons": {"contains": {"const": "DATASET_NOT_EXPLICIT"}, "minContains": 1}
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {"dataset_version": {"type": "null"}},
+                "required": ["dataset_version"]
+            },
+            "then": {
+                "properties": {
+                    "reasons": {
+                        "contains": {"const": "DATASET_VERSION_NOT_EXPLICIT"},
+                        "minContains": 1
+                    }
+                }
+            }
+        }
+    ],
+    "$comment": "Presence-only receipt. Paths, detached package receipts, and serialized tokens are never accepted as authority and no root is probed."
+}

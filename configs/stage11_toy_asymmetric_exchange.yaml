@@ -1,0 +1,74 @@
+schema_version: "11.0.0"
+run_id: "stage11-toy-asymmetric-exchange-001"
+method: "local_ed25519_rotation_tamper_fixture_v1"
+scope: "SYNTHETIC_FIXTURE"
+dataset_id: "synthetic_stage2"
+dataset_version: "synthetic-fixture-v1"
+split: "test"
+runner_ids:
+  - "runner_a"
+  - "runner_b"
+physical_host_count: 1
+cross_physical_host_claim: false
+trusted_time_epoch: 1787529600
+source_contract:
+  stage10_package_sha256: "c504e3cf2e7e4b4fae42fe4a1011d90225a826cc98b80bff49ad32483dd2046b"
+  stage10_package_file_count: 588
+  stage10_manifest_sha256: "eabdd44cc55f060fe0c726ad26878c0f0b8995973f125cecc4333c163d450af3"
+  stage10_audit_sha256: "2b5719ad9a3a53b30197cc65adb400c30c27f0fdf390c03349545be538540dce"
+  stage10_summary_sha256: "002c7e05f1e69b2457e7bdd003081dbd551b5ce015b9350a453b60a77fbf9cee"
+  stage10_environment_lock_sha256: "a97bb60a4ad48e6fe3de36cc5c121ad90b7a46c272232b0f7fb73f506277aa04"
+trust_policy:
+  algorithm: "Ed25519"
+  authentication_scope: "LOCAL_ASYMMETRIC_FIXTURE_ONLY"
+  trust_anchor_sha256: "03add3884e653c96213c29ef825f48d093c7d0bab7fa2dddedfa7d3809fca9f3"
+  fixture_private_derivation_public: true
+  production_authentication: false
+  unique_runner_leaf_keys_required: true
+  rotation_required: true
+  revocation_status_required: true
+  trusted_time_required: true
+  private_keys_written_to_artifacts: false
+environment_policy:
+  dependency_distributions:
+    - "Pillow"
+    - "PyYAML"
+    - "cffi"
+    - "cryptography"
+    - "numpy"
+    - "pycparser"
+    - "retinaentail-dr"
+  complete_wheel_archive_hashes: false
+  production_hardware_attestation: false
+  cpu_instruction_policy: "RECORDED_NOT_HARDWARE_ATTESTED"
+  exact_stage10_environment_lock_required: true
+locked_contract:
+  alpha: 0.25
+  positive_threshold: 0.000012299400515471258
+  negative_threshold: 0.000012299400515471254
+  positive_sample_count: 4
+  negative_sample_count: 4
+  config_hash: "0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52"
+  data_hash: "ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd"
+  model_hash: "ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1"
+tamper_scenarios:
+  - "payload_mutation"
+  - "signature_mutation"
+  - "untrusted_anchor"
+  - "current_leaf_revoked"
+  - "expired_certificate"
+  - "rotation_proof_mutation"
+  - "stale_revocation_status"
+  - "revocation_signature_mutation"
+  - "session_nonce_replay"
+  - "shared_runner_leaf_key"
+locked_policy:
+  test_tuning_prohibited: true
+  threshold_reestimation_prohibited: true
+  sample_replacement_prohibited: true
+  network_used: false
+  gpu_used: false
+  real_data_access: false
+  deterministic_difference_fail_closed: true
+  large_model_training_prohibited: true
+  weights_download_prohibited: true

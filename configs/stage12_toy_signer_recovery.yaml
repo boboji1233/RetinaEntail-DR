@@ -1,0 +1,64 @@
+schema_version: "12.0.0"
+run_id: "stage12-local-random-signer-recovery-001"
+method: "two_process_random_ed25519_compromise_recovery_v1"
+scope: "SYNTHETIC_FIXTURE"
+dataset_id: "synthetic_stage2"
+dataset_version: "synthetic-fixture-v1"
+split: "test"
+runner_ids:
+  - "runner_a"
+  - "runner_b"
+physical_host_count: 1
+independent_process_count: 2
+cross_physical_host_claim: false
+production_authentication: false
+trusted_time_epoch: 1787529600
+compromise_epoch: 1787529000
+recovery_epoch: 1787529300
+source_contract:
+  stage11_package_sha256: "f94c7698b8d9214dbcc19cd62173311751b7a4290c78d9dc3319d53862d8e46d"
+  stage11_package_file_count: 608
+  stage11_manifest_sha256: "b7e4de9d5b8c7e66408afd71aaabf48358b12973f6776761b1f57c0e0aad3f20"
+  stage11_audit_sha256: "9e5f2aa94d178fa42ddff0059ec3c6c3ef174224c2eeff19380e5069a3cb4f1e"
+  stage11_summary_sha256: "9bcb774ac0285fadadc5140cf7de32c3f6ff4479b11503c523fc9026d10e2e3d"
+locked_contract:
+  alpha: 0.25
+  positive_threshold: 0.000012299400515471258
+  negative_threshold: 0.000012299400515471254
+  positive_sample_count: 4
+  negative_sample_count: 4
+  config_hash: "0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52"
+  data_hash: "ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd"
+  model_hash: "ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1"
+signer_policy:
+  adapter: "InMemoryEd25519Signer"
+  algorithm: "Ed25519"
+  random_private_keys: true
+  private_key_export_allowed: false
+  private_key_serialization_allowed: false
+  private_key_artifact_write_allowed: false
+  hsm_backed: false
+  production_authentication: false
+  local_status_is_rfc6960_ocsp: false
+  complete_wheel_archive_hashes: false
+tamper_scenarios:
+  - "recovered_payload_mutation"
+  - "recovered_signature_mutation"
+  - "recovery_proof_mutation"
+  - "status_signature_mutation"
+  - "untrusted_anchor"
+  - "generation2_certificate_mutation"
+  - "session_nonce_replay"
+  - "shared_recovery_key"
+  - "frozen_contract_mutation"
+  - "malformed_bundle_extra_field"
+locked_policy:
+  test_tuning_prohibited: true
+  threshold_reestimation_prohibited: true
+  sample_replacement_prohibited: true
+  network_used: false
+  gpu_used: false
+  real_data_access: false
+  deterministic_difference_fail_closed: true
+  large_model_training_prohibited: true
+  weights_download_prohibited: true

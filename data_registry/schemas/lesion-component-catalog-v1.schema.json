@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/lesion-component-catalog-v1.schema.json",
+  "title": "RetinaEntail-DR Science S2 lesion component catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "dataset_version", "scope", "records"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "scope": {"const": "TRAIN_AND_CALIBRATION_ONLY"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema_version", "dataset_id", "dataset_version", "source_image_id", "split",
+          "lesion_class", "component_id", "image_relative_path", "mask_relative_path",
+          "image_sha256", "mask_sha256", "non_target_lesion_class",
+          "non_target_mask_relative_path", "non_target_mask_sha256",
+          "component_mask_sha256", "image_size_wh",
+          "fov_bbox_xyxy", "area_px", "bbox_xyxy", "centroid_xy", "eccentricity",
+          "distance_to_fov_boundary_px", "touches_image_boundary", "touches_fov_boundary",
+          "coordinate_transforms", "patch", "safety_ring", "inclusion_status",
+          "exclusion_reason", "reason_code", "config_sha256", "data_sha256", "code_sha256"
+        ],
+        "properties": {
+          "schema_version": {"const": "1.0.0"},
+          "split": {"enum": ["TRAIN", "CALIBRATION"]},
+          "lesion_class": {"enum": ["HE", "EX"]},
+          "region_channel": {"const": "ORACLE_REGION"},
+          "oracle_use_scope": {"const": "CONTROLLED_EXPERIMENT_ONLY_NOT_DEPLOYMENT"},
+          "area_px": {"type": "integer", "minimum": 1},
+          "eccentricity": {"type": "number", "minimum": 0, "maximum": 1},
+          "inclusion_status": {"enum": ["INCLUDED", "EXCLUDED"]}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s7-prospective-external-selection-v1.json",
+  "title": "Science S7-P0 prospective external source selection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "protocol_id",
+    "status",
+    "classification",
+    "effective_boundary",
+    "selected_source",
+    "access",
+    "identity",
+    "historical_isolation",
+    "selection_rules",
+    "io_audit",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "protocol_id": {"const": "S7_P0_PROSPECTIVE_EXTERNAL_CONFIRMATION_V1"},
+    "status": {"const": "READY_FOR_PROSPECTIVE_DATA_ACQUISITION_NOT_RUN"},
+    "classification": {"const": "POST_DEVELOPMENT_PROSPECTIVE_FROM_PROTOCOL_FREEZE"},
+    "effective_boundary": {"const": "GIT_COMMIT_CONTAINING_THIS_MANIFEST"},
+    "selected_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "local_version",
+        "provider_release_name",
+        "provider_release_date",
+        "provider_release_date_note",
+        "official_url",
+        "paper_doi",
+        "paper_url",
+        "subset",
+        "expected_source_images",
+        "expected_pixel_labels",
+        "excluded_subset"
+      ],
+      "properties": {
+        "dataset_id": {"const": "fgadr"},
+        "local_version": {"const": "fgadr-official-seg-set-1842-unnumbered-p0"},
+        "provider_release_name": {"const": "FGADR Seg-set current unnumbered official release"},
+        "provider_release_date": {"type": "null"},
+        "provider_release_date_note": {"type": "string", "minLength": 1},
+        "official_url": {"const": "https://csyizhou.github.io/FGADR/"},
+        "paper_doi": {"const": "10.1109/TMI.2020.3037771"},
+        "paper_url": {"const": "https://arxiv.org/abs/2008.09772"},
+        "subset": {"const": "Seg-set"},
+        "expected_source_images": {"const": 1842},
+        "expected_pixel_labels": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "MA"},
+            {"const": "HE"},
+            {"const": "EX"},
+            {"const": "SE"},
+            {"const": "IRMA"},
+            {"const": "NV"}
+          ],
+          "items": false
+        },
+        "excluded_subset": {"const": "Grade-set"}
+      }
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "noncommercial_research_only",
+        "research_use_agreement_required",
+        "agreement_execution_verified",
+        "personal_link_received",
+        "payload_downloaded"
+      ],
+      "properties": {
+        "mode": {"const": "MANUAL_GATED"},
+        "noncommercial_research_only": {"const": true},
+        "research_use_agreement_required": {"const": true},
+        "agreement_execution_verified": {"const": false},
+        "personal_link_received": {"const": false},
+        "payload_downloaded": {"const": false}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independent_unit",
+        "source_id_rule",
+        "provider_one_image_per_patient_assertion",
+        "patient_id_released",
+        "eye_id_released",
+        "unknown_identity_policy"
+      ],
+      "properties": {
+        "independent_unit": {"const": "SOURCE_IMAGE"},
+        "source_id_rule": {"const": "OFFICIAL_SEG_SET_IMAGE_IDENTIFIER"},
+        "provider_one_image_per_patient_assertion": {"const": true},
+        "patient_id_released": {"const": false},
+        "eye_id_released": {"const": false},
+        "unknown_identity_policy": {"const": "DO_NOT_INFER__EXACT_DUPLICATES_COLLAPSE__UNRESOLVED_IDENTITY_FAILS_CLOSED"}
+      }
+    },
+    "historical_isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_namespace", "checked_artifacts", "namespace_mentions", "known_role_intersections"],
+      "properties": {
+        "dataset_namespace": {"const": "fgadr"},
+        "checked_artifacts": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "namespace_mentions": {"const": 0},
+        "known_role_intersections": {"const": 0}
+      }
+    },
+    "selection_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["payload_order", "source_order", "target_order", "missing_label_policy", "result_feedback_allowed"],
+      "properties": {
+        "payload_order": {"const": "PROTOCOL_COMMIT_BEFORE_ANY_PAYLOAD"},
+        "source_order": {"const": "SHA256_OFFICIAL_SOURCE_ID_ASC"},
+        "target_order": {"const": "CLASS_ORDER_HE_EX_MA_SE__SHA256_COMPONENT_ID_ASC"},
+        "missing_label_policy": {"const": "UNKNOWN_FAIL_CLOSED_NEVER_NEGATIVE"},
+        "result_feedback_allowed": {"const": false}
+      }
+    },
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "new_dataset_downloads",
+        "new_dataset_root_reads",
+        "new_image_decodes",
+        "new_mask_or_label_decodes",
+        "final_locked_test_reads",
+        "online_evaluation_reads"
+      ],
+      "properties": {
+        "new_dataset_downloads": {"const": 0},
+        "new_dataset_root_reads": {"const": 0},
+        "new_image_decodes": {"const": 0},
+        "new_mask_or_label_decodes": {"const": 0},
+        "final_locked_test_reads": {"const": 0},
+        "online_evaluation_reads": {"const": 0}
+      }
+    },
+    "claim_boundary": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

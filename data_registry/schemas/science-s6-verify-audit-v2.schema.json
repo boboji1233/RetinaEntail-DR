@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s6-verify-audit-v2.schema.json",
+  "title": "Science S6 RetinaEntail-Verify v2 amendment audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "development_disclosure",
+    "v1_manifest_audit",
+    "conditional_calibration",
+    "preservation",
+    "gate",
+    "io_audit",
+    "hashes",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "experiment_id": {"const": "S6_RETINAENTAIL_VERIFY_V2"},
+    "status": {"enum": ["READY_FOR_AI_QC", "BLOCKED_DEVELOPMENT_NONTRIVIALITY"]},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "development_disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["v1_observed", "independent_replication", "final_test_opened"],
+      "properties": {
+        "v1_observed": {"const": true},
+        "independent_replication": {"const": false},
+        "final_test_opened": {"const": false}
+      }
+    },
+    "v1_manifest_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entries", "verified_bytes", "mismatches", "unlisted"],
+      "properties": {
+        "entries": {"type": "integer", "minimum": 0},
+        "verified_bytes": {"type": "integer", "minimum": 0},
+        "mismatches": {"type": "integer", "minimum": 0},
+        "unlisted": {"type": "integer", "minimum": 0}
+      }
+    },
+    "conditional_calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conditions", "calibration_searches", "s4_twin_png_decodes", "source_isolation_violations"],
+      "properties": {
+        "conditions": {"const": ["IDENTITY", "S5_TARGET_GLARE_SEVERITY_1"]},
+        "calibration_searches": {"type": "integer", "minimum": 0},
+        "s4_twin_png_decodes": {"type": "integer", "minimum": 0},
+        "source_isolation_violations": {"type": "integer", "minimum": 0}
+      }
+    },
+    "preservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_count",
+        "state_counts_per_class",
+        "strata_counts_per_class",
+        "witness_hash_checks",
+        "witness_hash_mismatches",
+        "preserved_zero_gap_searches",
+        "ood_records",
+        "ood_preserved_out_of_model",
+        "ambiguity_records",
+        "ambiguity_raw_unidentifiable",
+        "ambiguity_agreement_rate"
+      ],
+      "properties": {
+        "record_count": {"type": "integer", "minimum": 0},
+        "state_counts_per_class": {"$ref": "#/$defs/classStateMaps"},
+        "strata_counts_per_class": {"$ref": "#/$defs/classStrataMaps"},
+        "witness_hash_checks": {"type": "integer", "minimum": 0},
+        "witness_hash_mismatches": {"type": "integer", "minimum": 0},
+        "preserved_zero_gap_searches": {"type": "integer", "minimum": 0},
+        "ood_records": {"type": "integer", "minimum": 0},
+        "ood_preserved_out_of_model": {"type": "integer", "minimum": 0},
+        "ambiguity_records": {"type": "integer", "minimum": 0},
+        "ambiguity_raw_unidentifiable": {"type": "integer", "minimum": 0},
+        "ambiguity_agreement_rate": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_ambiguity_agreement",
+        "observed_ambiguity_agreement",
+        "automated",
+        "ai_visual_qc",
+        "s6_closed",
+        "s7_authorized"
+      ],
+      "properties": {
+        "minimum_ambiguity_agreement": {"type": "number", "minimum": 0, "maximum": 1},
+        "observed_ambiguity_agreement": {"type": "number", "minimum": 0, "maximum": 1},
+        "automated": {"enum": ["PASS", "FAIL"]},
+        "ai_visual_qc": {"const": "PENDING"},
+        "s6_closed": {"const": false},
+        "s7_authorized": {"const": false}
+      }
+    },
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v1_probe_searches_rerun",
+        "final_locked_test_reads",
+        "online_evaluation_reads",
+        "uwf_reads",
+        "dr_grade_values_used"
+      ],
+      "properties": {
+        "v1_probe_searches_rerun": {"const": 0},
+        "final_locked_test_reads": {"const": 0},
+        "online_evaluation_reads": {"const": 0},
+        "uwf_reads": {"const": 0},
+        "dr_grade_values_used": {"const": 0}
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code_sha256", "conditional_thresholds_sha256", "verify_results_v2_sha256"],
+      "properties": {
+        "code_sha256": {"$ref": "#/$defs/sha256"},
+        "conditional_thresholds_sha256": {"$ref": "#/$defs/sha256"},
+        "verify_results_v2_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stateMap": {
+      "type": "object",
+      "propertyNames": {"enum": ["ENTAILED_PRESENT", "ENTAILED_ABSENT", "RAW_UNIDENTIFIABLE", "OUT_OF_MODEL"]},
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "strataMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["PRESENT_ID", "ABSENT_ID", "S5_TIER_A_AMBIGUOUS_ID", "NEAR_OOD", "FAR_OOD"],
+      "properties": {
+        "PRESENT_ID": {"type": "integer", "minimum": 0},
+        "ABSENT_ID": {"type": "integer", "minimum": 0},
+        "S5_TIER_A_AMBIGUOUS_ID": {"type": "integer", "minimum": 0},
+        "NEAR_OOD": {"type": "integer", "minimum": 0},
+        "FAR_OOD": {"type": "integer", "minimum": 0}
+      }
+    },
+    "classStateMaps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"$ref": "#/$defs/stateMap"},
+        "EX": {"$ref": "#/$defs/stateMap"},
+        "MA": {"$ref": "#/$defs/stateMap"},
+        "SE": {"$ref": "#/$defs/stateMap"}
+      }
+    },
+    "classStrataMaps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"$ref": "#/$defs/strataMap"},
+        "EX": {"$ref": "#/$defs/strataMap"},
+        "MA": {"$ref": "#/$defs/strataMap"},
+        "SE": {"$ref": "#/$defs/strataMap"}
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s7-fgadr-archive-structure-v1.schema.json",
+  "title": "Science S7 FGADR archive structure manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment_id", "status", "archive", "summary", "members", "io_audit"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S7_P1_FGADR_IDENTITY_AND_TARGET_MANIFEST_V1"},
+    "status": {"const": "PASS_ARCHIVE_STRUCTURE"},
+    "archive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["filename", "byte_size", "sha256"],
+      "properties": {
+        "filename": {"type": "string", "minLength": 1},
+        "byte_size": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "summary": {"type": "object"},
+    "members": {"type": "array", "items": {"type": "object"}},
+    "io_audit": {"type": "object"}
+  }
+}

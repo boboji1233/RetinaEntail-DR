@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage6-toy-config-v6.schema.json",
+  "title": "RetinaEntail-DR Stage 6 Synthetic Verifier Pilot Config v6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "method",
+    "source_contract",
+    "confidence_level",
+    "threshold_policy",
+    "process_bound_capabilities_required",
+    "capabilities_serialized",
+    "detached_summaries_authoritative",
+    "test_tuning_prohibited",
+    "real_data_access"
+  ],
+  "properties": {
+    "schema_version": {"const": "6.0"},
+    "run_id": {"const": "stage6-toy-verifier-pilot-001"},
+    "method": {"const": "complete_package_capabilities_locked_pilot_v1"},
+    "source_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage2_scope",
+        "stage2_dataset_id",
+        "stage2_dataset_version",
+        "stage2_audit_status",
+        "stage3_scope",
+        "stage5_scope",
+        "stage5_pilot_id"
+      ],
+      "properties": {
+        "stage2_scope": {"const": "SYNTHETIC_FIXTURE"},
+        "stage2_dataset_id": {"const": "synthetic_stage2"},
+        "stage2_dataset_version": {"const": "synthetic-fixture-v1"},
+        "stage2_audit_status": {"const": "PASS"},
+        "stage3_scope": {"const": "SYNTHETIC_TOY"},
+        "stage5_scope": {"const": "SYNTHETIC_ONLY"},
+        "stage5_pilot_id": {"const": "stage5-toy-locked-pilot-001"}
+      }
+    },
+    "confidence_level": {"const": 0.95},
+    "threshold_policy": {"const": "LOCKED_STAGE3_NO_REESTIMATION"},
+    "process_bound_capabilities_required": {"const": true},
+    "capabilities_serialized": {"const": false},
+    "detached_summaries_authoritative": {"const": false},
+    "test_tuning_prohibited": {"const": true},
+    "real_data_access": {"const": false}
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.example/schemas/science-s2-qc-record-v1.schema.json",
+  "title": "RetinaEntail-DR Science S2 QC record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "experiment_id",
+    "decision",
+    "decision_scope",
+    "protocol",
+    "automated_evidence",
+    "responsible_person_confirmation",
+    "ai_review",
+    "contact_sheets",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "record_id": {"const": "S2_CONTACT_SHEET_QC_2026_08_25"},
+    "experiment_id": {"const": "S2_IDRID_LESION_CATALOG"},
+    "decision": {"enum": ["PASS", "REJECT"]},
+    "decision_scope": {"const": "SCIENCE_S2_CATALOG_GATE_ONLY"},
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "amendment_date", "review_mode"],
+      "properties": {
+        "path": {"type": "string"},
+        "amendment_date": {"type": "string", "format": "date"},
+        "review_mode": {"const": "AI_ASSISTED_PLUS_RESPONSIBLE_PERSON_CONFIRMATION"}
+      }
+    },
+    "automated_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_root",
+        "artifact_manifest_sha256",
+        "generated_audit_status",
+        "locked_test_root_reads",
+        "source_split_leaks",
+        "maximum_coordinate_round_trip_error_px"
+      ],
+      "properties": {
+        "artifact_root": {"type": "string"},
+        "artifact_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "generated_audit_status": {"const": "READY_FOR_HUMAN_QC"},
+        "locked_test_root_reads": {"const": 0},
+        "source_split_leaks": {"const": 0},
+        "maximum_coordinate_round_trip_error_px": {"type": "number", "minimum": 0}
+      }
+    },
+    "responsible_person_confirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewer_name",
+        "review_date",
+        "confirmation_source",
+        "mentor_authorization_basis",
+        "direct_mentor_signature_collected"
+      ],
+      "properties": {
+        "reviewer_name": {"type": "string", "minLength": 1},
+        "review_date": {"type": "string", "format": "date"},
+        "confirmation_source": {"type": "string", "minLength": 1},
+        "mentor_authorization_basis": {"const": "USER_ATTESTED"},
+        "direct_mentor_signature_collected": {"const": false}
+      }
+    },
+    "ai_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewer", "reviewed_sheet_count", "method", "overall_finding"],
+      "properties": {
+        "reviewer": {"type": "string", "minLength": 1},
+        "reviewed_sheet_count": {"const": 4},
+        "method": {"type": "string", "minLength": 1},
+        "overall_finding": {"type": "string", "minLength": 1}
+      }
+    },
+    "contact_sheets": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {"$ref": "#/$defs/contactSheet"}
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "contactSheet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "split", "lesion_class", "sampled_components", "decision", "checklist", "notes"],
+      "properties": {
+        "path": {"type": "string"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "split": {"enum": ["TRAIN", "CALIBRATION"]},
+        "lesion_class": {"enum": ["HE", "EX"]},
+        "sampled_components": {"const": 12},
+        "decision": {"const": "PASS"},
+        "checklist": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "target_component_alignment",
+            "safety_ring_alignment",
+            "patch_center_and_boundary",
+            "fov_black_border",
+            "same_class_component_coverage",
+            "obvious_class_or_coordinate_error"
+          ],
+          "properties": {
+            "target_component_alignment": {"$ref": "#/$defs/checkStatus"},
+            "safety_ring_alignment": {"$ref": "#/$defs/checkStatus"},
+            "patch_center_and_boundary": {"$ref": "#/$defs/checkStatus"},
+            "fov_black_border": {"$ref": "#/$defs/checkStatus"},
+            "same_class_component_coverage": {"$ref": "#/$defs/checkStatus"},
+            "obvious_class_or_coordinate_error": {"enum": ["NOT_OBSERVED", "OBSERVED"]}
+          }
+        },
+        "notes": {"type": "string", "minLength": 1}
+      }
+    },
+    "checkStatus": {"enum": ["PASS", "PASS_WITH_NOTE", "FAIL"]}
+  }
+}

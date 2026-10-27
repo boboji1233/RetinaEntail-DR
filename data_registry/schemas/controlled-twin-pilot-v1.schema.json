@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/controlled-twin-pilot-v1.schema.json",
+  "title": "RetinaEntail-DR Science S3 controlled-twin pilot manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "dataset_id",
+    "dataset_version",
+    "scope",
+    "config_sha256",
+    "upstream",
+    "accepted",
+    "rejected",
+    "selection_reason_counts"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S3_HE_EX_TWIN_PILOT"},
+    "dataset_id": {"const": "idrid"},
+    "dataset_version": {"type": "string", "minLength": 1},
+    "scope": {"const": "TRAIN_AND_CALIBRATION_ONLY"},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "upstream": {"type": "object"},
+    "accepted": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/acceptedTwin"}
+    },
+    "rejected": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/rejectedTwin"}
+    },
+    "selection_reason_counts": {"type": "object"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "acceptedTwin": {
+      "type": "object",
+      "required": [
+        "twin_id",
+        "component_id",
+        "source_image_id",
+        "split",
+        "lesion_class",
+        "method",
+        "method_implementation_id",
+        "seed",
+        "source",
+        "target",
+        "sham",
+        "outputs",
+        "automated_gate"
+      ],
+      "properties": {
+        "twin_id": {"type": "string", "minLength": 1},
+        "component_id": {"type": "string", "minLength": 1},
+        "source_image_id": {"type": "string", "minLength": 1},
+        "split": {"enum": ["TRAIN", "CALIBRATION"]},
+        "lesion_class": {"enum": ["HE", "EX"]},
+        "method": {"enum": ["TELEA", "NAVIER_STOKES", "DONOR_POISSON"]},
+        "method_implementation_id": {"type": "string", "minLength": 1},
+        "seed": {"type": "integer", "minimum": 0},
+        "source": {"type": "object"},
+        "target": {"type": "object"},
+        "sham": {"type": "object"},
+        "outputs": {
+          "type": "object",
+          "required": ["x_plus_sham", "x_minus_removed"],
+          "properties": {
+            "x_plus_sham": {"$ref": "#/$defs/output"},
+            "x_minus_removed": {"$ref": "#/$defs/output"}
+          }
+        },
+        "automated_gate": {"type": "object"}
+      }
+    },
+    "rejectedTwin": {
+      "type": "object",
+      "required": ["component_id", "split", "lesion_class", "reason_code"],
+      "properties": {
+        "component_id": {"type": "string"},
+        "split": {"enum": ["TRAIN", "CALIBRATION"]},
+        "lesion_class": {"enum": ["HE", "EX"]},
+        "reason_code": {"type": "string", "minLength": 1}
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["relative_path", "sha256", "byte_size"],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_size": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

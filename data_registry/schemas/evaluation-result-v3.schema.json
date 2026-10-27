@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/evaluation-result-v3.schema.json",
+  "title": "RetinaEntail-DR Hypothesis Evaluation Result v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "method_version",
+    "protocol_scope",
+    "case_id",
+    "lesion_class",
+    "alpha",
+    "positive_score",
+    "negative_score",
+    "positive_threshold",
+    "negative_threshold",
+    "positive_feasible",
+    "negative_feasible",
+    "positive_sample_count",
+    "negative_sample_count",
+    "config_hash",
+    "data_hash",
+    "model_hash",
+    "input_config_hash",
+    "input_data_hash",
+    "input_model_hash",
+    "positive_solver_status",
+    "negative_solver_status",
+    "solver_status",
+    "degradation_known",
+    "positive_witness_replay_valid",
+    "negative_witness_replay_valid",
+    "out_of_distribution",
+    "state",
+    "status",
+    "failure_reasons"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0.0"},
+    "method_version": {"const": "toy_conservative_order_statistic_v1"},
+    "protocol_scope": {"enum": ["TOY_PROTOCOL"]},
+    "case_id": {"type": "string", "minLength": 1},
+    "lesion_class": {"type": "string", "minLength": 1},
+    "alpha": {"$ref": "#/$defs/nullableNonnegativeNumber"},
+    "positive_score": {"$ref": "#/$defs/nullableNonnegativeNumber"},
+    "negative_score": {"$ref": "#/$defs/nullableNonnegativeNumber"},
+    "positive_threshold": {"$ref": "#/$defs/nullableNonnegativeNumber"},
+    "negative_threshold": {"$ref": "#/$defs/nullableNonnegativeNumber"},
+    "positive_feasible": {"$ref": "#/$defs/nullableBoolean"},
+    "negative_feasible": {"$ref": "#/$defs/nullableBoolean"},
+    "positive_sample_count": {"type": "integer", "minimum": 0},
+    "negative_sample_count": {"type": "integer", "minimum": 0},
+    "config_hash": {"$ref": "#/$defs/nullableSha256"},
+    "data_hash": {"$ref": "#/$defs/nullableSha256"},
+    "model_hash": {"$ref": "#/$defs/nullableSha256"},
+    "input_config_hash": {"$ref": "#/$defs/nullableSha256"},
+    "input_data_hash": {"$ref": "#/$defs/nullableSha256"},
+    "input_model_hash": {"$ref": "#/$defs/nullableSha256"},
+    "positive_solver_status": {"$ref": "#/$defs/nullableStatusString"},
+    "negative_solver_status": {"$ref": "#/$defs/nullableStatusString"},
+    "solver_status": {"$ref": "#/$defs/nullableStatusString"},
+    "degradation_known": {"type": "boolean"},
+    "positive_witness_replay_valid": {"type": "boolean"},
+    "negative_witness_replay_valid": {"type": "boolean"},
+    "out_of_distribution": {"type": "boolean"},
+    "state": {
+      "enum": [
+        "ENTAILED_PRESENT",
+        "ENTAILED_ABSENT",
+        "RAW_UNIDENTIFIABLE",
+        "OUT_OF_MODEL"
+      ]
+    },
+    "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+    "failure_reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/failureReason"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableSha256": {
+      "anyOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "nullableNonnegativeNumber": {
+      "anyOf": [
+        {"type": "number", "minimum": 0},
+        {"type": "null"}
+      ]
+    },
+    "nullableBoolean": {
+      "anyOf": [
+        {"type": "boolean"},
+        {"type": "null"}
+      ]
+    },
+    "nullableStatusString": {
+      "anyOf": [
+        {"type": "string", "minLength": 1},
+        {"type": "null"}
+      ]
+    },
+    "successfulSolverStatus": {
+      "enum": [
+        "completed",
+        "converged",
+        "feasible",
+        "ok",
+        "optimal",
+        "success",
+        "toy_baseline"
+      ]
+    },
+    "failureReason": {
+      "enum": [
+        "INVALID_INPUT",
+        "INVALID_CALIBRATION",
+        "MISSING_THRESHOLD",
+        "NONFINITE_THRESHOLD",
+        "MISSING_SCORE",
+        "NONFINITE_SCORE",
+        "INVALID_SCORE_RANGE",
+        "UNKNOWN_DEGRADATION",
+        "INVALID_WITNESS",
+        "SOLVER_NOT_SUCCESSFUL",
+        "OUT_OF_DISTRIBUTION",
+        "INVALID_HASH",
+        "PROVENANCE_MISMATCH"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "SUCCESS"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+          "positive_score": {"type": "number", "minimum": 0},
+          "negative_score": {"type": "number", "minimum": 0},
+          "positive_threshold": {"type": "number", "minimum": 0},
+          "negative_threshold": {"type": "number", "minimum": 0},
+          "positive_feasible": {"type": "boolean"},
+          "negative_feasible": {"type": "boolean"},
+          "positive_sample_count": {"type": "integer", "minimum": 1},
+          "negative_sample_count": {"type": "integer", "minimum": 1},
+          "config_hash": {"$ref": "#/$defs/sha256"},
+          "data_hash": {"$ref": "#/$defs/sha256"},
+          "model_hash": {"$ref": "#/$defs/sha256"},
+          "input_config_hash": {"$ref": "#/$defs/sha256"},
+          "input_data_hash": {"$ref": "#/$defs/sha256"},
+          "input_model_hash": {"$ref": "#/$defs/sha256"},
+          "positive_solver_status": {"$ref": "#/$defs/successfulSolverStatus"},
+          "negative_solver_status": {"$ref": "#/$defs/successfulSolverStatus"},
+          "solver_status": {"$ref": "#/$defs/successfulSolverStatus"},
+          "degradation_known": {"const": true},
+          "positive_witness_replay_valid": {"const": true},
+          "negative_witness_replay_valid": {"const": true},
+          "out_of_distribution": {"const": false},
+          "failure_reasons": {"maxItems": 0}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "positive_feasible": {"const": true},
+                "negative_feasible": {"const": false}
+              },
+              "required": ["positive_feasible", "negative_feasible"]
+            },
+            "then": {"properties": {"state": {"const": "ENTAILED_PRESENT"}}}
+          },
+          {
+            "if": {
+              "properties": {
+                "positive_feasible": {"const": false},
+                "negative_feasible": {"const": true}
+              },
+              "required": ["positive_feasible", "negative_feasible"]
+            },
+            "then": {"properties": {"state": {"const": "ENTAILED_ABSENT"}}}
+          },
+          {
+            "if": {
+              "properties": {
+                "positive_feasible": {"const": true},
+                "negative_feasible": {"const": true}
+              },
+              "required": ["positive_feasible", "negative_feasible"]
+            },
+            "then": {"properties": {"state": {"const": "RAW_UNIDENTIFIABLE"}}}
+          },
+          {
+            "if": {
+              "properties": {
+                "positive_feasible": {"const": false},
+                "negative_feasible": {"const": false}
+              },
+              "required": ["positive_feasible", "negative_feasible"]
+            },
+            "then": {"properties": {"state": {"const": "OUT_OF_MODEL"}}}
+          }
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "FAIL_CLOSED"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "state": {"const": "OUT_OF_MODEL"},
+          "positive_feasible": {"type": "null"},
+          "negative_feasible": {"type": "null"},
+          "failure_reasons": {"minItems": 1}
+        }
+      }
+    }
+  ]
+}

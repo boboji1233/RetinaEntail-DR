@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage12-runner-bundle-v12.schema.json",
+  "title": "RetinaEntail-DR Stage 12 Local Runner Recovery Bundle v12",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "trust_anchor", "generation1_certificate", "generation2_certificate", "recovery_proof",
+    "status_staple", "pre_compromise_envelope", "recovered_envelope", "receipt"
+  ],
+  "properties": {
+    "trust_anchor": {"$ref": "#/$defs/trustAnchor"},
+    "generation1_certificate": {"$ref": "#/$defs/certificate"},
+    "generation2_certificate": {"$ref": "#/$defs/certificate"},
+    "recovery_proof": {"$ref": "#/$defs/recoveryProof"},
+    "status_staple": {"$ref": "#/$defs/statusStaple"},
+    "pre_compromise_envelope": {"$ref": "#/$defs/envelope"},
+    "recovered_envelope": {"$ref": "#/$defs/envelope"},
+    "receipt": {"$ref": "#/$defs/receipt"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "b64": {"type": "string", "minLength": 1, "pattern": "^[A-Za-z0-9+/]+={0,2}$"},
+    "signed": {
+      "type": "object", "additionalProperties": false,
+      "required": ["payload", "signature_b64"]
+    },
+    "trustAnchor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["payload", "signature_b64"],
+      "properties": {
+        "signature_b64": {"$ref": "#/$defs/b64"},
+        "payload": {
+          "type": "object", "additionalProperties": false,
+          "required": [
+            "schema_version", "artifact_type", "algorithm", "runner_id", "key_id",
+            "public_key_b64", "trust_scope", "not_before_epoch", "not_after_epoch",
+            "random_process_local_private_key", "production_authentication"
+          ],
+          "properties": {
+            "schema_version": {"const": "12.0.0"},
+            "artifact_type": {"const": "EPHEMERAL_TRUST_ANCHOR"},
+            "algorithm": {"const": "Ed25519"},
+            "runner_id": {"type": "string", "minLength": 1},
+            "key_id": {"$ref": "#/$defs/sha256"},
+            "public_key_b64": {"$ref": "#/$defs/b64"},
+            "trust_scope": {"const": "LOCAL_RANDOM_EPHEMERAL_PROCESS_ONLY"},
+            "not_before_epoch": {"type": "integer"},
+            "not_after_epoch": {"type": "integer"},
+            "random_process_local_private_key": {"const": true},
+            "production_authentication": {"const": false}
+          }
+        }
+      }
+    },
+    "certificate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["payload", "signature_b64"],
+      "properties": {
+        "signature_b64": {"$ref": "#/$defs/b64"},
+        "payload": {
+          "type": "object", "additionalProperties": false,
+          "required": [
+            "schema_version", "artifact_type", "algorithm", "runner_id", "generation",
+            "serial", "issuer_key_id", "key_id", "public_key_b64", "previous_key_id",
+            "usage", "scope", "not_before_epoch", "not_after_epoch", "production_authentication"
+          ],
+          "properties": {
+            "schema_version": {"const": "12.0.0"},
+            "artifact_type": {"const": "EPHEMERAL_RUNNER_CERTIFICATE"},
+            "algorithm": {"const": "Ed25519"},
+            "runner_id": {"type": "string", "minLength": 1},
+            "generation": {"enum": [1, 2]},
+            "serial": {"$ref": "#/$defs/sha256"},
+            "issuer_key_id": {"$ref": "#/$defs/sha256"},
+            "key_id": {"$ref": "#/$defs/sha256"},
+            "public_key_b64": {"$ref": "#/$defs/b64"},
+            "previous_key_id": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+            "usage": {"const": "LOCAL_ARTIFACT_SIGNING"},
+            "scope": {"const": "LOCAL_RANDOM_EPHEMERAL_PROCESS_ONLY"},
+            "not_before_epoch": {"type": "integer"},
+            "not_after_epoch": {"type": "integer"},
+            "production_authentication": {"const": false}
+          }
+        }
+      }
+    },
+    "recoveryProof": {
+      "type": "object", "additionalProperties": false,
+      "required": ["payload", "root_signature_b64", "new_key_proof_of_possession_b64"],
+      "properties": {
+        "root_signature_b64": {"$ref": "#/$defs/b64"},
+        "new_key_proof_of_possession_b64": {"$ref": "#/$defs/b64"},
+        "payload": {
+          "type": "object", "additionalProperties": false,
+          "required": [
+            "schema_version", "artifact_type", "runner_id", "old_certificate_serial",
+            "new_certificate_serial", "old_key_id", "new_key_id", "old_generation",
+            "new_generation", "compromise_epoch", "recovery_epoch",
+            "source_stage11_package_sha256", "frozen_contract_sha256",
+            "old_key_authorized_after_compromise"
+          ],
+          "properties": {
+            "schema_version": {"const": "12.0.0"},
+            "artifact_type": {"const": "KEY_COMPROMISE_RECOVERY_PROOF"},
+            "runner_id": {"type": "string", "minLength": 1},
+            "old_certificate_serial": {"$ref": "#/$defs/sha256"},
+            "new_certificate_serial": {"$ref": "#/$defs/sha256"},
+            "old_key_id": {"$ref": "#/$defs/sha256"},
+            "new_key_id": {"$ref": "#/$defs/sha256"},
+            "old_generation": {"const": 1},
+            "new_generation": {"const": 2},
+            "compromise_epoch": {"type": "integer", "minimum": 1},
+            "recovery_epoch": {"type": "integer", "minimum": 1},
+            "source_stage11_package_sha256": {"$ref": "#/$defs/sha256"},
+            "frozen_contract_sha256": {"$ref": "#/$defs/sha256"},
+            "old_key_authorized_after_compromise": {"const": false}
+          }
+        }
+      }
+    },
+    "statusStaple": {
+      "type": "object", "additionalProperties": false,
+      "required": ["payload", "signature_b64"],
+      "properties": {
+        "signature_b64": {"$ref": "#/$defs/b64"},
+        "payload": {
+          "type": "object", "additionalProperties": false,
+          "required": [
+            "schema_version", "artifact_type", "runner_id", "issuer_key_id",
+            "produced_at_epoch", "next_update_epoch", "statuses", "scope",
+            "rfc6960_ocsp_response", "production_status"
+          ],
+          "properties": {
+            "schema_version": {"const": "12.0.0"},
+            "artifact_type": {"const": "LOCAL_SIGNED_STATUS_STAPLE"},
+            "runner_id": {"type": "string", "minLength": 1},
+            "issuer_key_id": {"$ref": "#/$defs/sha256"},
+            "produced_at_epoch": {"type": "integer"},
+            "next_update_epoch": {"type": "integer"},
+            "statuses": {
+              "type": "array", "minItems": 2, "maxItems": 2,
+              "items": {
+                "type": "object", "additionalProperties": false,
+                "required": ["certificate_serial", "generation", "status", "reason", "effective_epoch"],
+                "properties": {
+                  "certificate_serial": {"$ref": "#/$defs/sha256"},
+                  "generation": {"enum": [1, 2]},
+                  "status": {"enum": ["REVOKED", "GOOD"]},
+                  "reason": {"type": ["string", "null"]},
+                  "effective_epoch": {"type": "integer"}
+                }
+              }
+            },
+            "scope": {"const": "LOCAL_RANDOM_EPHEMERAL_PROCESS_ONLY"},
+            "rfc6960_ocsp_response": {"const": false},
+            "production_status": {"const": false}
+          }
+        }
+      }
+    },
+    "envelope": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "schema_version", "algorithm", "authentication_scope", "certificate_serial",
+        "key_id", "payload", "signature_b64"
+      ],
+      "properties": {
+        "schema_version": {"const": "12.0.0"},
+        "algorithm": {"const": "Ed25519"},
+        "authentication_scope": {"const": "LOCAL_RANDOM_EPHEMERAL_PROCESS_ONLY"},
+        "certificate_serial": {"$ref": "#/$defs/sha256"},
+        "key_id": {"$ref": "#/$defs/sha256"},
+        "payload": {"$ref": "#/$defs/envelopePayload"},
+        "signature_b64": {"$ref": "#/$defs/b64"}
+      }
+    },
+    "envelopePayload": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "schema_version", "runner_id", "producer_process_id", "session_nonce_sha256",
+        "phase", "signing_generation", "source_stage11_package_sha256",
+        "source_stage11_package_file_count", "source_stage11_manifest_sha256",
+        "source_stage11_audit_sha256", "source_stage11_summary_sha256",
+        "frozen_contract_sha256", "alpha", "positive_threshold", "negative_threshold",
+        "positive_sample_count", "negative_sample_count", "config_hash", "data_hash",
+        "model_hash", "scope", "split", "payload_contains_data", "payload_contains_root",
+        "payload_contains_private_key", "authorizes_real_data", "authorizes_physical_root",
+        "production_authentication"
+      ],
+      "properties": {
+        "schema_version": {"const": "12.0.0"},
+        "runner_id": {"type": "string", "minLength": 1},
+        "producer_process_id": {"type": "integer", "minimum": 1},
+        "session_nonce_sha256": {"$ref": "#/$defs/sha256"},
+        "phase": {"enum": ["PRE_COMPROMISE", "RECOVERED"]},
+        "signing_generation": {"enum": [1, 2]},
+        "source_stage11_package_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage11_package_file_count": {"type": "integer", "minimum": 1},
+        "source_stage11_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage11_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage11_summary_sha256": {"$ref": "#/$defs/sha256"},
+        "frozen_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "alpha": {"type": "number", "minimum": 0, "maximum": 1},
+        "positive_threshold": {"type": "number"},
+        "negative_threshold": {"type": "number"},
+        "positive_sample_count": {"type": "integer", "minimum": 1},
+        "negative_sample_count": {"type": "integer", "minimum": 1},
+        "config_hash": {"$ref": "#/$defs/sha256"},
+        "data_hash": {"$ref": "#/$defs/sha256"},
+        "model_hash": {"$ref": "#/$defs/sha256"},
+        "scope": {"const": "LOCAL_RANDOM_EPHEMERAL_PROCESS_ONLY"},
+        "split": {"const": "test"},
+        "payload_contains_data": {"const": false},
+        "payload_contains_root": {"const": false},
+        "payload_contains_private_key": {"const": false},
+        "authorizes_real_data": {"const": false},
+        "authorizes_physical_root": {"const": false},
+        "production_authentication": {"const": false}
+      }
+    },
+    "receipt": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "schema_version", "runner_id", "producer_process_id", "signer_adapter",
+        "random_private_keys_generated", "private_key_exported", "private_key_serialized",
+        "private_key_written_to_artifact", "hsm_backed", "production_authentication",
+        "physical_host_attested", "network_used", "gpu_used"
+      ],
+      "properties": {
+        "schema_version": {"const": "12.0.0"},
+        "runner_id": {"type": "string", "minLength": 1},
+        "producer_process_id": {"type": "integer", "minimum": 1},
+        "signer_adapter": {"const": "InMemoryEd25519Signer"},
+        "random_private_keys_generated": {"const": 3},
+        "private_key_exported": {"const": false},
+        "private_key_serialized": {"const": false},
+        "private_key_written_to_artifact": {"const": false},
+        "hsm_backed": {"const": false},
+        "production_authentication": {"const": false},
+        "physical_host_attested": {"const": false},
+        "network_used": {"const": false},
+        "gpu_used": {"const": false}
+      }
+    }
+  }
+}

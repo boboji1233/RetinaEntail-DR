@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage12-preflight-v12.schema.json",
+  "title": "RetinaEntail-DR Stage 12 Zero-I/O Preflight v12",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "dataset_id", "dataset_version", "required_scope",
+    "required_split", "inputs_present", "reasons", "accepts_paths", "accepts_private_keys",
+    "reads_environment", "authorizes_file_open", "authorizes_real_data",
+    "dataset_root_probed", "real_data_read", "detached_json_authoritative",
+    "historical_receipt_authoritative", "local_fixture_authorizes_production",
+    "production_ceremony_executed", "physical_host_count_verified"
+  ],
+  "properties": {
+    "schema_version": {"const": "12.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_PRODUCTION_CEREMONY_VERIFICATION"]},
+    "dataset_id": {"type": ["string", "null"]},
+    "dataset_version": {"type": ["string", "null"]},
+    "required_scope": {"const": "APPROVED_REAL_DATA"},
+    "required_split": {"const": "test"},
+    "inputs_present": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "complete_real_stage11_package_a_capability_present",
+        "complete_real_stage11_package_b_capability_present",
+        "fresh_runner_a_process_capability_present", "fresh_runner_b_process_capability_present",
+        "two_governance_approved_hardware_runners_verified",
+        "hsm_or_controlled_signer_boundary_verified", "trusted_ca_chains_verified",
+        "trusted_timestamp_policy_verified", "current_ocsp_status_verified",
+        "current_crl_status_verified", "complete_wheel_lock_hashes_verified",
+        "hardware_identity_verified", "frozen_baseline_contract_preregistered",
+        "compromise_recovery_drill_preregistered"
+      ],
+      "properties": {
+        "complete_real_stage11_package_a_capability_present": {"type": "boolean"},
+        "complete_real_stage11_package_b_capability_present": {"type": "boolean"},
+        "fresh_runner_a_process_capability_present": {"type": "boolean"},
+        "fresh_runner_b_process_capability_present": {"type": "boolean"},
+        "two_governance_approved_hardware_runners_verified": {"type": "boolean"},
+        "hsm_or_controlled_signer_boundary_verified": {"type": "boolean"},
+        "trusted_ca_chains_verified": {"type": "boolean"},
+        "trusted_timestamp_policy_verified": {"type": "boolean"},
+        "current_ocsp_status_verified": {"type": "boolean"},
+        "current_crl_status_verified": {"type": "boolean"},
+        "complete_wheel_lock_hashes_verified": {"type": "boolean"},
+        "hardware_identity_verified": {"type": "boolean"},
+        "frozen_baseline_contract_preregistered": {"type": "boolean"},
+        "compromise_recovery_drill_preregistered": {"type": "boolean"}
+      }
+    },
+    "reasons": {
+      "type": "array", "uniqueItems": true,
+      "items": {
+        "enum": [
+          "DATASET_NOT_EXPLICIT", "DATASET_VERSION_NOT_EXPLICIT",
+          "COMPLETE_REAL_STAGE11_PACKAGE_A_CAPABILITY_NOT_PROVIDED",
+          "COMPLETE_REAL_STAGE11_PACKAGE_B_CAPABILITY_NOT_PROVIDED",
+          "FRESH_RUNNER_A_PROCESS_CAPABILITY_NOT_PROVIDED",
+          "FRESH_RUNNER_B_PROCESS_CAPABILITY_NOT_PROVIDED",
+          "TWO_GOVERNANCE_APPROVED_HARDWARE_RUNNERS_NOT_VERIFIED",
+          "HSM_OR_CONTROLLED_SIGNER_BOUNDARY_NOT_VERIFIED",
+          "TRUSTED_CA_CHAINS_NOT_VERIFIED", "TRUSTED_TIMESTAMP_POLICY_NOT_VERIFIED",
+          "CURRENT_OCSP_STATUS_NOT_VERIFIED", "CURRENT_CRL_STATUS_NOT_VERIFIED",
+          "COMPLETE_WHEEL_LOCK_HASHES_NOT_VERIFIED", "HARDWARE_IDENTITY_NOT_VERIFIED",
+          "FROZEN_BASELINE_CONTRACT_NOT_PREREGISTERED",
+          "COMPROMISE_RECOVERY_DRILL_NOT_PREREGISTERED", "INPUT_INVALID"
+        ]
+      }
+    },
+    "accepts_paths": {"const": false},
+    "accepts_private_keys": {"const": false},
+    "reads_environment": {"const": false},
+    "authorizes_file_open": {"const": false},
+    "authorizes_real_data": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false},
+    "detached_json_authoritative": {"const": false},
+    "historical_receipt_authoritative": {"const": false},
+    "local_fixture_authorizes_production": {"const": false},
+    "production_ceremony_executed": {"const": false},
+    "physical_host_count_verified": {"const": 0}
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s7-fgadr-identity-audit-v1.schema.json",
+  "title": "Science S7 FGADR identity audit v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment_id", "status", "source_count", "unique_source_count_after_exact_duplicate_collapse", "exact_duplicate_group_count", "exact_duplicate_excluded_source_ids", "required_mask_counts", "sparse_other_mask_counts", "historical_source_intersection_count", "historical_source_intersections", "coordinate_audit", "io_audit"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S7_P1_FGADR_IDENTITY_AND_TARGET_MANIFEST_V1"},
+    "status": {"const": "PASS_IDENTITY_AND_TARGET_MANIFEST"},
+    "source_count": {"type": "integer", "minimum": 1},
+    "unique_source_count_after_exact_duplicate_collapse": {"type": "integer", "minimum": 1},
+    "exact_duplicate_group_count": {"type": "integer", "minimum": 0},
+    "exact_duplicate_excluded_source_ids": {"type": "array", "items": {"type": "string"}},
+    "required_mask_counts": {"type": "object"},
+    "sparse_other_mask_counts": {"type": "object"},
+    "historical_source_intersection_count": {"const": 0},
+    "historical_source_intersections": {"type": "array", "maxItems": 0},
+    "coordinate_audit": {"type": "object"},
+    "io_audit": {"type": "object"}
+  }
+}

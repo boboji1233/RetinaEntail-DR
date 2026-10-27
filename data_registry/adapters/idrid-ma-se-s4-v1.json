@@ -1,0 +1,582 @@
+{
+  "dataset_id": "idrid",
+  "entries": [
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_03.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_03_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_03_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_03",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_08.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_08_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_08_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_08",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_13.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_13_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_13_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_13",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_14.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_14_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_14_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_14",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_17.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_17_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_17_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_17",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_18.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_18_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_18_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_18",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_19.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_19_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_19_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_19",
+      "split": "CALIBRATION"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_22.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_22_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_22_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_22",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_23.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_23_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_23_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_23",
+      "split": "CALIBRATION"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_25.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_25_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_25_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_25",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_30.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_30_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_30_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_30",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_31.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_31_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_31_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_31",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_32.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_32_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_32_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_32",
+      "split": "CALIBRATION"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_33.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_33_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_33_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_33",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_35.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_35_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_35_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_35",
+      "split": "CALIBRATION"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_38.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_38_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_38_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_38",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_39.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_39_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_39_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_39",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_46.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_46_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_46_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_46",
+      "split": "CALIBRATION"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_47.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_47_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_47_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_47",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_48.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_48_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_48_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_48",
+      "split": "CALIBRATION"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_49.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_49_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_49_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_49",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_50.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_50_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_50_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_50",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_51.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_51_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_51_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_51",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_52.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_52_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_52_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_52",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_53.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_53_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_53_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_53",
+      "split": "TRAIN"
+    },
+    {
+      "eye_id": null,
+      "followup_id": null,
+      "image_path": "A. Segmentation/1. Original Images/a. Training Set/IDRiD_54.jpg",
+      "intervention_pair_id": null,
+      "labels": [
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/1. Microaneurysms/IDRiD_54_MA.tif",
+          "schema_version": "2.0.0",
+          "semantic": "MICROANEURYSM_MASK"
+        },
+        {
+          "relative_path": "A. Segmentation/2. All Segmentation Groundtruths/a. Training Set/4. Soft Exudates/IDRiD_54_SE.tif",
+          "schema_version": "2.0.0",
+          "semantic": "SOFT_EXUDATE_MASK"
+        }
+      ],
+      "patient_id": null,
+      "schema_version": "2.0.0",
+      "source_image_id": "idrid-segmentation-IDRiD_54",
+      "split": "TRAIN"
+    }
+  ],
+  "label_semantics": [
+    "MICROANEURYSM_MASK",
+    "SOFT_EXUDATE_MASK"
+  ],
+  "schema_version": "2.0.0"
+}

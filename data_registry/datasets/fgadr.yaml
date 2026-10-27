@@ -1,0 +1,28 @@
+schema_version: "1.0.0"
+dataset_id: fgadr
+name: FGADR
+version: "fgadr-official-seg-set-1842-unnumbered-p0"
+source_url: "https://csyizhou.github.io/FGADR/"
+alternate_source_urls: []
+access_mode: gated
+license_status: restricted
+license_review_status: reviewed
+license_notes: >-
+  The official author page limits FGADR to non-commercial research, prohibits
+  redistribution, and requires a signed Research Use Agreement followed by a
+  personal email-delivered link. The 2026-08-26 P0 review approves metadata
+  validation only. Payload acquisition and read-only audit remain blocked until
+  the responsible operator completes the manual agreement, receives access, and
+  records a delivery-specific review and hashes. Do not automate form submission,
+  share a signed URL, or copy restricted files into the repository.
+expected_labels:
+  - dr_grade
+  - lesion_pixel_masks_ma_he_ex_se_irma_nv
+label_verification_status: pending_review
+root_env: RETINAENTAIL_FGADR_ROOT
+patient_id_available: false
+source_image_id_rule: >-
+  Use the official Seg-set image identifier. The provider paper states that
+  pre-cleaning retained one best-quality image per patient ID; do not infer or
+  reconstruct anonymized patient or eye identifiers from filenames.
+redistribution: false

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s8-controlled-truth-audit-v1.schema.json",
+  "title": "Science S8 controlled-truth audit v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "bindings",
+    "source_role_counts",
+    "source_role_overlap",
+    "twin_png_decodes",
+    "twin_png_hash_mismatches",
+    "degradation_replay_checks",
+    "degradation_replay_mismatches",
+    "query_witness_source_collisions",
+    "locked_test_root_reads",
+    "model_training_steps",
+    "adapter_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S8_CONTROLLED_TRUTH_BOUNDARY_V1"},
+    "status": {"const": "PASS"},
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "bindings": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "source_role_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "source_role_overlap": {"const": 0},
+    "twin_png_decodes": {"type": "integer", "minimum": 1},
+    "twin_png_hash_mismatches": {"const": 0},
+    "degradation_replay_checks": {"type": "integer", "minimum": 1},
+    "degradation_replay_mismatches": {"const": 0},
+    "query_witness_source_collisions": {"const": 0},
+    "locked_test_root_reads": {"const": 0},
+    "model_training_steps": {"const": 0},
+    "adapter_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

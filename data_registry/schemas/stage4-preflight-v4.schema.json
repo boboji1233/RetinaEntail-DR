@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage4-preflight-v4.schema.json",
+  "title": "RetinaEntail-DR Stage 4 Zero-I/O Preflight Report v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "dataset_id",
+    "dataset_version",
+    "approved_review_provided",
+    "approved_review_purposes",
+    "dataset_root_provided",
+    "adapter_spec_provided",
+    "stage2_pass_audit_provided",
+    "frozen_data_card_provided",
+    "stage3_calibration_package_provided",
+    "manual_confirmation_record_provided",
+    "locked_evidence_provided",
+    "locked_evidence",
+    "locked_evidence_binding_sha256",
+    "reasons",
+    "test_tuning_prohibited",
+    "prerequisites_verified",
+    "authorizes_data_access",
+    "real_data_read",
+    "sample_count"
+  ],
+  "properties": {
+    "schema_version": {"const": "4.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_PREREQUISITE_VERIFICATION"]},
+    "dataset_id": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "dataset_version": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "approved_review_provided": {"type": "boolean"},
+    "approved_review_purposes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reviewPurpose"}
+    },
+    "dataset_root_provided": {"type": "boolean"},
+    "adapter_spec_provided": {"type": "boolean"},
+    "stage2_pass_audit_provided": {"type": "boolean"},
+    "frozen_data_card_provided": {"type": "boolean"},
+    "stage3_calibration_package_provided": {"type": "boolean"},
+    "manual_confirmation_record_provided": {"type": "boolean"},
+    "locked_evidence_provided": {"type": "boolean"},
+    "locked_evidence": {
+      "anyOf": [
+        {"$ref": "#/$defs/lockedEvidence"},
+        {"type": "null"}
+      ]
+    },
+    "locked_evidence_binding_sha256": {
+      "anyOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/preflightReason"}
+    },
+    "test_tuning_prohibited": {"const": true},
+    "prerequisites_verified": {"const": false},
+    "authorizes_data_access": {"const": false},
+    "real_data_read": {"const": false},
+    "sample_count": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reviewPurpose": {
+      "enum": [
+        "read_only_audit",
+        "metadata_validation",
+        "lesion_calibration",
+        "locked_test_evaluation"
+      ]
+    },
+    "preflightReason": {
+      "enum": [
+        "DATASET_NOT_EXPLICIT",
+        "DATASET_VERSION_NOT_EXPLICIT",
+        "APPROVED_REVIEW_NOT_PROVIDED",
+        "READ_ONLY_AUDIT_PURPOSE_NOT_APPROVED",
+        "LESION_CALIBRATION_PURPOSE_NOT_APPROVED",
+        "LOCKED_TEST_EVALUATION_PURPOSE_NOT_APPROVED",
+        "DATASET_ROOT_NOT_PROVIDED",
+        "ADAPTER_SPEC_NOT_PROVIDED",
+        "STAGE2_PASS_AUDIT_NOT_PROVIDED",
+        "FROZEN_DATA_CARD_NOT_PROVIDED",
+        "STAGE3_CALIBRATION_PACKAGE_NOT_PROVIDED",
+        "MANUAL_CONFIRMATION_RECORD_NOT_PROVIDED",
+        "LOCKED_EVIDENCE_NOT_PROVIDED",
+        "LOCKED_EVIDENCE_DATASET_MISMATCH"
+      ]
+    },
+    "lockedEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "dataset_version",
+        "license_review_sha256",
+        "adapter_spec_sha256",
+        "stage2_audit_sha256",
+        "frozen_data_card_sha256",
+        "stage3_calibration_package_sha256",
+        "manual_confirmation_sha256",
+        "calibration_artifact_sha256",
+        "config_sha256",
+        "data_sha256",
+        "model_sha256",
+        "alpha",
+        "positive_threshold",
+        "negative_threshold",
+        "positive_calibration_sample_count",
+        "negative_calibration_sample_count",
+        "total_calibration_sample_count",
+        "stage2_audit_status",
+        "frozen_data_card_scope",
+        "stage3_calibration_status",
+        "manual_confirmations_complete",
+        "thresholds_locked_before_test",
+        "test_split_used_for_calibration",
+        "test_tuning_prohibited"
+      ],
+      "properties": {
+        "schema_version": {"const": "4.0.0"},
+        "dataset_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "dataset_version": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+        },
+        "license_review_sha256": {"$ref": "#/$defs/sha256"},
+        "adapter_spec_sha256": {"$ref": "#/$defs/sha256"},
+        "stage2_audit_sha256": {"$ref": "#/$defs/sha256"},
+        "frozen_data_card_sha256": {"$ref": "#/$defs/sha256"},
+        "stage3_calibration_package_sha256": {"$ref": "#/$defs/sha256"},
+        "manual_confirmation_sha256": {"$ref": "#/$defs/sha256"},
+        "calibration_artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "config_sha256": {"$ref": "#/$defs/sha256"},
+        "data_sha256": {"$ref": "#/$defs/sha256"},
+        "model_sha256": {"$ref": "#/$defs/sha256"},
+        "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "positive_threshold": {"type": "number", "minimum": 0},
+        "negative_threshold": {"type": "number", "minimum": 0},
+        "positive_calibration_sample_count": {"type": "integer", "minimum": 1},
+        "negative_calibration_sample_count": {"type": "integer", "minimum": 1},
+        "total_calibration_sample_count": {"type": "integer", "minimum": 2},
+        "stage2_audit_status": {"const": "PASS"},
+        "frozen_data_card_scope": {"const": "APPROVED_REAL_DATA"},
+        "stage3_calibration_status": {"const": "SUCCESS"},
+        "manual_confirmations_complete": {"const": true},
+        "thresholds_locked_before_test": {"const": true},
+        "test_split_used_for_calibration": {"const": false},
+        "test_tuning_prohibited": {"const": true}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+      "then": {"properties": {"reasons": {"minItems": 1}}}
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "READY_FOR_PREREQUISITE_VERIFICATION"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "dataset_id": {"type": "string"},
+          "dataset_version": {"type": "string"},
+          "approved_review_provided": {"const": true},
+          "approved_review_purposes": {
+            "allOf": [
+              {"contains": {"const": "read_only_audit"}, "minContains": 1},
+              {"contains": {"const": "lesion_calibration"}, "minContains": 1},
+              {"contains": {"const": "locked_test_evaluation"}, "minContains": 1}
+            ]
+          },
+          "dataset_root_provided": {"const": true},
+          "adapter_spec_provided": {"const": true},
+          "stage2_pass_audit_provided": {"const": true},
+          "frozen_data_card_provided": {"const": true},
+          "stage3_calibration_package_provided": {"const": true},
+          "manual_confirmation_record_provided": {"const": true},
+          "locked_evidence_provided": {"const": true},
+          "reasons": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"locked_evidence": {"type": "null"}},
+        "required": ["locked_evidence"]
+      },
+      "then": {
+        "properties": {"locked_evidence_binding_sha256": {"type": "null"}}
+      },
+      "else": {
+        "properties": {
+          "locked_evidence_binding_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    }
+  ],
+  "$comment": "locked_evidence_provided is only a caller assertion that the file argument exists syntactically; preflight never opens it. The optional locked_evidence object is used only when a caller already holds an in-memory summary. READY means only that an independent verifier may compare exact artifacts. Python binds an in-memory summary's dataset/version and recomputes its digest. No preflight state authorizes root I/O."
+}

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage6-pilot-report-v6.schema.json",
+  "title": "RetinaEntail-DR Stage 6 Complete-Package Verifier Pilot Report v6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scope",
+    "method",
+    "run_id",
+    "source_digest_method",
+    "stage2_verifier",
+    "stage3_verifier",
+    "stage5_source",
+    "pilot_audit",
+    "stage6_config_sha256",
+    "stage6_package_payload_sha256",
+    "stage6_model_provenance_sha256",
+    "thresholds_locked_before_pilot",
+    "thresholds_reestimated",
+    "test_split_used_for_calibration",
+    "test_tuning_prohibited",
+    "process_bound_capabilities_required",
+    "capabilities_serialized",
+    "detached_summaries_authoritative",
+    "synthetic_capabilities_authorize_real_data",
+    "synthetic_components_same_dataset_provenance",
+    "real_authorization_issued",
+    "dataset_root_probed",
+    "real_data_used",
+    "real_data_read_count",
+    "cpu_only",
+    "gpu_used",
+    "network_used",
+    "clinical_claim",
+    "individual_report_authoritative",
+    "authority_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "6.0.0"},
+    "scope": {"const": "SYNTHETIC_ONLY"},
+    "method": {"const": "complete_package_capabilities_locked_pilot_v1"},
+    "run_id": {"const": "stage6-toy-verifier-pilot-001"},
+    "source_digest_method": {"const": "sha256-canonical-file-manifest-v1"},
+    "stage2_verifier": {"$ref": "#/$defs/stage2Verifier"},
+    "stage3_verifier": {"$ref": "#/$defs/stage3Verifier"},
+    "stage5_source": {"$ref": "#/$defs/stage5Source"},
+    "pilot_audit": {"$ref": "stage5-pilot-report-v5.schema.json"},
+    "stage6_config_sha256": {"$ref": "#/$defs/sha256"},
+    "stage6_package_payload_sha256": {"$ref": "#/$defs/sha256"},
+    "stage6_model_provenance_sha256": {"$ref": "#/$defs/sha256"},
+    "thresholds_locked_before_pilot": {"const": true},
+    "thresholds_reestimated": {"const": false},
+    "test_split_used_for_calibration": {"const": false},
+    "test_tuning_prohibited": {"const": true},
+    "process_bound_capabilities_required": {"const": true},
+    "capabilities_serialized": {"const": false},
+    "detached_summaries_authoritative": {"const": false},
+    "synthetic_capabilities_authorize_real_data": {"const": false},
+    "synthetic_components_same_dataset_provenance": {"const": false},
+    "real_authorization_issued": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_used": {"const": false},
+    "real_data_read_count": {"const": 0},
+    "cpu_only": {"const": true},
+    "gpu_used": {"const": false},
+    "network_used": {"const": false},
+    "clinical_claim": {"const": false},
+    "individual_report_authoritative": {"const": false},
+    "authority_boundary": {"const": "COMPLETE_VERIFIED_STAGE6_PACKAGE"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "positiveInteger": {"type": "integer", "minimum": 1},
+    "stage2Verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope", "dataset_id", "dataset_version", "audit_status", "record_count",
+        "manifest_sha256", "package_sha256", "package_file_count", "replay_verified",
+        "capability_issued"
+      ],
+      "properties": {
+        "scope": {"const": "SYNTHETIC_FIXTURE"},
+        "dataset_id": {"const": "synthetic_stage2"},
+        "dataset_version": {"const": "synthetic-fixture-v1"},
+        "audit_status": {"const": "PASS"},
+        "record_count": {"$ref": "#/$defs/positiveInteger"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "package_sha256": {"$ref": "#/$defs/sha256"},
+        "package_file_count": {"$ref": "#/$defs/positiveInteger"},
+        "replay_verified": {"const": true},
+        "capability_issued": {"const": true}
+      }
+    },
+    "stage3Verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope", "package_sha256", "package_file_count", "calibration_artifact_sha256",
+        "config_sha256", "data_sha256", "model_sha256", "alpha", "positive_threshold",
+        "negative_threshold", "positive_sample_count", "negative_sample_count",
+        "total_sample_count", "replay_verified", "capability_issued"
+      ],
+      "properties": {
+        "scope": {"const": "SYNTHETIC_TOY"},
+        "package_sha256": {"$ref": "#/$defs/sha256"},
+        "package_file_count": {"$ref": "#/$defs/positiveInteger"},
+        "calibration_artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "config_sha256": {"$ref": "#/$defs/sha256"},
+        "data_sha256": {"$ref": "#/$defs/sha256"},
+        "model_sha256": {"$ref": "#/$defs/sha256"},
+        "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "positive_threshold": {"type": "number", "minimum": 0},
+        "negative_threshold": {"type": "number", "minimum": 0},
+        "positive_sample_count": {"$ref": "#/$defs/positiveInteger"},
+        "negative_sample_count": {"$ref": "#/$defs/positiveInteger"},
+        "total_sample_count": {"$ref": "#/$defs/positiveInteger"},
+        "replay_verified": {"const": true},
+        "capability_issued": {"const": true}
+      }
+    },
+    "stage5Source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope", "pilot_id", "package_sha256", "package_file_count", "case_count",
+        "replay_verified"
+      ],
+      "properties": {
+        "scope": {"const": "SYNTHETIC_ONLY"},
+        "pilot_id": {"const": "stage5-toy-locked-pilot-001"},
+        "package_sha256": {"$ref": "#/$defs/sha256"},
+        "package_file_count": {"$ref": "#/$defs/positiveInteger"},
+        "case_count": {"$ref": "#/$defs/positiveInteger"},
+        "replay_verified": {"const": true}
+      }
+    }
+  },
+  "$comment": "Python recomputes package bytes, capabilities, Stage 5 replay, four-state counts, Wilson intervals, and all cross-stage lock bindings. The JSON report itself is never a capability."
+}

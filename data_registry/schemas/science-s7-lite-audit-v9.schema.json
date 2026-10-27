@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s7-lite-audit-v9.schema.json",
+  "title": "Science S7 RetinaEntail-Lite v9 run-informed recovery audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "development_disclosure",
+    "holdout_construction",
+    "method",
+    "training",
+    "calibration",
+    "validation",
+    "legacy_agreement",
+    "ood",
+    "preservation",
+    "io_audit",
+    "resource",
+    "gate",
+    "hashes",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "9.0.0"},
+    "experiment_id": {"const": "S7_RETINAENTAIL_LITE_V9"},
+    "status": {"enum": ["READY_FOR_AI_QC", "BLOCKED_AUTOMATED_GATE"]},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "development_disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v1_to_v8_observed",
+        "independent_replication",
+        "final_permitted_s7_recovery",
+        "v10_permitted",
+        "final_locked_test_opened"
+      ],
+      "properties": {
+        "v1_to_v8_observed": {"const": true},
+        "independent_replication": {"const": false},
+        "final_permitted_s7_recovery": {"const": true},
+        "v10_permitted": {"const": false},
+        "final_locked_test_opened": {"const": false}
+      }
+    },
+    "holdout_construction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_components",
+        "accepted_twins",
+        "rejected_components",
+        "accepted_distinct_sources_per_class",
+        "historical_role_overlap",
+        "image_decodes",
+        "mask_decodes"
+      ],
+      "properties": {
+        "selected_components": {"const": 150},
+        "accepted_twins": {"type": "integer", "minimum": 1, "maximum": 150},
+        "rejected_components": {"type": "integer", "minimum": 0, "maximum": 150},
+        "accepted_distinct_sources_per_class": {"$ref": "#/$defs/class_counts"},
+        "historical_role_overlap": {"const": 0},
+        "image_decodes": {"type": "integer", "minimum": 1},
+        "mask_decodes": {"type": "integer", "minimum": 4}
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime",
+        "python_version",
+        "torch_version",
+        "torchvision_version",
+        "architecture",
+        "input_side",
+        "embedding_dim",
+        "total_parameter_count",
+        "trainable_parameter_count",
+        "pretrained_weights",
+        "pretrained_weight_source_url",
+        "pretrained_weight_sha256",
+        "backbone_frozen",
+        "retrieval",
+        "sole_change"
+      ],
+      "properties": {
+        "runtime": {"const": "PYTHON_3_11_TORCH_2_5_1_TORCHVISION_0_20_1_CPU"},
+        "python_version": {"const": "3.11"},
+        "torch_version": {"const": "2.5.1+cpu"},
+        "torchvision_version": {"const": "0.20.1+cpu"},
+        "architecture": {
+          "const": "TARGET_CONTEXT_128_FROZEN_IMAGENET_RESNET18_CLASS_PROJECTED_32D_V1"
+        },
+        "input_side": {"const": 128},
+        "embedding_dim": {"const": 32},
+        "total_parameter_count": {"type": "integer", "minimum": 11000000},
+        "trainable_parameter_count": {"type": "integer", "minimum": 60000},
+        "pretrained_weights": {"const": true},
+        "pretrained_weight_source_url": {
+          "const": "https://download.pytorch.org/models/resnet18-f37072fd.pth"
+        },
+        "pretrained_weight_sha256": {"$ref": "#/$defs/sha256"},
+        "backbone_frozen": {"const": true},
+        "retrieval": {"const": "SOURCE_ISOLATED_NEAREST_WITNESS_SAME_CLASS_CONDITION"},
+        "sole_change": {"const": "SOURCE_BALANCED_CROSS_HYPOTHESIS_BATCH_HARD_V1"}
+      }
+    },
+    "training": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_twin_records",
+        "class_counts",
+        "epochs",
+        "batch_size",
+        "initial_loss",
+        "final_loss",
+        "minimum_loss",
+        "eligible_batch_hard_anchors",
+        "empty_candidate_batch_hard_anchors",
+        "finite"
+      ],
+      "properties": {
+        "selected_twin_records": {"const": 266},
+        "class_counts": {"type": "object"},
+        "epochs": {"const": 40},
+        "batch_size": {"const": 32},
+        "initial_loss": {"type": "number", "minimum": 0},
+        "final_loss": {"type": "number", "minimum": 0},
+        "minimum_loss": {"type": "number", "minimum": 0},
+        "eligible_batch_hard_anchors": {"type": "integer", "minimum": 1},
+        "empty_candidate_batch_hard_anchors": {"type": "integer", "minimum": 0},
+        "finite": {"const": true}
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "required": ["selected_twin_records", "rows", "thresholds_sha256"],
+      "properties": {
+        "selected_twin_records": {"const": 118},
+        "rows": {"const": 472},
+        "thresholds_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "selected_twin_records",
+        "rows",
+        "policy_metrics",
+        "truth_metrics",
+        "cluster_bootstrap",
+        "moderate_glare_determinate_coverage_per_class",
+        "zero_error_one_sided_95_upper_bound"
+      ],
+      "properties": {
+        "selected_twin_records": {"type": "integer", "minimum": 1, "maximum": 150},
+        "rows": {"type": "integer", "minimum": 4, "maximum": 600},
+        "policy_metrics": {"type": "object"},
+        "truth_metrics": {"type": "object"},
+        "cluster_bootstrap": {"type": "object"},
+        "moderate_glare_determinate_coverage_per_class": {"$ref": "#/$defs/class_rates"},
+        "zero_error_one_sided_95_upper_bound": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "legacy_agreement": {"type": "object"},
+    "ood": {
+      "type": "object",
+      "required": ["records", "out_of_model"],
+      "properties": {"records": {"const": 160}, "out_of_model": {"const": 160}}
+    },
+    "preservation": {"type": "object"},
+    "io_audit": {
+      "type": "object",
+      "required": [
+        "twin_png_decodes",
+        "twin_png_hash_mismatches",
+        "glare_replay_checks",
+        "glare_replay_mismatches",
+        "query_witness_source_collisions",
+        "locked_test_root_reads",
+        "online_evaluation_reads"
+      ],
+      "properties": {
+        "twin_png_decodes": {"type": "integer", "minimum": 1},
+        "twin_png_hash_mismatches": {"const": 0},
+        "glare_replay_checks": {"type": "integer", "minimum": 1},
+        "glare_replay_mismatches": {"const": 0},
+        "query_witness_source_collisions": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "online_evaluation_reads": {"const": 0}
+      }
+    },
+    "resource": {
+      "type": "object",
+      "required": ["device", "gpu_used", "peak_python_tracemalloc_bytes", "silent_resolution_change"],
+      "properties": {
+        "device": {"const": "CPU"},
+        "gpu_used": {"const": false},
+        "peak_python_tracemalloc_bytes": {"type": "integer", "minimum": 0},
+        "silent_resolution_change": {"const": false}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "maximum_validation_fcr",
+        "minimum_moderate_coverage_per_class",
+        "minimum_legacy_verify_agreement",
+        "automated",
+        "ai_visual_qc",
+        "s7_closed",
+        "s8_authorized"
+      ],
+      "properties": {
+        "maximum_validation_fcr": {"const": 0.05},
+        "minimum_moderate_coverage_per_class": {"const": 0.05},
+        "minimum_legacy_verify_agreement": {"const": 0.5},
+        "automated": {"enum": ["PASS", "FAIL"]},
+        "ai_visual_qc": {"const": "PENDING"},
+        "s7_closed": {"const": false},
+        "s8_authorized": {"const": false}
+      }
+    },
+    "hashes": {"type": "object"},
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "class_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"type": "integer", "minimum": 0},
+        "EX": {"type": "integer", "minimum": 0},
+        "MA": {"type": "integer", "minimum": 0},
+        "SE": {"type": "integer", "minimum": 0}
+      }
+    },
+    "class_rates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["HE", "EX", "MA", "SE"],
+      "properties": {
+        "HE": {"type": "number", "minimum": 0, "maximum": 1},
+        "EX": {"type": "number", "minimum": 0, "maximum": 1},
+        "MA": {"type": "number", "minimum": 0, "maximum": 1},
+        "SE": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}

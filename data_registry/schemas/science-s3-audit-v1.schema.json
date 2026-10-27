@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s3-audit-v1.schema.json",
+  "title": "RetinaEntail-DR Science S3 controlled-twin pilot audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment_id", "status", "summary", "gate", "hashes"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S3_HE_EX_TWIN_PILOT"},
+    "status": {
+      "enum": [
+        "READY_FOR_RESPONSIBLE_CONFIRMATION",
+        "PASS_SYNTHETIC_FIXTURE_ONLY",
+        "BLOCKED",
+        "FAIL_CLOSED"
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "accepted_twin_count",
+        "rejected_twin_count",
+        "paired_output_count",
+        "locked_test_root_reads",
+        "source_split_leak_count"
+      ],
+      "properties": {
+        "accepted_twin_count": {"type": "integer", "minimum": 0, "maximum": 40},
+        "rejected_twin_count": {"type": "integer", "minimum": 0},
+        "paired_output_count": {"type": "integer", "minimum": 0, "maximum": 80},
+        "locked_test_root_reads": {"const": 0},
+        "source_split_leak_count": {"const": 0}
+      }
+    },
+    "gate": {"type": "object"},
+    "hashes": {"type": "object"}
+  }
+}

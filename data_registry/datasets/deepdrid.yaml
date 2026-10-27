@@ -1,0 +1,23 @@
+schema_version: "1.0.0"
+dataset_id: deepdrid
+name: DeepDRiD
+version: "deepdrid-github-56d8af713198-regular-v1"
+source_url: "https://github.com/deepdrdoc/DeepDRiD"
+alternate_source_urls: []
+access_mode: public_direct
+license_status: verified
+license_review_status: reviewed
+license_notes: >-
+  The responsible data-governance operator approved exact commit 56d8af713198 for
+  non-commercial research/training on regular TRAIN/VALID. The exact repository LICENSE,
+  task-scoped terms, archive SHA-256, and owner attestation are recorded separately.
+expected_labels:
+  - dr_grade
+  - image_quality
+  - artifact_clarity_and_field_attributes
+  - paired_view_metadata
+label_verification_status: verified
+root_env: RETINAENTAIL_DEEPDRID_ROOT
+patient_id_available: true
+source_image_id_rule: "Preserve official image and paired-view identifiers."
+redistribution: false

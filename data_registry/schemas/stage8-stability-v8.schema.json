@@ -1,0 +1,897 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage8-stability-v8.schema.json",
+    "title": "RetinaEntail-DR Stage 8 Repeatability and Witness Stability v8",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "status",
+        "interval_method",
+        "clinical_claim",
+        "preregistration",
+        "input_baseline_count",
+        "input_repeat_count",
+        "expected_transition_count",
+        "rejected_record_count",
+        "case_transitions",
+        "transition_matrix",
+        "metric_intervals",
+        "event_intervals",
+        "failure_reason_counts",
+        "rejected_reason_counts"
+    ],
+    "properties": {
+        "schema_version": {"const": "8.0.0"},
+        "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+        "interval_method": {"const": "wilson_score"},
+        "clinical_claim": {"const": false},
+        "preregistration": {"$ref": "#/$defs/preregistration"},
+        "input_baseline_count": {"$ref": "#/$defs/count"},
+        "input_repeat_count": {"$ref": "#/$defs/count"},
+        "expected_transition_count": {"$ref": "#/$defs/positiveCount"},
+        "rejected_record_count": {"$ref": "#/$defs/count"},
+        "case_transitions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"$ref": "#/$defs/caseTransition"}
+        },
+        "transition_matrix": {"$ref": "#/$defs/transitionMatrix"},
+        "metric_intervals": {"$ref": "#/$defs/metricIntervals"},
+        "event_intervals": {"$ref": "#/$defs/eventIntervals"},
+        "failure_reason_counts": {"$ref": "#/$defs/failureCounts"},
+        "rejected_reason_counts": {"$ref": "#/$defs/failureCounts"}
+    },
+    "$defs": {
+        "count": {"type": "integer", "minimum": 0},
+        "positiveCount": {"type": "integer", "minimum": 1},
+        "sampleCount": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "safeIdentifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+        "state": {
+            "enum": ["ENTAILED_PRESENT", "ENTAILED_ABSENT", "RAW_UNIDENTIFIABLE", "OUT_OF_MODEL"]
+        },
+        "stabilityMetric": {
+            "enum": [
+                "STATE_STABLE",
+                "FAIL_CLOSED_STATUS_STABLE",
+                "OUT_OF_DISTRIBUTION_STATUS_STABLE",
+                "POSITIVE_WITNESS_REPLAY_STABLE",
+                "NEGATIVE_WITNESS_REPLAY_STABLE",
+                "DUAL_WITNESS_REPLAY_STABLE",
+                "POSITIVE_WITNESS_HASH_STABLE",
+                "NEGATIVE_WITNESS_HASH_STABLE",
+                "DUAL_WITNESS_HASH_STABLE"
+            ]
+        },
+        "eventMetric": {
+            "enum": [
+                "REPEAT_FAIL_CLOSED",
+                "REPEAT_OUT_OF_DISTRIBUTION",
+                "REPEAT_OUT_OF_MODEL",
+                "REPEAT_DUAL_WITNESS_REPLAY_PASSED"
+            ]
+        },
+        "failureReason": {
+            "enum": [
+                "EMPTY_BASELINE",
+                "EMPTY_REPEAT_SET",
+                "INVALID_RECORD",
+                "INVALID_IDENTIFIER",
+                "INVALID_SCHEMA_VERSION",
+                "DUPLICATE_BASELINE_CASE",
+                "DUPLICATE_REPEAT_OBSERVATION",
+                "MISSING_BASELINE_CASE",
+                "MISSING_REPEAT_OBSERVATION",
+                "UNDECLARED_BASELINE_CASE",
+                "UNDECLARED_REPEAT_CASE",
+                "UNDECLARED_RUN",
+                "DATASET_ID_MISMATCH",
+                "DATASET_VERSION_MISMATCH",
+                "SPLIT_MISMATCH",
+                "SCOPE_MISMATCH",
+                "RUN_SEED_MISMATCH",
+                "DEGRADATION_REPLAY_ID_MISMATCH",
+                "DEGRADATION_REPLAY_SET_HASH_MISMATCH",
+                "CASE_DEGRADATION_TRACE_MISMATCH",
+                "INVALID_STATE",
+                "INVALID_FLAG",
+                "INVALID_NUMERIC_VALUE",
+                "INVALID_SEED",
+                "INVALID_SAMPLE_COUNT",
+                "STATE_SCORE_MISMATCH",
+                "LOCKED_ALPHA_MISMATCH",
+                "LOCKED_POSITIVE_THRESHOLD_MISMATCH",
+                "LOCKED_NEGATIVE_THRESHOLD_MISMATCH",
+                "LOCKED_POSITIVE_SAMPLE_COUNT_MISMATCH",
+                "LOCKED_NEGATIVE_SAMPLE_COUNT_MISMATCH",
+                "LOCKED_CONFIG_HASH_MISMATCH",
+                "LOCKED_DATA_HASH_MISMATCH",
+                "LOCKED_MODEL_HASH_MISMATCH",
+                "STAGE7_PACKAGE_HASH_MISMATCH",
+                "PROVENANCE_HASH_MISMATCH",
+                "INVALID_WITNESS_HASH",
+                "FAIL_CLOSED_SEMANTICS_MISMATCH",
+                "UNKNOWN_DEGRADATION",
+                "SOLVER_FAILED",
+                "INVALID_WITNESS_REPLAY",
+                "OUT_OF_DISTRIBUTION"
+            ]
+        },
+        "contractFailureReason": {
+            "enum": [
+                "EMPTY_BASELINE",
+                "EMPTY_REPEAT_SET",
+                "INVALID_RECORD",
+                "INVALID_IDENTIFIER",
+                "INVALID_SCHEMA_VERSION",
+                "DUPLICATE_BASELINE_CASE",
+                "DUPLICATE_REPEAT_OBSERVATION",
+                "MISSING_BASELINE_CASE",
+                "MISSING_REPEAT_OBSERVATION",
+                "UNDECLARED_BASELINE_CASE",
+                "UNDECLARED_REPEAT_CASE",
+                "UNDECLARED_RUN",
+                "DATASET_ID_MISMATCH",
+                "DATASET_VERSION_MISMATCH",
+                "SPLIT_MISMATCH",
+                "SCOPE_MISMATCH",
+                "RUN_SEED_MISMATCH",
+                "DEGRADATION_REPLAY_ID_MISMATCH",
+                "DEGRADATION_REPLAY_SET_HASH_MISMATCH",
+                "CASE_DEGRADATION_TRACE_MISMATCH",
+                "INVALID_STATE",
+                "INVALID_FLAG",
+                "INVALID_NUMERIC_VALUE",
+                "INVALID_SEED",
+                "INVALID_SAMPLE_COUNT",
+                "STATE_SCORE_MISMATCH",
+                "LOCKED_ALPHA_MISMATCH",
+                "LOCKED_POSITIVE_THRESHOLD_MISMATCH",
+                "LOCKED_NEGATIVE_THRESHOLD_MISMATCH",
+                "LOCKED_POSITIVE_SAMPLE_COUNT_MISMATCH",
+                "LOCKED_NEGATIVE_SAMPLE_COUNT_MISMATCH",
+                "LOCKED_CONFIG_HASH_MISMATCH",
+                "LOCKED_DATA_HASH_MISMATCH",
+                "LOCKED_MODEL_HASH_MISMATCH",
+                "STAGE7_PACKAGE_HASH_MISMATCH",
+                "PROVENANCE_HASH_MISMATCH",
+                "INVALID_WITNESS_HASH",
+                "FAIL_CLOSED_SEMANTICS_MISMATCH"
+            ]
+        },
+        "replaySpec": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "schema_version",
+                "run_id",
+                "seed",
+                "degradation_replay_id",
+                "degradation_replay_set_sha256"
+            ],
+            "properties": {
+                "schema_version": {"const": "8.0.0"},
+                "run_id": {"$ref": "#/$defs/safeIdentifier"},
+                "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+                "degradation_replay_id": {"$ref": "#/$defs/safeIdentifier"},
+                "degradation_replay_set_sha256": {"$ref": "#/$defs/sha256"}
+            }
+        },
+        "preregistration": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "schema_version",
+                "dataset_id",
+                "dataset_version",
+                "scope",
+                "split",
+                "inclusion_rule",
+                "inclusion_case_ids",
+                "replay_specs",
+                "alpha",
+                "positive_threshold",
+                "negative_threshold",
+                "positive_sample_count",
+                "negative_sample_count",
+                "config_hash",
+                "data_hash",
+                "model_hash",
+                "stage7_package_sha256",
+                "provenance_sha256",
+                "confidence_level",
+                "stability_metrics",
+                "clinical_claim"
+            ],
+            "properties": {
+                "schema_version": {"const": "8.0.0"},
+                "dataset_id": {"$ref": "#/$defs/safeIdentifier"},
+                "dataset_version": {"$ref": "#/$defs/safeIdentifier"},
+                "scope": {"enum": ["SYNTHETIC_ONLY", "APPROVED_REAL_DATA"]},
+                "split": {"const": "test"},
+                "inclusion_rule": {"const": "EXACT_FROZEN_STAGE7_TEST_CASE_SET"},
+                "inclusion_case_ids": {
+                    "type": "array",
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "items": {"$ref": "#/$defs/safeIdentifier"}
+                },
+                "replay_specs": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {"$ref": "#/$defs/replaySpec"}
+                },
+                "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+                "positive_threshold": {"type": "number", "minimum": 0},
+                "negative_threshold": {"type": "number", "minimum": 0},
+                "positive_sample_count": {"$ref": "#/$defs/sampleCount"},
+                "negative_sample_count": {"$ref": "#/$defs/sampleCount"},
+                "config_hash": {"$ref": "#/$defs/sha256"},
+                "data_hash": {"$ref": "#/$defs/sha256"},
+                "model_hash": {"$ref": "#/$defs/sha256"},
+                "stage7_package_sha256": {"$ref": "#/$defs/sha256"},
+                "provenance_sha256": {"$ref": "#/$defs/sha256"},
+                "confidence_level": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "exclusiveMaximum": 1
+                },
+                "stability_metrics": {
+                    "const": [
+                        "STATE_STABLE",
+                        "FAIL_CLOSED_STATUS_STABLE",
+                        "OUT_OF_DISTRIBUTION_STATUS_STABLE",
+                        "POSITIVE_WITNESS_REPLAY_STABLE",
+                        "NEGATIVE_WITNESS_REPLAY_STABLE",
+                        "DUAL_WITNESS_REPLAY_STABLE",
+                        "POSITIVE_WITNESS_HASH_STABLE",
+                        "NEGATIVE_WITNESS_HASH_STABLE",
+                        "DUAL_WITNESS_HASH_STABLE"
+                    ]
+                },
+                "clinical_claim": {"const": false}
+            }
+        },
+        "caseTransition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "schema_version",
+                "case_id",
+                "run_id",
+                "status",
+                "baseline_state",
+                "repeat_state",
+                "transition",
+                "baseline_fail_closed",
+                "repeat_fail_closed",
+                "baseline_out_of_distribution",
+                "repeat_out_of_distribution",
+                "state_stable",
+                "fail_closed_status_stable",
+                "out_of_distribution_status_stable",
+                "positive_witness_replay_stable",
+                "negative_witness_replay_stable",
+                "dual_witness_replay_stable",
+                "baseline_positive_witness_replay_valid",
+                "baseline_negative_witness_replay_valid",
+                "repeat_positive_witness_replay_valid",
+                "repeat_negative_witness_replay_valid",
+                "baseline_positive_witness_sha256",
+                "baseline_negative_witness_sha256",
+                "repeat_positive_witness_sha256",
+                "repeat_negative_witness_sha256",
+                "positive_witness_hash_stable",
+                "negative_witness_hash_stable",
+                "dual_witness_hash_stable",
+                "failure_reasons"
+            ],
+            "properties": {
+                "schema_version": {"const": "8.0.0"},
+                "case_id": {"$ref": "#/$defs/safeIdentifier"},
+                "run_id": {"$ref": "#/$defs/safeIdentifier"},
+                "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+                "baseline_state": {"$ref": "#/$defs/state"},
+                "repeat_state": {"$ref": "#/$defs/state"},
+                "transition": {
+                    "type": "string",
+                    "pattern": "^(ENTAILED_PRESENT|ENTAILED_ABSENT|RAW_UNIDENTIFIABLE|OUT_OF_MODEL)->(ENTAILED_PRESENT|ENTAILED_ABSENT|RAW_UNIDENTIFIABLE|OUT_OF_MODEL)$"
+                },
+                "baseline_fail_closed": {"type": "boolean"},
+                "repeat_fail_closed": {"type": "boolean"},
+                "baseline_out_of_distribution": {"type": "boolean"},
+                "repeat_out_of_distribution": {"type": "boolean"},
+                "state_stable": {"type": "boolean"},
+                "fail_closed_status_stable": {"type": "boolean"},
+                "out_of_distribution_status_stable": {"type": "boolean"},
+                "positive_witness_replay_stable": {"type": "boolean"},
+                "negative_witness_replay_stable": {"type": "boolean"},
+                "dual_witness_replay_stable": {"type": "boolean"},
+                "baseline_positive_witness_replay_valid": {"type": "boolean"},
+                "baseline_negative_witness_replay_valid": {"type": "boolean"},
+                "repeat_positive_witness_replay_valid": {"type": "boolean"},
+                "repeat_negative_witness_replay_valid": {"type": "boolean"},
+                "baseline_positive_witness_sha256": {"$ref": "#/$defs/nullableSha256"},
+                "baseline_negative_witness_sha256": {"$ref": "#/$defs/nullableSha256"},
+                "repeat_positive_witness_sha256": {"$ref": "#/$defs/nullableSha256"},
+                "repeat_negative_witness_sha256": {"$ref": "#/$defs/nullableSha256"},
+                "positive_witness_hash_stable": {"type": "boolean"},
+                "negative_witness_hash_stable": {"type": "boolean"},
+                "dual_witness_hash_stable": {"type": "boolean"},
+                "failure_reasons": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "items": {"$ref": "#/$defs/failureReason"}
+                }
+            },
+            "allOf": [
+                {
+                    "if": {"properties": {"status": {"const": "SUCCESS"}}, "required": ["status"]},
+                    "then": {
+                        "properties": {
+                            "repeat_fail_closed": {"const": false},
+                            "failure_reasons": {"maxItems": 0}
+                        }
+                    },
+                    "else": {
+                        "anyOf": [
+                            {"properties": {"repeat_fail_closed": {"const": true}}},
+                            {"properties": {"failure_reasons": {"minItems": 1}}}
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "failure_reasons": {
+                                "contains": {"$ref": "#/$defs/contractFailureReason"},
+                                "minContains": 1
+                            }
+                        },
+                        "required": ["failure_reasons"]
+                    },
+                    "then": {
+                        "properties": {
+                            "repeat_state": {"const": "OUT_OF_MODEL"},
+                            "repeat_fail_closed": {"const": true},
+                            "state_stable": {"const": false},
+                            "fail_closed_status_stable": {"const": false},
+                            "out_of_distribution_status_stable": {"const": false},
+                            "positive_witness_replay_stable": {"const": false},
+                            "negative_witness_replay_stable": {"const": false},
+                            "dual_witness_replay_stable": {"const": false},
+                            "positive_witness_hash_stable": {"const": false},
+                            "negative_witness_hash_stable": {"const": false},
+                            "dual_witness_hash_stable": {"const": false}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {"baseline_fail_closed": {"const": true}},
+                        "required": ["baseline_fail_closed"]
+                    },
+                    "then": {"properties": {"baseline_state": {"const": "OUT_OF_MODEL"}}}
+                },
+                {
+                    "if": {
+                        "properties": {"repeat_fail_closed": {"const": true}},
+                        "required": ["repeat_fail_closed"]
+                    },
+                    "then": {"properties": {"repeat_state": {"const": "OUT_OF_MODEL"}}}
+                },
+                {
+                    "if": {
+                        "properties": {"baseline_out_of_distribution": {"const": true}},
+                        "required": ["baseline_out_of_distribution"]
+                    },
+                    "then": {"properties": {"baseline_fail_closed": {"const": true}}}
+                },
+                {
+                    "if": {
+                        "properties": {"repeat_out_of_distribution": {"const": true}},
+                        "required": ["repeat_out_of_distribution"]
+                    },
+                    "then": {"properties": {"repeat_fail_closed": {"const": true}}}
+                },
+                {
+                    "if": {"properties": {"state_stable": {"const": true}}},
+                    "then": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "baseline_state": {"const": "ENTAILED_PRESENT"},
+                                    "repeat_state": {"const": "ENTAILED_PRESENT"}
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "baseline_state": {"const": "ENTAILED_ABSENT"},
+                                    "repeat_state": {"const": "ENTAILED_ABSENT"}
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "baseline_state": {"const": "RAW_UNIDENTIFIABLE"},
+                                    "repeat_state": {"const": "RAW_UNIDENTIFIABLE"}
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "baseline_state": {"const": "OUT_OF_MODEL"},
+                                    "repeat_state": {"const": "OUT_OF_MODEL"}
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "if": {"properties": {"fail_closed_status_stable": {"const": true}}},
+                    "then": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "baseline_fail_closed": {"const": true},
+                                    "repeat_fail_closed": {"const": true}
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "baseline_fail_closed": {"const": false},
+                                    "repeat_fail_closed": {"const": false}
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "if": {"properties": {"out_of_distribution_status_stable": {"const": true}}},
+                    "then": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "baseline_out_of_distribution": {"const": true},
+                                    "repeat_out_of_distribution": {"const": true}
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "baseline_out_of_distribution": {"const": false},
+                                    "repeat_out_of_distribution": {"const": false}
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "if": {"properties": {"positive_witness_replay_stable": {"const": true}}},
+                    "then": {
+                        "properties": {
+                            "baseline_positive_witness_replay_valid": {"const": true},
+                            "repeat_positive_witness_replay_valid": {"const": true}
+                        }
+                    }
+                },
+                {
+                    "if": {"properties": {"negative_witness_replay_stable": {"const": true}}},
+                    "then": {
+                        "properties": {
+                            "baseline_negative_witness_replay_valid": {"const": true},
+                            "repeat_negative_witness_replay_valid": {"const": true}
+                        }
+                    }
+                },
+                {
+                    "if": {"properties": {"dual_witness_replay_stable": {"const": true}}},
+                    "then": {
+                        "properties": {
+                            "positive_witness_replay_stable": {"const": true},
+                            "negative_witness_replay_stable": {"const": true}
+                        }
+                    }
+                },
+                {
+                    "if": {"properties": {"positive_witness_hash_stable": {"const": true}}},
+                    "then": {
+                        "properties": {
+                            "baseline_positive_witness_sha256": {"$ref": "#/$defs/sha256"},
+                            "repeat_positive_witness_sha256": {"$ref": "#/$defs/sha256"}
+                        },
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "baseline_positive_witness_replay_valid": {"const": true},
+                                    "repeat_positive_witness_replay_valid": {"const": true}
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "baseline_positive_witness_replay_valid": {"const": false},
+                                    "repeat_positive_witness_replay_valid": {"const": false}
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "if": {"properties": {"negative_witness_hash_stable": {"const": true}}},
+                    "then": {
+                        "properties": {
+                            "baseline_negative_witness_sha256": {"$ref": "#/$defs/sha256"},
+                            "repeat_negative_witness_sha256": {"$ref": "#/$defs/sha256"}
+                        },
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "baseline_negative_witness_replay_valid": {"const": true},
+                                    "repeat_negative_witness_replay_valid": {"const": true}
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "baseline_negative_witness_replay_valid": {"const": false},
+                                    "repeat_negative_witness_replay_valid": {"const": false}
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "if": {"properties": {"dual_witness_hash_stable": {"const": true}}},
+                    "then": {
+                        "properties": {
+                            "positive_witness_hash_stable": {"const": true},
+                            "negative_witness_hash_stable": {"const": true}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_PRESENT"},
+                            "repeat_state": {"const": "ENTAILED_PRESENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "transition": {"const": "ENTAILED_PRESENT->ENTAILED_PRESENT"}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_PRESENT"},
+                            "repeat_state": {"const": "ENTAILED_ABSENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "ENTAILED_PRESENT->ENTAILED_ABSENT"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_PRESENT"},
+                            "repeat_state": {"const": "RAW_UNIDENTIFIABLE"}
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "transition": {"const": "ENTAILED_PRESENT->RAW_UNIDENTIFIABLE"}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_PRESENT"},
+                            "repeat_state": {"const": "OUT_OF_MODEL"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "ENTAILED_PRESENT->OUT_OF_MODEL"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_ABSENT"},
+                            "repeat_state": {"const": "ENTAILED_PRESENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "ENTAILED_ABSENT->ENTAILED_PRESENT"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_ABSENT"},
+                            "repeat_state": {"const": "ENTAILED_ABSENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "ENTAILED_ABSENT->ENTAILED_ABSENT"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_ABSENT"},
+                            "repeat_state": {"const": "RAW_UNIDENTIFIABLE"}
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "transition": {"const": "ENTAILED_ABSENT->RAW_UNIDENTIFIABLE"}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "ENTAILED_ABSENT"},
+                            "repeat_state": {"const": "OUT_OF_MODEL"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "ENTAILED_ABSENT->OUT_OF_MODEL"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "RAW_UNIDENTIFIABLE"},
+                            "repeat_state": {"const": "ENTAILED_PRESENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "transition": {"const": "RAW_UNIDENTIFIABLE->ENTAILED_PRESENT"}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "RAW_UNIDENTIFIABLE"},
+                            "repeat_state": {"const": "ENTAILED_ABSENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "transition": {"const": "RAW_UNIDENTIFIABLE->ENTAILED_ABSENT"}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "RAW_UNIDENTIFIABLE"},
+                            "repeat_state": {"const": "RAW_UNIDENTIFIABLE"}
+                        }
+                    },
+                    "then": {
+                        "properties": {
+                            "transition": {"const": "RAW_UNIDENTIFIABLE->RAW_UNIDENTIFIABLE"}
+                        }
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "RAW_UNIDENTIFIABLE"},
+                            "repeat_state": {"const": "OUT_OF_MODEL"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "RAW_UNIDENTIFIABLE->OUT_OF_MODEL"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "OUT_OF_MODEL"},
+                            "repeat_state": {"const": "ENTAILED_PRESENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "OUT_OF_MODEL->ENTAILED_PRESENT"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "OUT_OF_MODEL"},
+                            "repeat_state": {"const": "ENTAILED_ABSENT"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "OUT_OF_MODEL->ENTAILED_ABSENT"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "OUT_OF_MODEL"},
+                            "repeat_state": {"const": "RAW_UNIDENTIFIABLE"}
+                        }
+                    },
+                    "then": {
+                        "properties": {"transition": {"const": "OUT_OF_MODEL->RAW_UNIDENTIFIABLE"}}
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "baseline_state": {"const": "OUT_OF_MODEL"},
+                            "repeat_state": {"const": "OUT_OF_MODEL"}
+                        }
+                    },
+                    "then": {"properties": {"transition": {"const": "OUT_OF_MODEL->OUT_OF_MODEL"}}}
+                }
+            ]
+        },
+        "unitNumber": {"type": "number", "minimum": 0, "maximum": 1},
+        "nullableSha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "proportion": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "numerator",
+                "denominator",
+                "estimate",
+                "lower",
+                "upper",
+                "confidence_level",
+                "method"
+            ],
+            "properties": {
+                "numerator": {"$ref": "#/$defs/count"},
+                "denominator": {"$ref": "#/$defs/count"},
+                "estimate": {"$ref": "#/$defs/unitNumber"},
+                "lower": {"$ref": "#/$defs/unitNumber"},
+                "upper": {"$ref": "#/$defs/unitNumber"},
+                "confidence_level": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "exclusiveMaximum": 1
+                },
+                "method": {"const": "wilson_score"}
+            }
+        },
+        "metricIntervals": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "STATE_STABLE",
+                "FAIL_CLOSED_STATUS_STABLE",
+                "OUT_OF_DISTRIBUTION_STATUS_STABLE",
+                "POSITIVE_WITNESS_REPLAY_STABLE",
+                "NEGATIVE_WITNESS_REPLAY_STABLE",
+                "DUAL_WITNESS_REPLAY_STABLE",
+                "POSITIVE_WITNESS_HASH_STABLE",
+                "NEGATIVE_WITNESS_HASH_STABLE",
+                "DUAL_WITNESS_HASH_STABLE"
+            ],
+            "properties": {
+                "STATE_STABLE": {"$ref": "#/$defs/proportion"},
+                "FAIL_CLOSED_STATUS_STABLE": {"$ref": "#/$defs/proportion"},
+                "OUT_OF_DISTRIBUTION_STATUS_STABLE": {"$ref": "#/$defs/proportion"},
+                "POSITIVE_WITNESS_REPLAY_STABLE": {"$ref": "#/$defs/proportion"},
+                "NEGATIVE_WITNESS_REPLAY_STABLE": {"$ref": "#/$defs/proportion"},
+                "DUAL_WITNESS_REPLAY_STABLE": {"$ref": "#/$defs/proportion"},
+                "POSITIVE_WITNESS_HASH_STABLE": {"$ref": "#/$defs/proportion"},
+                "NEGATIVE_WITNESS_HASH_STABLE": {"$ref": "#/$defs/proportion"},
+                "DUAL_WITNESS_HASH_STABLE": {"$ref": "#/$defs/proportion"}
+            }
+        },
+        "eventIntervals": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "REPEAT_FAIL_CLOSED",
+                "REPEAT_OUT_OF_DISTRIBUTION",
+                "REPEAT_OUT_OF_MODEL",
+                "REPEAT_DUAL_WITNESS_REPLAY_PASSED"
+            ],
+            "properties": {
+                "REPEAT_FAIL_CLOSED": {"$ref": "#/$defs/proportion"},
+                "REPEAT_OUT_OF_DISTRIBUTION": {"$ref": "#/$defs/proportion"},
+                "REPEAT_OUT_OF_MODEL": {"$ref": "#/$defs/proportion"},
+                "REPEAT_DUAL_WITNESS_REPLAY_PASSED": {"$ref": "#/$defs/proportion"}
+            }
+        },
+        "transitionMatrix": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "ENTAILED_PRESENT->ENTAILED_PRESENT",
+                "ENTAILED_PRESENT->ENTAILED_ABSENT",
+                "ENTAILED_PRESENT->RAW_UNIDENTIFIABLE",
+                "ENTAILED_PRESENT->OUT_OF_MODEL",
+                "ENTAILED_ABSENT->ENTAILED_PRESENT",
+                "ENTAILED_ABSENT->ENTAILED_ABSENT",
+                "ENTAILED_ABSENT->RAW_UNIDENTIFIABLE",
+                "ENTAILED_ABSENT->OUT_OF_MODEL",
+                "RAW_UNIDENTIFIABLE->ENTAILED_PRESENT",
+                "RAW_UNIDENTIFIABLE->ENTAILED_ABSENT",
+                "RAW_UNIDENTIFIABLE->RAW_UNIDENTIFIABLE",
+                "RAW_UNIDENTIFIABLE->OUT_OF_MODEL",
+                "OUT_OF_MODEL->ENTAILED_PRESENT",
+                "OUT_OF_MODEL->ENTAILED_ABSENT",
+                "OUT_OF_MODEL->RAW_UNIDENTIFIABLE",
+                "OUT_OF_MODEL->OUT_OF_MODEL"
+            ],
+            "properties": {
+                "ENTAILED_PRESENT->ENTAILED_PRESENT": {"$ref": "#/$defs/count"},
+                "ENTAILED_PRESENT->ENTAILED_ABSENT": {"$ref": "#/$defs/count"},
+                "ENTAILED_PRESENT->RAW_UNIDENTIFIABLE": {"$ref": "#/$defs/count"},
+                "ENTAILED_PRESENT->OUT_OF_MODEL": {"$ref": "#/$defs/count"},
+                "ENTAILED_ABSENT->ENTAILED_PRESENT": {"$ref": "#/$defs/count"},
+                "ENTAILED_ABSENT->ENTAILED_ABSENT": {"$ref": "#/$defs/count"},
+                "ENTAILED_ABSENT->RAW_UNIDENTIFIABLE": {"$ref": "#/$defs/count"},
+                "ENTAILED_ABSENT->OUT_OF_MODEL": {"$ref": "#/$defs/count"},
+                "RAW_UNIDENTIFIABLE->ENTAILED_PRESENT": {"$ref": "#/$defs/count"},
+                "RAW_UNIDENTIFIABLE->ENTAILED_ABSENT": {"$ref": "#/$defs/count"},
+                "RAW_UNIDENTIFIABLE->RAW_UNIDENTIFIABLE": {"$ref": "#/$defs/count"},
+                "RAW_UNIDENTIFIABLE->OUT_OF_MODEL": {"$ref": "#/$defs/count"},
+                "OUT_OF_MODEL->ENTAILED_PRESENT": {"$ref": "#/$defs/count"},
+                "OUT_OF_MODEL->ENTAILED_ABSENT": {"$ref": "#/$defs/count"},
+                "OUT_OF_MODEL->RAW_UNIDENTIFIABLE": {"$ref": "#/$defs/count"},
+                "OUT_OF_MODEL->OUT_OF_MODEL": {"$ref": "#/$defs/count"}
+            }
+        },
+        "failureCounts": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "EMPTY_BASELINE": {"$ref": "#/$defs/positiveCount"},
+                "EMPTY_REPEAT_SET": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_RECORD": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_IDENTIFIER": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_SCHEMA_VERSION": {"$ref": "#/$defs/positiveCount"},
+                "DUPLICATE_BASELINE_CASE": {"$ref": "#/$defs/positiveCount"},
+                "DUPLICATE_REPEAT_OBSERVATION": {"$ref": "#/$defs/positiveCount"},
+                "MISSING_BASELINE_CASE": {"$ref": "#/$defs/positiveCount"},
+                "MISSING_REPEAT_OBSERVATION": {"$ref": "#/$defs/positiveCount"},
+                "UNDECLARED_BASELINE_CASE": {"$ref": "#/$defs/positiveCount"},
+                "UNDECLARED_REPEAT_CASE": {"$ref": "#/$defs/positiveCount"},
+                "UNDECLARED_RUN": {"$ref": "#/$defs/positiveCount"},
+                "DATASET_ID_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "DATASET_VERSION_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "SPLIT_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "SCOPE_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "RUN_SEED_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "DEGRADATION_REPLAY_ID_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "DEGRADATION_REPLAY_SET_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "CASE_DEGRADATION_TRACE_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_STATE": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_FLAG": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_NUMERIC_VALUE": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_SEED": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_SAMPLE_COUNT": {"$ref": "#/$defs/positiveCount"},
+                "STATE_SCORE_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_ALPHA_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_POSITIVE_THRESHOLD_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_NEGATIVE_THRESHOLD_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_POSITIVE_SAMPLE_COUNT_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_NEGATIVE_SAMPLE_COUNT_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_CONFIG_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_DATA_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "LOCKED_MODEL_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "STAGE7_PACKAGE_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "PROVENANCE_HASH_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_WITNESS_HASH": {"$ref": "#/$defs/positiveCount"},
+                "FAIL_CLOSED_SEMANTICS_MISMATCH": {"$ref": "#/$defs/positiveCount"},
+                "UNKNOWN_DEGRADATION": {"$ref": "#/$defs/positiveCount"},
+                "SOLVER_FAILED": {"$ref": "#/$defs/positiveCount"},
+                "INVALID_WITNESS_REPLAY": {"$ref": "#/$defs/positiveCount"},
+                "OUT_OF_DISTRIBUTION": {"$ref": "#/$defs/positiveCount"}
+            }
+        }
+    },
+    "$comment": "All 16 state transitions and every preregistered stability/event Wilson interval are recomputed from the exact case-by-run Cartesian product."
+}

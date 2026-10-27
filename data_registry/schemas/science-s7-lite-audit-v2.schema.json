@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s7-lite-audit-v2.schema.json",
+  "title": "Science S7 RetinaEntail-Lite v2 audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "development_disclosure",
+    "method",
+    "preservation",
+    "calibration",
+    "multi_region",
+    "development_gate_metrics",
+    "resource",
+    "io_audit",
+    "gate",
+    "hashes",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "experiment_id": {"const": "S7_RETINAENTAIL_LITE_V2"},
+    "status": {"enum": ["READY_FOR_AI_QC", "BLOCKED_AUTOMATED_GATE"]},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "development_disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["v1_observed", "v1_status", "independent_replication", "final_test_opened"],
+      "properties": {
+        "v1_observed": {"const": true},
+        "v1_status": {"const": "BLOCKED_AUTOMATED_GATE"},
+        "independent_replication": {"const": false},
+        "final_test_opened": {"const": false}
+      }
+    },
+    "method": {
+      "type": "object",
+      "required": ["name", "probe_searches_rerun", "bank_only_cross_hypothesis_searches", "finite_zero_gap_searches", "source_leaks"],
+      "properties": {
+        "name": {"const": "LABEL_CONDITIONAL_CONTRASTIVE_CONFORMAL_SET"},
+        "probe_searches_rerun": {"const": 0},
+        "bank_only_cross_hypothesis_searches": {"const": 768},
+        "finite_zero_gap_searches": {"const": 768},
+        "source_leaks": {"const": 0}
+      }
+    },
+    "preservation": {"type": "object"},
+    "calibration": {"type": "object"},
+    "multi_region": {"type": "object"},
+    "development_gate_metrics": {"type": "object"},
+    "resource": {
+      "type": "object",
+      "required": ["device", "gpu_used", "learned_parameters", "peak_python_tracemalloc_bytes", "wall_seconds", "silent_resolution_change"],
+      "properties": {
+        "device": {"const": "CPU"},
+        "gpu_used": {"const": false},
+        "learned_parameters": {"const": 0},
+        "peak_python_tracemalloc_bytes": {"type": "integer", "minimum": 0},
+        "wall_seconds": {"type": "number", "minimum": 0},
+        "silent_resolution_change": {"const": false}
+      }
+    },
+    "io_audit": {
+      "type": "object",
+      "required": ["probe_searches_rerun", "locked_test_root_reads", "online_evaluation_reads", "source_split_leaks"],
+      "properties": {
+        "probe_searches_rerun": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "online_evaluation_reads": {"const": 0},
+        "source_split_leaks": {"const": 0}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": ["automated", "ai_visual_qc", "s8_authorized"],
+      "properties": {
+        "automated": {"enum": ["PASS", "FAIL"]},
+        "ai_visual_qc": {"const": "PENDING"},
+        "s8_authorized": {"const": false}
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "required": ["code_sha256", "contrastive_calibration_sha256", "results_sha256"],
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/calibration-artifact-v3.schema.json",
+  "title": "RetinaEntail-DR Calibration Artifact v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "method_version",
+    "protocol_scope",
+    "alpha",
+    "positive_threshold",
+    "negative_threshold",
+    "positive_sample_count",
+    "negative_sample_count",
+    "total_sample_count",
+    "positive_order_index",
+    "negative_order_index",
+    "config_hash",
+    "data_hash",
+    "model_hash",
+    "status",
+    "failure_reasons"
+  ],
+  "properties": {
+    "schema_version": {"const": "3.0.0"},
+    "method_version": {"const": "toy_conservative_order_statistic_v1"},
+    "protocol_scope": {"enum": ["TOY_PROTOCOL"]},
+    "alpha": {
+      "anyOf": [
+        {"type": "number", "minimum": 0},
+        {"type": "null"}
+      ]
+    },
+    "positive_threshold": {"$ref": "#/$defs/nullableNonnegativeNumber"},
+    "negative_threshold": {"$ref": "#/$defs/nullableNonnegativeNumber"},
+    "positive_sample_count": {"type": "integer", "minimum": 0},
+    "negative_sample_count": {"type": "integer", "minimum": 0},
+    "total_sample_count": {"type": "integer", "minimum": 0},
+    "positive_order_index": {"$ref": "#/$defs/nullablePositiveInteger"},
+    "negative_order_index": {"$ref": "#/$defs/nullablePositiveInteger"},
+    "config_hash": {"$ref": "#/$defs/nullableSha256"},
+    "data_hash": {"$ref": "#/$defs/nullableSha256"},
+    "model_hash": {"$ref": "#/$defs/nullableSha256"},
+    "status": {"enum": ["SUCCESS", "FAIL_CLOSED"]},
+    "failure_reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/failureReason"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableSha256": {
+      "anyOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "nullableNonnegativeNumber": {
+      "anyOf": [
+        {"type": "number", "minimum": 0},
+        {"type": "null"}
+      ]
+    },
+    "nullablePositiveInteger": {
+      "anyOf": [
+        {"type": "integer", "minimum": 1},
+        {"type": "null"}
+      ]
+    },
+    "failureReason": {
+      "enum": [
+        "EMPTY_CALIBRATION_SET",
+        "INVALID_ALPHA",
+        "INVALID_HASH",
+        "INVALID_SAMPLE",
+        "UNSUPPORTED_SCHEMA_VERSION",
+        "DUPLICATE_SAMPLE_ID",
+        "UNKNOWN_LABEL",
+        "NON_CALIBRATION_SPLIT",
+        "IDENTITY_LEAKAGE",
+        "NONFINITE_SCORE",
+        "INVALID_SCORE_RANGE",
+        "MISSING_POSITIVE_SAMPLES",
+        "MISSING_NEGATIVE_SAMPLES",
+        "INSUFFICIENT_POSITIVE_SAMPLES",
+        "INSUFFICIENT_NEGATIVE_SAMPLES"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "SUCCESS"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+          "positive_threshold": {"type": "number", "minimum": 0},
+          "negative_threshold": {"type": "number", "minimum": 0},
+          "positive_sample_count": {"type": "integer", "minimum": 1},
+          "negative_sample_count": {"type": "integer", "minimum": 1},
+          "total_sample_count": {"type": "integer", "minimum": 2},
+          "positive_order_index": {"type": "integer", "minimum": 1},
+          "negative_order_index": {"type": "integer", "minimum": 1},
+          "config_hash": {"$ref": "#/$defs/sha256"},
+          "data_hash": {"$ref": "#/$defs/sha256"},
+          "model_hash": {"$ref": "#/$defs/sha256"},
+          "failure_reasons": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "FAIL_CLOSED"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "positive_threshold": {"type": "null"},
+          "negative_threshold": {"type": "null"},
+          "positive_order_index": {"type": "null"},
+          "negative_order_index": {"type": "null"},
+          "failure_reasons": {"minItems": 1}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/manifest-v2.schema.json",
+  "title": "RetinaEntail-DR Dataset Manifest v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "dataset_version", "records"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "dataset_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "dataset_version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/record"}
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^/]+(?:/[^/]+)*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableId": {"type": ["string", "null"], "minLength": 1},
+    "semantic": {
+      "enum": [
+        "DR_GRADE",
+        "DME_GRADE",
+        "MICROANEURYSM_MASK",
+        "HEMORRHAGE_MASK",
+        "HARD_EXUDATE_MASK",
+        "SOFT_EXUDATE_MASK",
+        "OPTIC_DISC_LOCALIZATION",
+        "FOVEA_LOCALIZATION",
+        "LESION_DETECTION",
+        "IMAGE_QUALITY_GRADE",
+        "ARTIFACT_ATTRIBUTES",
+        "CLARITY_ATTRIBUTE",
+        "FIELD_DEFINITION_ATTRIBUTE",
+        "PAIRED_VIEW_METADATA"
+      ]
+    },
+    "label": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "semantic",
+        "availability",
+        "relative_path",
+        "sha256",
+        "byte_size"
+      ],
+      "properties": {
+        "schema_version": {"const": "2.0.0"},
+        "semantic": {"$ref": "#/$defs/semantic"},
+        "availability": {"enum": ["AVAILABLE", "UNKNOWN"]},
+        "relative_path": {
+          "oneOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]
+        },
+        "sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "byte_size": {"type": ["integer", "null"], "minimum": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"availability": {"const": "AVAILABLE"}}},
+          "then": {
+            "properties": {
+              "relative_path": {"$ref": "#/$defs/relativePath"},
+              "sha256": {"$ref": "#/$defs/sha256"},
+              "byte_size": {"type": "integer", "minimum": 1}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"availability": {"const": "UNKNOWN"}}},
+          "then": {
+            "properties": {"sha256": {"type": "null"}, "byte_size": {"type": "null"}}
+          }
+        },
+        {
+          "if": {"properties": {"relative_path": {"type": "null"}}},
+          "then": {"properties": {"availability": {"const": "UNKNOWN"}}}
+        }
+      ]
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "dataset_id",
+        "relative_path",
+        "sha256",
+        "byte_size",
+        "width",
+        "height",
+        "channels",
+        "image_format",
+        "source_image_id",
+        "patient_id",
+        "eye_id",
+        "followup_id",
+        "intervention_pair_id",
+        "split",
+        "labels"
+      ],
+      "properties": {
+        "schema_version": {"const": "2.0.0"},
+        "dataset_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+        "relative_path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "byte_size": {"type": "integer", "minimum": 1},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "channels": {"type": "integer", "minimum": 1},
+        "image_format": {"type": "string", "minLength": 1},
+        "source_image_id": {"type": "string", "minLength": 1},
+        "patient_id": {"$ref": "#/$defs/nullableId"},
+        "eye_id": {"$ref": "#/$defs/nullableId"},
+        "followup_id": {"$ref": "#/$defs/nullableId"},
+        "intervention_pair_id": {"$ref": "#/$defs/nullableId"},
+        "split": {"type": "string", "minLength": 1},
+        "labels": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/label"}}
+      }
+    }
+  }
+}

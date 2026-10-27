@@ -1,0 +1,20 @@
+schema_version: "1.0.0"
+dataset_id: eyeq
+name: EyeQ
+version: "official_or_release_id"
+source_url: "https://github.com/hzfu/EyeQ"
+alternate_source_urls: []
+access_mode: gated
+license_status: unknown
+license_review_status: pending_review
+license_notes: >-
+  EyeQ labels/code and the underlying EyePACS images have distinct terms. Both
+  must be independently reviewed; possession of one does not authorize the other.
+expected_labels:
+  - image_quality_good_usable_reject
+  - dr_grade_if_present_and_separately_licensed
+label_verification_status: pending_review
+root_env: RETINAENTAIL_EYEQ_ROOT
+patient_id_available: unknown
+source_image_id_rule: "Retain the EyeQ mapping to the legally acquired upstream image identifier."
+redistribution: false

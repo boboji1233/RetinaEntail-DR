@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage6-preflight-v6.schema.json",
+  "title": "RetinaEntail-DR Stage 6 Zero-I/O Preflight v6",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "verification_context",
+    "dataset_id",
+    "dataset_version",
+    "reasons",
+    "prerequisites_verified",
+    "authorization_issued",
+    "authorizes_file_open",
+    "accepts_paths",
+    "dataset_root_probed",
+    "real_data_read"
+  ],
+  "properties": {
+    "schema_version": {"const": "6.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_PREREQUISITE_VERIFICATION"]},
+    "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+    "dataset_id": {"type": ["string", "null"], "pattern": "^[a-z][a-z0-9_]*$"},
+    "dataset_version": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reason"}
+    },
+    "prerequisites_verified": {"const": false},
+    "authorization_issued": {"const": false},
+    "authorizes_file_open": {"const": false},
+    "accepts_paths": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false}
+  },
+  "$defs": {
+    "reason": {
+      "enum": [
+        "INPUT_INVALID",
+        "DATASET_NOT_EXPLICIT",
+        "DATASET_VERSION_NOT_EXPLICIT",
+        "READ_ONLY_AUDIT_PURPOSE_NOT_APPROVED",
+        "LESION_CALIBRATION_PURPOSE_NOT_APPROVED",
+        "LOCKED_TEST_EVALUATION_PURPOSE_NOT_APPROVED",
+        "DATASET_ROOT_NOT_EXPLICIT",
+        "STAGE2_ACCESS_PERMIT_NOT_PROVIDED",
+        "STAGE2_PACKAGE_CAPABILITY_NOT_PROVIDED",
+        "STAGE3_PACKAGE_CAPABILITY_NOT_PROVIDED",
+        "FROZEN_DATA_CARD_NOT_PROVIDED",
+        "MANUAL_CONFIRMATION_NOT_PROVIDED",
+        "LOCKED_EVIDENCE_NOT_PROVIDED",
+        "ROOT_INVALID",
+        "TTL_INVALID",
+        "STAGE2_ACCESS_PERMIT_INVALID",
+        "STAGE2_PACKAGE_CAPABILITY_API_UNAVAILABLE",
+        "STAGE2_PACKAGE_CAPABILITY_INVALID",
+        "STAGE3_PACKAGE_CAPABILITY_API_UNAVAILABLE",
+        "STAGE3_PACKAGE_CAPABILITY_INVALID",
+        "STAGE5_SYNTHETIC_PILOT_NOT_PROVIDED",
+        "STAGE5_SYNTHETIC_PILOT_INVALID",
+        "FROZEN_DATA_CARD_INVALID",
+        "MANUAL_CONFIRMATION_INVALID",
+        "LOCKED_EVIDENCE_INVALID",
+        "DATASET_MISMATCH",
+        "DATASET_VERSION_MISMATCH",
+        "SCOPE_MISMATCH",
+        "SPLIT_MISMATCH",
+        "HASH_MISMATCH",
+        "PROVENANCE_MISMATCH"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+      "then": {"properties": {"reasons": {"minItems": 1}}}
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "READY_FOR_PREREQUISITE_VERIFICATION"}},
+        "required": ["status"]
+      },
+      "then": {"properties": {"reasons": {"maxItems": 0}}}
+    }
+  ],
+  "$comment": "This report accepts no path or serialized capability and can never authorize file access."
+}

@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use RetinaEntail-DR, please cite this software and the eventual peer-reviewed paper."
+title: "RetinaEntail-DR"
+type: software
+version: 0.1.0
+authors:
+  - family-names: "Qiu"
+    given-names: "Haifeng"
+    email: "1063855025@qq.com"

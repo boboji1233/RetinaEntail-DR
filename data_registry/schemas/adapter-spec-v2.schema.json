@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/adapter-spec-v2.schema.json",
+  "title": "RetinaEntail-DR Explicit Adapter Spec v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dataset_id", "entries"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "dataset_id": {"enum": ["idrid", "ddr", "deepdrid"]},
+    "label_semantics": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/semantic"}
+    },
+    "entries": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/entry"}}
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^/]+(?:/[^/]+)*$"
+    },
+    "nullableId": {"type": ["string", "null"], "minLength": 1},
+    "semantic": {
+      "enum": [
+        "DR_GRADE",
+        "DME_GRADE",
+        "MICROANEURYSM_MASK",
+        "HEMORRHAGE_MASK",
+        "HARD_EXUDATE_MASK",
+        "SOFT_EXUDATE_MASK",
+        "OPTIC_DISC_LOCALIZATION",
+        "FOVEA_LOCALIZATION",
+        "LESION_DETECTION",
+        "IMAGE_QUALITY_GRADE",
+        "ARTIFACT_ATTRIBUTES",
+        "CLARITY_ATTRIBUTE",
+        "FIELD_DEFINITION_ATTRIBUTE",
+        "PAIRED_VIEW_METADATA"
+      ]
+    },
+    "label": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "semantic", "relative_path"],
+      "properties": {
+        "schema_version": {"const": "2.0.0"},
+        "semantic": {"$ref": "#/$defs/semantic"},
+        "relative_path": {
+          "oneOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]
+        }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "image_path",
+        "source_image_id",
+        "split",
+        "patient_id",
+        "eye_id",
+        "followup_id",
+        "intervention_pair_id",
+        "labels"
+      ],
+      "properties": {
+        "schema_version": {"const": "2.0.0"},
+        "image_path": {"$ref": "#/$defs/relativePath"},
+        "source_image_id": {"type": "string", "minLength": 1},
+        "split": {"type": "string", "minLength": 1},
+        "patient_id": {"$ref": "#/$defs/nullableId"},
+        "eye_id": {"$ref": "#/$defs/nullableId"},
+        "followup_id": {"$ref": "#/$defs/nullableId"},
+        "intervention_pair_id": {"$ref": "#/$defs/nullableId"},
+        "labels": {"type": "array", "items": {"$ref": "#/$defs/label"}}
+      }
+    }
+  }
+}

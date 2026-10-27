@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage11-rotation-proof-v11.schema.json",
+  "title": "RetinaEntail-DR Stage 11 Key Rotation Proof v11",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payload", "old_key_signature_b64", "root_signature_b64"],
+  "properties": {
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "artifact_type", "runner_id", "old_certificate_serial",
+        "new_certificate_serial", "old_key_id", "new_key_id", "old_generation",
+        "new_generation", "effective_epoch", "rotation_nonce_sha256",
+        "source_stage10_package_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "11.0.0"},
+        "artifact_type": {"const": "KEY_ROTATION_PROOF"},
+        "runner_id": {"type": "string", "minLength": 1},
+        "old_certificate_serial": {"$ref": "#/$defs/sha256"},
+        "new_certificate_serial": {"$ref": "#/$defs/sha256"},
+        "old_key_id": {"$ref": "#/$defs/sha256"},
+        "new_key_id": {"$ref": "#/$defs/sha256"},
+        "old_generation": {"type": "integer", "minimum": 1},
+        "new_generation": {"type": "integer", "minimum": 2},
+        "effective_epoch": {"type": "integer", "minimum": 1},
+        "rotation_nonce_sha256": {"$ref": "#/$defs/sha256"},
+        "source_stage10_package_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "old_key_signature_b64": {"type": "string", "minLength": 88, "maxLength": 88},
+    "root_signature_b64": {"type": "string", "minLength": 88, "maxLength": 88}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

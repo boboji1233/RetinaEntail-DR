@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s4-recovery-execution-audit-v1.schema.json",
+  "title": "Science S4 evidence-gap recovery execution audit v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "upstream_replay",
+    "source_recovery",
+    "tier_b_candidate",
+    "download_attempts",
+    "io_audit",
+    "blockers",
+    "downstream_authorization",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S4_EVIDENCE_GAP_RECOVERY_EXECUTION_V1"},
+    "status": {
+      "enum": ["READY_FOR_S4_RECOVERY_TWIN_EXECUTION", "BLOCKED_PREREQUISITES"]
+    },
+    "config_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "upstream_replay": {"type": "object"},
+    "source_recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "all_parts_complete",
+        "complete_part_count",
+        "expected_part_count",
+        "archive_merge_or_extract_performed",
+        "development_adapter_built"
+      ],
+      "properties": {
+        "dataset_id": {"const": "ddr"},
+        "all_parts_complete": {"type": "boolean"},
+        "complete_part_count": {"type": "integer", "minimum": 0, "maximum": 10},
+        "expected_part_count": {"const": 10},
+        "archive_merge_or_extract_performed": {"const": false},
+        "development_adapter_built": {"const": false}
+      }
+    },
+    "tier_b_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataset_id",
+        "metadata_status",
+        "independent_subject_eye_count",
+        "minimum_independent_pairs",
+        "conditions_frozen",
+        "tier_b_status"
+      ],
+      "properties": {
+        "dataset_id": {"const": "paired_retina"},
+        "metadata_status": {"type": "string", "minLength": 1},
+        "independent_subject_eye_count": {"type": "integer", "minimum": 0},
+        "minimum_independent_pairs": {"const": 59},
+        "conditions_frozen": {"type": "boolean"},
+        "tier_b_status": {"enum": ["AVAILABLE", "NOT_AVAILABLE"]}
+      }
+    },
+    "download_attempts": {"type": "object"},
+    "io_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ddr_part_directory_entries",
+        "ddr_archive_reads",
+        "ddr_dataset_root_reads",
+        "ddr_image_decodes",
+        "tier_b_metadata_directory_entries",
+        "tier_b_image_decodes",
+        "fgadr_root_reads",
+        "locked_test_root_reads",
+        "locked_test_image_decodes"
+      ],
+      "properties": {
+        "ddr_part_directory_entries": {"type": "integer", "minimum": 0},
+        "ddr_archive_reads": {"const": 0},
+        "ddr_dataset_root_reads": {"const": 0},
+        "ddr_image_decodes": {"const": 0},
+        "tier_b_metadata_directory_entries": {"type": "integer", "minimum": 0},
+        "tier_b_image_decodes": {"const": 0},
+        "fgadr_root_reads": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "locked_test_image_decodes": {"const": 0}
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "downstream_authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "s4_recovery_twin_execution",
+        "s5_degradation_calibration",
+        "s6_verify",
+        "s7_lite",
+        "enhancer_training",
+        "locked_test_evaluation",
+        "fcr_estimation",
+        "paper_performance_experiment"
+      ],
+      "properties": {
+        "s4_recovery_twin_execution": {"type": "boolean"},
+        "s5_degradation_calibration": {"const": false},
+        "s6_verify": {"const": false},
+        "s7_lite": {"const": false},
+        "enhancer_training": {"const": false},
+        "locked_test_evaluation": {"const": false},
+        "fcr_estimation": {"const": false},
+        "paper_performance_experiment": {"const": false}
+      }
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

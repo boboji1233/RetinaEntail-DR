@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage11-preflight-v11.schema.json",
+  "title": "RetinaEntail-DR Stage 11 Zero-I/O Preflight v11",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "verification_context", "dataset_id", "dataset_version",
+    "required_scope", "required_split", "inputs_present", "reasons", "accepts_paths",
+    "reads_environment", "authorizes_file_open", "dataset_root_probed", "real_data_read",
+    "detached_json_authoritative", "historical_receipt_authoritative",
+    "synthetic_signature_authorizes_real", "production_private_key_accepted_as_input",
+    "two_physical_hosts_verified"
+  ],
+  "properties": {
+    "schema_version": {"const": "11.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_PRODUCTION_HOST_VERIFICATION"]},
+    "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+    "dataset_id": {"type": ["string", "null"]},
+    "dataset_version": {"type": ["string", "null"]},
+    "required_scope": {"const": "APPROVED_REAL_DATA"},
+    "required_split": {"const": "test"},
+    "inputs_present": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_seed_replay_preregistered", "certificate_chains_verified",
+        "complete_real_stage10_package_a_capability_present",
+        "complete_real_stage10_package_b_capability_present",
+        "complete_wheel_lock_hashes_verified", "fresh_host_a_process_capability_present",
+        "fresh_host_b_process_capability_present", "host_environment_policy_preregistered",
+        "locked_hashes_thresholds_preregistered",
+        "production_asymmetric_trust_anchor_verified", "revocation_status_current",
+        "trusted_time_policy_verified", "two_approved_physical_hosts_confirmed",
+        "unique_runner_leaf_keys_verified"
+      ],
+      "properties": {
+        "case_seed_replay_preregistered": {"type": "boolean"},
+        "certificate_chains_verified": {"type": "boolean"},
+        "complete_real_stage10_package_a_capability_present": {"type": "boolean"},
+        "complete_real_stage10_package_b_capability_present": {"type": "boolean"},
+        "complete_wheel_lock_hashes_verified": {"type": "boolean"},
+        "fresh_host_a_process_capability_present": {"type": "boolean"},
+        "fresh_host_b_process_capability_present": {"type": "boolean"},
+        "host_environment_policy_preregistered": {"type": "boolean"},
+        "locked_hashes_thresholds_preregistered": {"type": "boolean"},
+        "production_asymmetric_trust_anchor_verified": {"type": "boolean"},
+        "revocation_status_current": {"type": "boolean"},
+        "trusted_time_policy_verified": {"type": "boolean"},
+        "two_approved_physical_hosts_confirmed": {"type": "boolean"},
+        "unique_runner_leaf_keys_verified": {"type": "boolean"}
+      }
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "DATASET_NOT_EXPLICIT", "DATASET_VERSION_NOT_EXPLICIT",
+          "COMPLETE_REAL_STAGE10_PACKAGE_A_CAPABILITY_NOT_PROVIDED",
+          "COMPLETE_REAL_STAGE10_PACKAGE_B_CAPABILITY_NOT_PROVIDED",
+          "FRESH_HOST_A_PROCESS_CAPABILITY_NOT_PROVIDED",
+          "FRESH_HOST_B_PROCESS_CAPABILITY_NOT_PROVIDED",
+          "TWO_APPROVED_PHYSICAL_HOSTS_NOT_CONFIRMED",
+          "PRODUCTION_ASYMMETRIC_TRUST_ANCHOR_NOT_VERIFIED",
+          "UNIQUE_RUNNER_LEAF_KEYS_NOT_VERIFIED", "CERTIFICATE_CHAINS_NOT_VERIFIED",
+          "REVOCATION_STATUS_NOT_CURRENT", "TRUSTED_TIME_POLICY_NOT_VERIFIED",
+          "COMPLETE_WHEEL_LOCK_HASHES_NOT_VERIFIED",
+          "HOST_ENVIRONMENT_POLICY_NOT_PREREGISTERED",
+          "CASE_SEED_REPLAY_NOT_PREREGISTERED",
+          "LOCKED_HASHES_THRESHOLDS_NOT_PREREGISTERED", "INPUT_INVALID"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "accepts_paths": {"const": false},
+    "reads_environment": {"const": false},
+    "authorizes_file_open": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false},
+    "detached_json_authoritative": {"const": false},
+    "historical_receipt_authoritative": {"const": false},
+    "synthetic_signature_authorizes_real": {"const": false},
+    "production_private_key_accepted_as_input": {"const": false},
+    "two_physical_hosts_verified": {"const": false}
+  }
+}

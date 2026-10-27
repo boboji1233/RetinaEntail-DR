@@ -1,0 +1,20 @@
+schema_version: "1.0.0"
+dataset_id: fives
+name: FIVES
+version: "official_or_release_id"
+source_url: "https://figshare.com/articles/figure/FIVES_A_Fundus_Image_Dataset_for_AI-based_Vessel_Segmentation/19688169"
+alternate_source_urls: []
+access_mode: public_direct
+license_status: unknown
+license_review_status: pending_review
+license_notes: >-
+  Review and snapshot the terms displayed for the exact Figshare version before
+  use. FIVES is a vessel/structure resource, not DR lesion ground truth.
+expected_labels:
+  - retinal_vessel_pixel_mask
+  - image_level_disease_category_if_provided
+label_verification_status: pending_review
+root_env: RETINAENTAIL_FIVES_ROOT
+patient_id_available: unknown
+source_image_id_rule: "Use the stable image identifier in the selected Figshare release."
+redistribution: false

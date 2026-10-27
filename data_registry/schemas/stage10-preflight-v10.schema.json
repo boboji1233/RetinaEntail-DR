@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage10-preflight-v10.schema.json",
+  "title": "RetinaEntail-DR Stage 10 Zero-I/O Preflight v10",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "verification_context", "dataset_id", "dataset_version",
+    "required_scope", "required_split", "inputs_present", "reasons", "accepts_paths",
+    "reads_environment", "dataset_root_probed", "real_data_read",
+    "detached_json_authoritative", "historical_receipt_authoritative",
+    "synthetic_signature_authorizes_real", "two_physical_runners_verified"
+  ],
+  "properties": {
+    "schema_version": {"const": "10.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_RUNNER_CAPABILITY_VERIFICATION"]},
+    "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+    "dataset_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/identifier"}]},
+    "dataset_version": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/identifier"}]},
+    "required_scope": {"const": "APPROVED_REAL_DATA"},
+    "required_split": {"const": "test"},
+    "inputs_present": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_seed_replay_preregistered",
+        "complete_real_stage9_package_a_capability_present",
+        "complete_real_stage9_package_b_capability_present",
+        "environment_lock_preregistered", "fresh_runner_a_capability_present",
+        "fresh_runner_b_capability_present", "locked_hashes_thresholds_preregistered",
+        "signer_trust_policy_preregistered", "two_approved_runners_confirmed"
+      ],
+      "properties": {
+        "case_seed_replay_preregistered": {"type": "boolean"},
+        "complete_real_stage9_package_a_capability_present": {"type": "boolean"},
+        "complete_real_stage9_package_b_capability_present": {"type": "boolean"},
+        "environment_lock_preregistered": {"type": "boolean"},
+        "fresh_runner_a_capability_present": {"type": "boolean"},
+        "fresh_runner_b_capability_present": {"type": "boolean"},
+        "locked_hashes_thresholds_preregistered": {"type": "boolean"},
+        "signer_trust_policy_preregistered": {"type": "boolean"},
+        "two_approved_runners_confirmed": {"type": "boolean"}
+      }
+    },
+    "reasons": {
+      "type": "array", "uniqueItems": true,
+      "items": {"enum": [
+        "DATASET_NOT_EXPLICIT", "DATASET_VERSION_NOT_EXPLICIT",
+        "COMPLETE_REAL_STAGE9_PACKAGE_A_CAPABILITY_NOT_PROVIDED",
+        "COMPLETE_REAL_STAGE9_PACKAGE_B_CAPABILITY_NOT_PROVIDED",
+        "FRESH_RUNNER_A_CAPABILITY_NOT_PROVIDED",
+        "FRESH_RUNNER_B_CAPABILITY_NOT_PROVIDED", "TWO_APPROVED_RUNNERS_NOT_CONFIRMED",
+        "ENVIRONMENT_LOCK_NOT_PREREGISTERED", "CASE_SEED_REPLAY_NOT_PREREGISTERED",
+        "LOCKED_HASHES_THRESHOLDS_NOT_PREREGISTERED",
+        "SIGNER_TRUST_POLICY_NOT_PREREGISTERED", "INPUT_INVALID"
+      ]}
+    },
+    "accepts_paths": {"const": false},
+    "reads_environment": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false},
+    "detached_json_authoritative": {"const": false},
+    "historical_receipt_authoritative": {"const": false},
+    "synthetic_signature_authorizes_real": {"const": false},
+    "two_physical_runners_verified": {"const": false}
+  },
+  "$defs": {
+    "identifier": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"}
+  }
+}

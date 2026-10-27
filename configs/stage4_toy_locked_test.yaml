@@ -1,0 +1,58 @@
+schema_version: "4.0"
+run_id: stage4-toy-locked-test-001
+seed: 20260824
+image_size: 96
+lesion_class: MA
+lesion_radius: 2
+stage3_lock:
+  schema_version: "3.0.0"
+  method_version: toy_conservative_order_statistic_v1
+  protocol_scope: TOY_PROTOCOL
+  artifact_sha256: c84762f2d44d345cd39732e1ce0f5a44003e0a635e482f28d3f8abcd6395e78e
+  alpha: 0.25
+  positive_threshold: 0.000012299400515471258
+  negative_threshold: 0.000012299400515471254
+  positive_sample_count: 4
+  negative_sample_count: 4
+  total_sample_count: 8
+  positive_order_index: 4
+  negative_order_index: 4
+  config_hash: 0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52
+  data_hash: ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd
+  model_hash: ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1
+degradations:
+  - name: gaussian_blur
+    severity: 0.55
+  - name: downsample_restore
+    severity: 0.35
+  - name: jpeg_compression
+    severity: 0.25
+test_cases:
+  - case_id: stage4-toy-entailed-present
+    observation_mode: LESION_PRESENT
+    failure_mode: NONE
+    expected_state: ENTAILED_PRESENT
+  - case_id: stage4-toy-entailed-absent
+    observation_mode: LESION_ABSENT
+    failure_mode: NONE
+    expected_state: ENTAILED_ABSENT
+  - case_id: stage4-toy-raw-unidentifiable
+    observation_mode: MIDPOINT
+    failure_mode: NONE
+    expected_state: RAW_UNIDENTIFIABLE
+  - case_id: stage4-toy-infeasible-out-of-model
+    observation_mode: SHIFTED_MIDPOINT
+    failure_mode: NONE
+    expected_state: OUT_OF_MODEL
+  - case_id: stage4-toy-domain-out-of-model
+    observation_mode: LESION_PRESENT
+    failure_mode: OUT_OF_DISTRIBUTION
+    expected_state: OUT_OF_MODEL
+  - case_id: stage4-toy-unknown-degradation
+    observation_mode: LESION_PRESENT
+    failure_mode: UNKNOWN_DEGRADATION
+    expected_state: OUT_OF_MODEL
+  - case_id: stage4-toy-invalid-witness
+    observation_mode: LESION_PRESENT
+    failure_mode: INVALID_WITNESS
+    expected_state: OUT_OF_MODEL

@@ -1,0 +1,18 @@
+schema_version: "6.0"
+run_id: stage6-toy-verifier-pilot-001
+method: complete_package_capabilities_locked_pilot_v1
+source_contract:
+  stage2_scope: SYNTHETIC_FIXTURE
+  stage2_dataset_id: synthetic_stage2
+  stage2_dataset_version: synthetic-fixture-v1
+  stage2_audit_status: PASS
+  stage3_scope: SYNTHETIC_TOY
+  stage5_scope: SYNTHETIC_ONLY
+  stage5_pilot_id: stage5-toy-locked-pilot-001
+confidence_level: 0.95
+threshold_policy: LOCKED_STAGE3_NO_REESTIMATION
+process_bound_capabilities_required: true
+capabilities_serialized: false
+detached_summaries_authoritative: false
+test_tuning_prohibited: true
+real_data_access: false

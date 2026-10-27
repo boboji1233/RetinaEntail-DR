@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage10-artifact-diff-v10.schema.json",
+  "title": "RetinaEntail-DR Stage 10 Artifact Diff v10",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "comparison_policy", "allowed_provenance_paths",
+    "compared_file_count", "exact_file_match_count", "allowed_provenance_difference_count",
+    "deterministic_file_mismatch_count", "deterministic_difference_fail_closed", "files"
+  ],
+  "properties": {
+    "schema_version": {"const": "10.0.0"},
+    "comparison_policy": {"const": "exact_except_preregistered_runner_provenance_paths_v1"},
+    "allowed_provenance_paths": {
+      "type": "array", "uniqueItems": true,
+      "items": {"enum": ["audit.html", "audit.json", "package_manifest.json", "session_a.json", "session_b.json"]}
+    },
+    "compared_file_count": {"type": "integer", "minimum": 0},
+    "exact_file_match_count": {"type": "integer", "minimum": 0},
+    "allowed_provenance_difference_count": {"type": "integer", "minimum": 0},
+    "deterministic_file_mismatch_count": {"type": "integer", "minimum": 0},
+    "deterministic_difference_fail_closed": {"const": true},
+    "files": {"type": "array", "items": {"$ref": "#/$defs/file"}}
+  },
+  "$defs": {
+    "sha256OrNull": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{64}$"}]},
+    "sizeOrNull": {"oneOf": [{"type": "null"}, {"type": "integer", "minimum": 0}]},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "relative_path", "classification", "runner_a_sha256", "runner_b_sha256",
+        "runner_a_size_bytes", "runner_b_size_bytes"
+      ],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1},
+        "classification": {"enum": ["EXACT_MATCH", "ALLOWED_RUNNER_PROVENANCE", "MISSING_RUNNER_A", "MISSING_RUNNER_B", "DETERMINISTIC_MISMATCH"]},
+        "runner_a_sha256": {"$ref": "#/$defs/sha256OrNull"},
+        "runner_b_sha256": {"$ref": "#/$defs/sha256OrNull"},
+        "runner_a_size_bytes": {"$ref": "#/$defs/sizeOrNull"},
+        "runner_b_size_bytes": {"$ref": "#/$defs/sizeOrNull"}
+      }
+    }
+  }
+}

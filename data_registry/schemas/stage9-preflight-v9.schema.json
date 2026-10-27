@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage9-preflight-v9.schema.json",
+  "title": "RetinaEntail-DR Stage 9 Zero-I/O Preflight v9",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "verification_context", "dataset_id", "dataset_version",
+    "reasons", "accepts_paths", "reads_environment", "authorizes_file_open",
+    "dataset_root_probed", "real_data_read", "detached_pass_json_authoritative",
+    "cross_session_capability_reuse_allowed", "synthetic_authorizes_real"
+  ],
+  "properties": {
+    "schema_version": {"const": "9.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_DUAL_SESSION_CAPABILITY_VERIFICATION"]},
+    "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+    "dataset_id": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 1}]},
+    "dataset_version": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 1}]},
+    "reasons": {
+      "type": "array", "uniqueItems": true,
+      "items": {"enum": [
+        "INPUT_INVALID", "DATASET_NOT_EXPLICIT", "DATASET_VERSION_NOT_EXPLICIT",
+        "COMPLETE_REAL_STAGE8_PACKAGE_A_CAPABILITY_NOT_PROVIDED",
+        "COMPLETE_REAL_STAGE8_PACKAGE_B_CAPABILITY_NOT_PROVIDED",
+        "FRESH_SESSION_A_CAPABILITY_NOT_PROVIDED", "FRESH_SESSION_B_CAPABILITY_NOT_PROVIDED",
+        "ENVIRONMENT_LOCK_NOT_PREREGISTERED", "CASE_SEED_REPLAY_NOT_PREREGISTERED",
+        "LOCKED_HASHES_THRESHOLDS_NOT_PREREGISTERED"
+      ]}
+    },
+    "accepts_paths": {"const": false},
+    "reads_environment": {"const": false},
+    "authorizes_file_open": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false},
+    "detached_pass_json_authoritative": {"const": false},
+    "cross_session_capability_reuse_allowed": {"const": false},
+    "synthetic_authorizes_real": {"const": false}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+      "then": {"properties": {"reasons": {"minItems": 1}}}
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "READY_FOR_DUAL_SESSION_CAPABILITY_VERIFICATION"}},
+        "required": ["status"]
+      },
+      "then": {"properties": {"reasons": {"maxItems": 0}}}
+    }
+  ],
+  "$comment": "Presence only. No path, root, detached JSON, or serialized capability grants authority."
+}

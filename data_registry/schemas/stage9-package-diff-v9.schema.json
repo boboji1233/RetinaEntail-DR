@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage9-package-diff-v9.schema.json",
+  "title": "RetinaEntail-DR Stage 9 Complete Stage 8 Package Diff v9",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "deterministic_difference_fail_closed", "compared_file_count",
+    "matching_file_count", "differing_file_count", "files"
+  ],
+  "properties": {
+    "schema_version": {"const": "9.0.0"},
+    "deterministic_difference_fail_closed": {"const": true},
+    "compared_file_count": {"type": "integer", "minimum": 0},
+    "matching_file_count": {"type": "integer", "minimum": 0},
+    "differing_file_count": {"type": "integer", "minimum": 0},
+    "files": {"type": "array", "items": {"$ref": "#/$defs/fileDiff"}}
+  },
+  "$defs": {
+    "sha256OrNull": {
+      "oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[0-9a-f]{64}$"}]
+    },
+    "sizeOrNull": {
+      "oneOf": [{"type": "null"}, {"type": "integer", "minimum": 0}]
+    },
+    "fileDiff": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "relative_path", "status", "session_a_sha256", "session_b_sha256",
+        "session_a_size_bytes", "session_b_size_bytes"
+      ],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1, "pattern": "^[^\\\\:\\u0000]+$"},
+        "status": {"enum": ["MATCH", "MISSING_SESSION_A", "MISSING_SESSION_B", "CONTENT_MISMATCH"]},
+        "session_a_sha256": {"$ref": "#/$defs/sha256OrNull"},
+        "session_b_sha256": {"$ref": "#/$defs/sha256OrNull"},
+        "session_a_size_bytes": {"$ref": "#/$defs/sizeOrNull"},
+        "session_b_size_bytes": {"$ref": "#/$defs/sizeOrNull"}
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s7-fgadr-extraction-manifest-v1.schema.json",
+  "title": "Science S7 FGADR extraction manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "experiment_id", "status", "archive_sha256", "file_count", "files", "path_safety", "io_audit"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S7_P1_FGADR_IDENTITY_AND_TARGET_MANIFEST_V1"},
+    "status": {"const": "PASS_SAFE_EXTRACTION"},
+    "archive_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file_count": {"type": "integer", "minimum": 1},
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_relative_path", "byte_size", "sha256", "crc32"],
+        "properties": {
+          "source_relative_path": {"type": "string", "minLength": 1},
+          "byte_size": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "crc32": {"type": "string", "pattern": "^[0-9a-f]{8}$"}
+        }
+      }
+    },
+    "path_safety": {"const": "PASS"},
+    "io_audit": {"type": "object"}
+  }
+}

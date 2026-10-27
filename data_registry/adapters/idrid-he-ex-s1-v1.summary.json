@@ -1,0 +1,18 @@
+{
+  "excluded_source_image_ids": [
+    "idrid-segmentation-IDRiD_43"
+  ],
+  "included_count": 80,
+  "label_semantics": [
+    "HARD_EXUDATE_MASK",
+    "HEMORRHAGE_MASK"
+  ],
+  "missing_label_policy": "UNKNOWN_NEVER_NEGATIVE",
+  "published_image_count": 81,
+  "schema_version": "1.0.0",
+  "split_counts": {
+    "CALIBRATION": 8,
+    "LOCKED_TEST": 27,
+    "TRAIN": 45
+  }
+}

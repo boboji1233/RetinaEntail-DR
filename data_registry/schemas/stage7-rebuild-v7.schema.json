@@ -1,0 +1,179 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage7-rebuild-v7.schema.json",
+    "title": "RetinaEntail-DR Stage 7 Frozen-versus-Rebuilt Verification v7",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "status",
+        "dataset_id",
+        "dataset_version",
+        "frozen_manifest_sha256",
+        "rebuilt_manifest_sha256",
+        "frozen_audit_sha256",
+        "rebuilt_audit_sha256",
+        "frozen_record_count",
+        "rebuilt_record_count",
+        "manifests_identical",
+        "audits_valid",
+        "audits_identical",
+        "identity_isolation_proven",
+        "frozen_unknown_label_count",
+        "rebuilt_unknown_label_count",
+        "frozen_identity_audit",
+        "rebuilt_identity_audit",
+        "reasons",
+        "differences",
+        "verification_sha256"
+    ],
+    "properties": {
+        "schema_version": {"const": "7.0.0"},
+        "status": {"enum": ["PASS", "FAIL_CLOSED"]},
+        "dataset_id": {"$ref": "#/$defs/nullableDatasetId"},
+        "dataset_version": {"$ref": "#/$defs/nullableDatasetVersion"},
+        "frozen_manifest_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "rebuilt_manifest_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "frozen_audit_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "rebuilt_audit_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "frozen_record_count": {"$ref": "#/$defs/count"},
+        "rebuilt_record_count": {"$ref": "#/$defs/count"},
+        "manifests_identical": {"type": "boolean"},
+        "audits_valid": {"type": "boolean"},
+        "audits_identical": {"type": "boolean"},
+        "identity_isolation_proven": {"type": "boolean"},
+        "frozen_unknown_label_count": {"$ref": "#/$defs/count"},
+        "rebuilt_unknown_label_count": {"$ref": "#/$defs/count"},
+        "frozen_identity_audit": {"$ref": "#/$defs/nullableIdentityAudit"},
+        "rebuilt_identity_audit": {"$ref": "#/$defs/nullableIdentityAudit"},
+        "reasons": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/reason"}},
+        "differences": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/difference"}
+        },
+        "verification_sha256": {"$ref": "#/$defs/sha256"}
+    },
+    "$defs": {
+        "count": {"type": "integer", "minimum": 0},
+        "positiveCount": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "nullableSha256": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]},
+        "nullableDatasetId": {
+            "oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}]
+        },
+        "nullableDatasetVersion": {
+            "oneOf": [
+                {"type": "null"},
+                {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"}
+            ]
+        },
+        "nullableIdentityAudit": {
+            "oneOf": [{"type": "null"}, {"$ref": "stage5-identity-audit-v5.schema.json"}]
+        },
+        "reason": {
+            "enum": [
+                "INPUT_INVALID",
+                "FROZEN_PACKAGE_EVIDENCE_INVALID",
+                "NONFINITE_VALUE",
+                "DUPLICATE_RECORD",
+                "FROZEN_AUDIT_INVALID",
+                "REBUILT_AUDIT_INVALID",
+                "DATASET_ID_MISMATCH",
+                "DATASET_VERSION_MISMATCH",
+                "MANIFEST_HASH_MISMATCH",
+                "AUDIT_EVIDENCE_MISMATCH",
+                "RECORD_COUNT_MISMATCH",
+                "RECORD_ORDER_MISMATCH",
+                "RECORD_FIELD_MISMATCH",
+                "LABEL_FIELD_MISMATCH",
+                "UNKNOWN_LABEL_STATE",
+                "FIVE_IDENTITY_ISOLATION_FAILED",
+                "VERIFICATION_EXCEPTION"
+            ]
+        },
+        "difference": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "kind",
+                "field",
+                "record_index",
+                "label_index",
+                "expected_sha256",
+                "observed_sha256"
+            ],
+            "properties": {
+                "kind": {"enum": ["MANIFEST", "RECORD", "LABEL", "AUDIT"]},
+                "field": {"type": "string", "pattern": "^[a-z][a-z0-9_.\\[\\]-]*$"},
+                "record_index": {"$ref": "#/$defs/nullableIndex"},
+                "label_index": {"$ref": "#/$defs/nullableIndex"},
+                "expected_sha256": {"$ref": "#/$defs/sha256"},
+                "observed_sha256": {"$ref": "#/$defs/sha256"}
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {"kind": {"enum": ["MANIFEST", "AUDIT"]}},
+                        "required": ["kind"]
+                    },
+                    "then": {
+                        "properties": {
+                            "record_index": {"type": "null"},
+                            "label_index": {"type": "null"}
+                        }
+                    }
+                },
+                {
+                    "if": {"properties": {"kind": {"const": "RECORD"}}, "required": ["kind"]},
+                    "then": {"properties": {"record_index": {"$ref": "#/$defs/count"}}}
+                },
+                {
+                    "if": {"properties": {"kind": {"const": "LABEL"}}, "required": ["kind"]},
+                    "then": {
+                        "properties": {
+                            "record_index": {"$ref": "#/$defs/count"},
+                            "label_index": {"$ref": "#/$defs/count"}
+                        }
+                    }
+                }
+            ]
+        },
+        "nullableIndex": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/count"}]}
+    },
+    "allOf": [
+        {
+            "if": {"properties": {"status": {"const": "PASS"}}, "required": ["status"]},
+            "then": {
+                "properties": {
+                    "dataset_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+                    "dataset_version": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+                    },
+                    "frozen_manifest_sha256": {"$ref": "#/$defs/sha256"},
+                    "rebuilt_manifest_sha256": {"$ref": "#/$defs/sha256"},
+                    "frozen_audit_sha256": {"$ref": "#/$defs/sha256"},
+                    "rebuilt_audit_sha256": {"$ref": "#/$defs/sha256"},
+                    "frozen_record_count": {"$ref": "#/$defs/positiveCount"},
+                    "rebuilt_record_count": {"$ref": "#/$defs/positiveCount"},
+                    "manifests_identical": {"const": true},
+                    "audits_valid": {"const": true},
+                    "audits_identical": {"const": true},
+                    "identity_isolation_proven": {"const": true},
+                    "frozen_unknown_label_count": {"const": 0},
+                    "rebuilt_unknown_label_count": {"const": 0},
+                    "frozen_identity_audit": {"$ref": "stage5-identity-audit-v5.schema.json"},
+                    "rebuilt_identity_audit": {"$ref": "stage5-identity-audit-v5.schema.json"},
+                    "reasons": {"maxItems": 0},
+                    "differences": {"maxItems": 0}
+                }
+            }
+        },
+        {
+            "if": {"properties": {"status": {"const": "FAIL_CLOSED"}}, "required": ["status"]},
+            "then": {"properties": {"reasons": {"minItems": 1}}}
+        }
+    ],
+    "$comment": "The schema validates the detached verification receipt. Python recomputes its canonical verification digest, exact record order and fields, audit bindings, unknown-label policy, and both five-identity audits."
+}

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage5-prerequisite-v5.schema.json",
+  "title": "RetinaEntail-DR Stage 5 Prerequisite Verification Report v5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "verification_context",
+    "dataset_id",
+    "dataset_version",
+    "purpose",
+    "reasons",
+    "evidence_sha256",
+    "evidence_files_read",
+    "locked_evidence_binding_sha256",
+    "stage3_package_sha256",
+    "config_sha256",
+    "data_sha256",
+    "model_sha256",
+    "root_binding_sha256",
+    "authorization_ttl_seconds",
+    "prerequisites_verified",
+    "authorization_issued",
+    "authorizes_data_access",
+    "dataset_root_probed",
+    "real_data_read",
+    "sample_count",
+    "test_tuning_prohibited",
+    "thresholds_reestimated",
+    "test_split_used_for_calibration"
+  ],
+  "properties": {
+    "schema_version": {"const": "5.0.0"},
+    "status": {"enum": ["BLOCKED", "VERIFIED"]},
+    "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+    "dataset_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "dataset_version": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "purpose": {"const": "locked_test_evaluation"},
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/prerequisiteReason"}
+    },
+    "evidence_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "license_review": {"$ref": "#/$defs/sha256"},
+        "adapter_spec": {"$ref": "#/$defs/sha256"},
+        "stage2_audit": {"$ref": "#/$defs/sha256"},
+        "frozen_data_card": {"$ref": "#/$defs/sha256"},
+        "manual_confirmation": {"$ref": "#/$defs/sha256"},
+        "stage3_package_summary": {"$ref": "#/$defs/sha256"},
+        "stage4_locked_evidence": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "evidence_files_read": {"type": "integer", "minimum": 0, "maximum": 7},
+    "locked_evidence_binding_sha256": {"$ref": "#/$defs/nullableSha256"},
+    "stage3_package_sha256": {"$ref": "#/$defs/nullableSha256"},
+    "config_sha256": {"$ref": "#/$defs/nullableSha256"},
+    "data_sha256": {"$ref": "#/$defs/nullableSha256"},
+    "model_sha256": {"$ref": "#/$defs/nullableSha256"},
+    "root_binding_sha256": {"$ref": "#/$defs/nullableSha256"},
+    "authorization_ttl_seconds": {
+      "anyOf": [
+        {"type": "integer", "minimum": 1, "maximum": 900},
+        {"type": "null"}
+      ]
+    },
+    "prerequisites_verified": {"type": "boolean"},
+    "authorization_issued": {"type": "boolean"},
+    "authorizes_data_access": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false},
+    "sample_count": {"const": 0},
+    "test_tuning_prohibited": {"const": true},
+    "thresholds_reestimated": {"const": false},
+    "test_split_used_for_calibration": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableSha256": {
+      "anyOf": [
+        {"$ref": "#/$defs/sha256"},
+        {"type": "null"}
+      ]
+    },
+    "prerequisiteReason": {
+      "enum": [
+        "INPUT_INVALID",
+        "TTL_INVALID",
+        "ROOT_INVALID",
+        "EVIDENCE_PATH_COLLISION",
+        "EVIDENCE_INSIDE_DATASET_ROOT",
+        "EVIDENCE_PATH_NOT_ABSOLUTE",
+        "EVIDENCE_LINK_OR_REPARSE_POINT",
+        "EVIDENCE_NOT_REGULAR_FILE",
+        "EVIDENCE_TOO_LARGE",
+        "EVIDENCE_CHANGED_DURING_READ",
+        "EVIDENCE_DECODE_FAILED",
+        "EVIDENCE_CONTRACT_INVALID",
+        "DATASET_MISMATCH",
+        "DATASET_VERSION_MISMATCH",
+        "REVIEW_NOT_APPROVED",
+        "REQUIRED_REVIEW_PURPOSE_MISSING",
+        "STAGE2_AUDIT_NOT_PASS",
+        "FROZEN_DATA_CARD_NOT_APPROVED_REAL_DATA",
+        "MANUAL_CONFIRMATION_INCOMPLETE",
+        "STAGE3_PACKAGE_NOT_VERIFIED",
+        "STAGE3_CALIBRATION_NOT_SUCCESS",
+        "LOCKED_EVIDENCE_INVALID",
+        "HASH_MISMATCH",
+        "PROVENANCE_MISMATCH",
+        "STAGE2_ACCESS_PERMIT_INVALID",
+        "REAL_STAGE2_AUDIT_CAPABILITY_UNAVAILABLE",
+        "REAL_STAGE3_PACKAGE_CAPABILITY_UNAVAILABLE"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "reasons": {"minItems": 1},
+          "locked_evidence_binding_sha256": {"type": "null"},
+          "stage3_package_sha256": {"type": "null"},
+          "config_sha256": {"type": "null"},
+          "data_sha256": {"type": "null"},
+          "model_sha256": {"type": "null"},
+          "root_binding_sha256": {"type": "null"},
+          "authorization_ttl_seconds": {"type": "null"},
+          "prerequisites_verified": {"const": false},
+          "authorization_issued": {"const": false}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"status": {"const": "VERIFIED"}}, "required": ["status"]},
+      "then": {
+        "properties": {
+          "reasons": {"maxItems": 0},
+          "evidence_sha256": {
+            "required": [
+              "license_review",
+              "adapter_spec",
+              "stage2_audit",
+              "frozen_data_card",
+              "manual_confirmation",
+              "stage3_package_summary",
+              "stage4_locked_evidence"
+            ]
+          },
+          "evidence_files_read": {"const": 7},
+          "locked_evidence_binding_sha256": {"$ref": "#/$defs/sha256"},
+          "stage3_package_sha256": {"$ref": "#/$defs/sha256"},
+          "config_sha256": {"$ref": "#/$defs/sha256"},
+          "data_sha256": {"$ref": "#/$defs/sha256"},
+          "model_sha256": {"$ref": "#/$defs/sha256"},
+          "root_binding_sha256": {"$ref": "#/$defs/sha256"},
+          "authorization_ttl_seconds": {"type": "integer", "minimum": 1, "maximum": 900},
+          "prerequisites_verified": {"const": true},
+          "authorization_issued": {"const": true}
+        }
+      }
+    }
+  ],
+  "$comment": "A VERIFIED report records consistent evidence but is never itself an access capability. Only the non-serializable, process-issued object may be consumed after point-of-use TTL and binding validation. Evidence files are bounded and link-safe; the verifier never probes the dataset root."
+}

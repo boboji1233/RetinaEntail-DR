@@ -1,0 +1,34 @@
+schema_version: "5.0"
+pilot_id: stage5-toy-locked-pilot-001
+source_stage4:
+  package_schema_version: "4.0.0"
+  run_id: stage4-toy-locked-test-001
+  package_sha256: bfb7b22393bf6bafd6944a6ef091fa2464d70b95a344ad5d78cbd0fb3d1713df
+  package_file_count: 88
+  stage4_config_sha256: ea417983d85b9564d4ec8b217966dc31d734734fe074b12beb48c34cfe933680
+  test_plan_sha256: e1c667954725800f8a5a2d0e012313ccca738247678d26f9a6400aadcf927094
+  test_data_sha256: c10341f6f466c2222587568ffdd2715d7460b23e748b79683c9d47f2f73a20d1
+  stage4_model_provenance_sha256: 213dae8b86972b551b60042e69e2ec2551f34947c2bab61298c412d9ebadf23b
+  calibration_artifact_sha256: c84762f2d44d345cd39732e1ce0f5a44003e0a635e482f28d3f8abcd6395e78e
+  calibration_config_sha256: 0ea540363d0a768bc1964c007f6a37a393f1b29b3c9a312ed92bd59a76bbab52
+  calibration_data_sha256: ab4fa68cb4228df6a1db23caaeacb8d1c35cca6ec7da220e600a8bdcbc067ecd
+  calibration_model_sha256: ca2fa473841f6b79d8b327525fb14de0e099ac8d342538a5031d9a54783b81c1
+  alpha: 0.25
+  positive_threshold: 0.000012299400515471258
+  negative_threshold: 0.000012299400515471254
+  positive_sample_count: 4
+  negative_sample_count: 4
+  total_sample_count: 8
+confidence_level: 0.95
+train_identity_control_count: 2
+pilot_case_ids:
+  - stage4-toy-entailed-present
+  - stage4-toy-entailed-absent
+  - stage4-toy-raw-unidentifiable
+  - stage4-toy-infeasible-out-of-model
+  - stage4-toy-domain-out-of-model
+  - stage4-toy-unknown-degradation
+  - stage4-toy-invalid-witness
+threshold_policy: LOCKED_STAGE3_NO_REESTIMATION
+test_tuning_prohibited: true
+real_data_access: false

@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/stage5-preflight-v5.schema.json",
+  "title": "RetinaEntail-DR Stage 5 Zero-I/O Preflight Report v5",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "verification_context",
+    "dataset_id",
+    "dataset_version",
+    "approved_review_provided",
+    "approved_review_purposes",
+    "dataset_root_provided",
+    "adapter_spec_provided",
+    "stage2_pass_audit_provided",
+    "frozen_data_card_provided",
+    "stage2_access_permit_provided",
+    "manual_confirmation_provided",
+    "stage3_package_summary_provided",
+    "stage4_locked_evidence_provided",
+    "reasons",
+    "test_tuning_prohibited",
+    "prerequisites_verified",
+    "authorizes_data_access",
+    "dataset_root_probed",
+    "real_data_read",
+    "sample_count"
+  ],
+  "properties": {
+    "schema_version": {"const": "5.0.0"},
+    "status": {"enum": ["BLOCKED", "READY_FOR_PREREQUISITE_VERIFICATION"]},
+    "verification_context": {"$ref": "#/$defs/verificationContext"},
+    "dataset_id": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "dataset_version": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"
+    },
+    "approved_review_provided": {"type": "boolean"},
+    "approved_review_purposes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/reviewPurpose"}
+    },
+    "dataset_root_provided": {"type": "boolean"},
+    "adapter_spec_provided": {"type": "boolean"},
+    "stage2_pass_audit_provided": {"type": "boolean"},
+    "frozen_data_card_provided": {"type": "boolean"},
+    "stage2_access_permit_provided": {"type": "boolean"},
+    "manual_confirmation_provided": {"type": "boolean"},
+    "stage3_package_summary_provided": {"type": "boolean"},
+    "stage4_locked_evidence_provided": {"type": "boolean"},
+    "reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/preflightReason"}
+    },
+    "test_tuning_prohibited": {"const": true},
+    "prerequisites_verified": {"const": false},
+    "authorizes_data_access": {"const": false},
+    "dataset_root_probed": {"const": false},
+    "real_data_read": {"const": false},
+    "sample_count": {"const": 0}
+  },
+  "$defs": {
+    "verificationContext": {
+      "enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]
+    },
+    "reviewPurpose": {
+      "enum": [
+        "read_only_audit",
+        "metadata_validation",
+        "lesion_calibration",
+        "locked_test_evaluation"
+      ]
+    },
+    "preflightReason": {
+      "enum": [
+        "DATASET_NOT_EXPLICIT",
+        "DATASET_VERSION_NOT_EXPLICIT",
+        "APPROVED_REVIEW_NOT_PROVIDED",
+        "READ_ONLY_AUDIT_PURPOSE_NOT_APPROVED",
+        "LESION_CALIBRATION_PURPOSE_NOT_APPROVED",
+        "LOCKED_TEST_EVALUATION_PURPOSE_NOT_APPROVED",
+        "DATASET_ROOT_NOT_PROVIDED",
+        "ADAPTER_SPEC_NOT_PROVIDED",
+        "STAGE2_PASS_AUDIT_NOT_PROVIDED",
+        "FROZEN_DATA_CARD_NOT_PROVIDED",
+        "VALID_STAGE2_ACCESS_PERMIT_NOT_PROVIDED",
+        "MANUAL_CONFIRMATION_NOT_PROVIDED",
+        "VERIFIED_STAGE3_PACKAGE_SUMMARY_NOT_PROVIDED",
+        "STAGE4_LOCKED_EVIDENCE_NOT_PROVIDED"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+      "then": {"properties": {"reasons": {"minItems": 1}}}
+    },
+    {
+      "if": {
+        "properties": {"status": {"const": "READY_FOR_PREREQUISITE_VERIFICATION"}},
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "dataset_id": {"type": "string"},
+          "dataset_version": {"type": "string"},
+          "approved_review_provided": {"const": true},
+          "approved_review_purposes": {
+            "allOf": [
+              {"contains": {"const": "read_only_audit"}, "minContains": 1},
+              {"contains": {"const": "lesion_calibration"}, "minContains": 1},
+              {"contains": {"const": "locked_test_evaluation"}, "minContains": 1}
+            ]
+          },
+          "dataset_root_provided": {"const": true},
+          "adapter_spec_provided": {"const": true},
+          "stage2_pass_audit_provided": {"const": true},
+          "frozen_data_card_provided": {"const": true},
+          "stage2_access_permit_provided": {"const": true},
+          "manual_confirmation_provided": {"const": true},
+          "stage3_package_summary_provided": {"const": true},
+          "stage4_locked_evidence_provided": {"const": true},
+          "reasons": {"maxItems": 0}
+        }
+      }
+    }
+  ],
+  "$comment": "This report accepts no paths and cannot verify prerequisites, probe a dataset root, or authorize access. READY means only that the separate bounded evidence verifier may run."
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s7-lite-audit-v4.schema.json",
+  "title": "Science S7 RetinaEntail-Lite v4 source-split audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "config_sha256",
+    "development_disclosure",
+    "source_split",
+    "preservation",
+    "calibration",
+    "multi_region",
+    "development_gate_metrics",
+    "io_audit",
+    "gate",
+    "hashes",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "4.0.0"},
+    "experiment_id": {"const": "S7_RETINAENTAIL_LITE_V4"},
+    "status": {"enum": ["READY_FOR_AI_QC", "BLOCKED_AUTOMATED_GATE"]},
+    "config_sha256": {"$ref": "#/$defs/sha256"},
+    "development_disclosure": {
+      "type": "object",
+      "required": ["v1_v2_v3_observed", "independent_replication", "final_test_opened"],
+      "properties": {
+        "v1_v2_v3_observed": {"const": true},
+        "independent_replication": {"const": false},
+        "final_test_opened": {"const": false}
+      }
+    },
+    "source_split": {
+      "type": "object",
+      "required": ["policy", "source_groups", "calibration_sources", "validation_sources", "source_role_overlap", "calibration_rows", "validation_in_domain_rows"],
+      "properties": {
+        "policy": {"const": "SHA256_SEED_AND_SOURCE_KEY"},
+        "source_groups": {"type": "integer", "minimum": 2},
+        "calibration_sources": {"type": "integer", "minimum": 1},
+        "validation_sources": {"type": "integer", "minimum": 1},
+        "source_role_overlap": {"const": 0},
+        "calibration_rows": {"type": "integer", "minimum": 20},
+        "validation_in_domain_rows": {"type": "integer", "minimum": 1}
+      }
+    },
+    "preservation": {"type": "object"},
+    "calibration": {"type": "object"},
+    "multi_region": {"type": "object"},
+    "development_gate_metrics": {"type": "object"},
+    "io_audit": {
+      "type": "object",
+      "required": ["probe_scores_recomputed", "probe_searches_rerun", "locked_test_root_reads", "online_evaluation_reads", "source_split_leaks"],
+      "properties": {
+        "probe_scores_recomputed": {"const": 0},
+        "probe_searches_rerun": {"const": 0},
+        "locked_test_root_reads": {"const": 0},
+        "online_evaluation_reads": {"const": 0},
+        "source_split_leaks": {"const": 0}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": ["automated", "ai_visual_qc", "s8_authorized"],
+      "properties": {
+        "automated": {"enum": ["PASS", "FAIL"]},
+        "ai_visual_qc": {"const": "PENDING"},
+        "s8_authorized": {"const": false}
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "required": ["code_sha256", "source_split_sha256", "calibration_sha256", "results_sha256"],
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "evidence_boundary": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

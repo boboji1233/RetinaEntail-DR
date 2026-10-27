@@ -1,0 +1,74 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://retinaentail.local/schemas/stage7-preflight-v7.schema.json",
+    "title": "RetinaEntail-DR Stage 7 Zero-I/O Preflight v7",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema_version",
+        "status",
+        "verification_context",
+        "dataset_id",
+        "dataset_version",
+        "reasons",
+        "accepts_paths",
+        "authorizes_file_open",
+        "stage6_bound_root_consumed",
+        "dataset_root_probed",
+        "real_data_read",
+        "synthetic_authorizes_real"
+    ],
+    "properties": {
+        "schema_version": {"const": "7.0.0"},
+        "status": {"enum": ["BLOCKED", "READY_FOR_BOUND_ROOT_CONSUMPTION"]},
+        "verification_context": {"enum": ["REAL_PREREQUISITE", "SYNTHETIC_FIXTURE"]},
+        "dataset_id": {
+            "oneOf": [{"type": "null"}, {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}]
+        },
+        "dataset_version": {
+            "oneOf": [
+                {"type": "null"},
+                {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:+-]{0,127}$"}
+            ]
+        },
+        "reasons": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/reason"}},
+        "accepts_paths": {"const": false},
+        "authorizes_file_open": {"const": false},
+        "stage6_bound_root_consumed": {"const": false},
+        "dataset_root_probed": {"const": false},
+        "real_data_read": {"const": false},
+        "synthetic_authorizes_real": {"const": false}
+    },
+    "$defs": {
+        "reason": {
+            "enum": [
+                "INPUT_INVALID",
+                "DATASET_NOT_EXPLICIT",
+                "DATASET_VERSION_NOT_EXPLICIT",
+                "THREE_PURPOSE_REVIEW_NOT_PROVIDED",
+                "PHYSICAL_ROOT_NOT_PROVIDED",
+                "ADAPTER_SPEC_NOT_PROVIDED",
+                "STAGE2_PASS_PACKAGE_NOT_PROVIDED",
+                "APPROVED_REAL_DATA_CARD_NOT_PROVIDED",
+                "MANUAL_CONFIRMATION_NOT_PROVIDED",
+                "STAGE3_PACKAGE_NOT_PROVIDED",
+                "STAGE4_LOCKED_EVIDENCE_NOT_PROVIDED",
+                "STAGE6_BOUND_ROOT_NOT_PROVIDED"
+            ]
+        }
+    },
+    "allOf": [
+        {
+            "if": {"properties": {"status": {"const": "BLOCKED"}}, "required": ["status"]},
+            "then": {"properties": {"reasons": {"minItems": 1}}}
+        },
+        {
+            "if": {
+                "properties": {"status": {"const": "READY_FOR_BOUND_ROOT_CONSUMPTION"}},
+                "required": ["status"]
+            },
+            "then": {"properties": {"reasons": {"maxItems": 0}}}
+        }
+    ],
+    "$comment": "Presence-only receipt: it accepts no path or serialized authority, does not consume the Stage 6 binding, and never authorizes file access."
+}

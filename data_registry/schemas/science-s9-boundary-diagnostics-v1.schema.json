@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://retinaentail.local/schemas/science-s9-boundary-diagnostics-v1.schema.json",
+  "title": "Science S9 boundary diagnostics v1",
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "determinate", "coverage", "false", "fcr", "state_counts"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "determinate": {"type": "integer", "minimum": 0},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "false": {"type": "integer", "minimum": 0},
+        "fcr": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "state_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "factorMetric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["factor", "total", "determinate", "coverage", "false", "fcr", "state_counts"],
+      "properties": {
+        "factor": {"type": "number", "minimum": 0},
+        "total": {"type": "integer", "minimum": 0},
+        "determinate": {"type": "integer", "minimum": 0},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "false": {"type": "integer", "minimum": 0},
+        "fcr": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "state_counts": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "pairedTest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "common_determinate_rows",
+        "first_wrong_second_correct",
+        "first_correct_second_wrong",
+        "discordant",
+        "exact_two_sided_p"
+      ],
+      "properties": {
+        "common_determinate_rows": {"type": "integer", "minimum": 0},
+        "first_wrong_second_correct": {"type": "integer", "minimum": 0},
+        "first_correct_second_wrong": {"type": "integer", "minimum": 0},
+        "discordant": {"type": "integer", "minimum": 0},
+        "exact_two_sided_p": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "status",
+    "bindings",
+    "row_count",
+    "policy_metrics",
+    "selective_risk_coverage",
+    "symmetric_threshold_sensitivity",
+    "asymmetric_threshold_grid",
+    "by_condition",
+    "by_condition_lesion",
+    "by_severity",
+    "paired_tests",
+    "recent_method_executability",
+    "evidence_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "experiment_id": {"const": "S9_BOUNDARY_DIAGNOSTICS_V1"},
+    "status": {"const": "COMPLETE_POSTHOC_DIAGNOSTIC_NOT_CONFIRMATORY"},
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["s8_results_sha256", "s8_calibration_sha256"],
+      "properties": {
+        "s8_results_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "s8_calibration_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "row_count": {"const": 17442},
+    "policy_metrics": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}},
+    "selective_risk_coverage": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/factorMetric"}},
+    "symmetric_threshold_sensitivity": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/factorMetric"}},
+    "asymmetric_threshold_grid": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "by_condition": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}},
+    "by_condition_lesion": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}},
+    "by_severity": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}},
+    "paired_tests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["four_valued_vs_forced", "four_valued_vs_selective"],
+      "properties": {
+        "four_valued_vs_forced": {"$ref": "#/$defs/pairedTest"},
+        "four_valued_vs_selective": {"$ref": "#/$defs/pairedTest"}
+      }
+    },
+    "recent_method_executability": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "evidence_boundary": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}
