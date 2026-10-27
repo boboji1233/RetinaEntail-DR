@@ -22,7 +22,7 @@ and invalid witnesses produce `OUT_OF_MODEL`, rather than a determinate claim.
 
 ## Installation
 
-Python 3.11 or 3.12 is required. From the repository root:
+Use Python 3.11 on Windows, or Python 3.11/3.12 on Linux. From the repository root:
 
 ```bash
 python -m venv .venv
